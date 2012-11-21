@@ -20,9 +20,12 @@ protected:
 public:
 	GraphNode();
 	virtual ~GraphNode();
-	virtual void render();
+
+	void render();
+
 	void setPosition(GLfloat x, GLfloat y, GLfloat z);
 	void setRotation(GLfloat x, GLfloat y, GLfloat z);
+
 	void addMember(GraphNode* member);
 	void removeMember(GraphNode* member);
 
