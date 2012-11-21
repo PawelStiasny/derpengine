@@ -36,9 +36,9 @@ void reshape(int width, int height)
 
 void init_scene()
 {
-	static GLfloat pos[4] =
+	/*static GLfloat pos[4] =
 	{5.0, 5.0, 10.0, 0.0};
-	/*glLightfv(GL_LIGHT0, GL_POSITION, pos);
+	glLightfv(GL_LIGHT0, GL_POSITION, pos);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);*/
 	glEnable(GL_NORMALIZE);

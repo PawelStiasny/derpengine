@@ -12,7 +12,7 @@ if ARGUMENTS.get('debug', 0):
 	# Use clang as a compiler
 	env.Replace(CXX = 'clang++')
 	# Force architecture
-	env.Append( CXXFLAGS = ['-march=i686', '-g'] )
+	env.Append( CXXFLAGS = ['-march=i686', '-g', '-Wall'] )
 
 	# Allow clang pretty-printing
 	env['ENV']['TERM'] = os.environ['TERM']
@@ -20,5 +20,3 @@ if ARGUMENTS.get('debug', 0):
 env.Append( LIBS = ['SDL', 'GL', 'GLU'] )
 main = env.Program( target = 'mech', source = object_list )
 
-#test = Command( command = 'test', source = 'main', action = './main' )
-#env.Depends( test, main )
