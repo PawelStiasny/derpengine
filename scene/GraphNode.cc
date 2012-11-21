@@ -1,0 +1,54 @@
+#include "GraphNode.h"
+#include <algorithm>
+#include <functional>
+
+/// Scene graph manages its memory.
+GraphNode::~GraphNode()
+{
+	for (std::vector<GraphNode*>::iterator it = members.begin();
+			it != members.end(); it++)
+		delete *it;
+}
+
+/// Template Method that sets up transformations and calls the actual 
+/// object and member rendering.
+void GraphNode::render()
+{
+	// Apply transformations
+	if (pos.isSet() || rot.isSet()) glPushMatrix();
+	if (pos.isSet()) glTranslatef(pos.v[0], pos.v[1], pos.v[2]);
+	if (rot.isSet()) {
+		glRotatef(rot.v[0], 1.0f, 0.0f, 0.0f);
+		glRotatef(rot.v[1], 0.0f, 1.0f, 0.0f);
+		glRotatef(rot.v[2], 0.0f, 0.0f, 1.0f);
+	}
+
+	// Call concrete rendering implementation
+	doRender();
+
+	// Render members
+	std::for_each(members.begin(), members.end(), std::mem_fun(&GraphNode::render));
+
+	// Revert transformations
+	if (pos.isSet() || rot.isSet()) glPopMatrix();
+}
+
+/// Base implementation is a no-op.
+void GraphNode::doRender()
+{
+}
+
+void GraphNode::setPosition(GLfloat x, GLfloat y, GLfloat z)
+{
+	pos.v[0] = x;
+	pos.v[1] = y;
+	pos.v[2] = z;
+}
+
+void GraphNode::setRotation(GLfloat x, GLfloat y, GLfloat z)
+{
+	rot.v[0] = x;
+	rot.v[1] = y;
+	rot.v[2] = z;
+}
+
