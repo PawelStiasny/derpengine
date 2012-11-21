@@ -8,7 +8,9 @@ class GraphNode
 private:
 	struct Vec3 {
 		GLfloat v[3];
-		bool isSet() { return (v[0] != 0) || (v[1] != 0) || (v[2] != 0); };
+		bool isSet() {
+			return (v[0] != 0.0f) || (v[1] != 0.0f) || (v[2] != 0.0f);
+		};
 	} pos, rot;
 
 public:
