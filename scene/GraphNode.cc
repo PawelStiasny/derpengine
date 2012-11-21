@@ -2,12 +2,21 @@
 #include <algorithm>
 #include <functional>
 
+GraphNode::GraphNode()
+{
+	parent = NULL;
+}
+
 /// Scene graph manages its memory.
 GraphNode::~GraphNode()
 {
-	for (std::vector<GraphNode*>::iterator it = members.begin();
-			it != members.end(); it++)
+	if (parent) parent->members.remove(this);
+
+	for (std::list<GraphNode*>::iterator it = members.begin();
+			it != members.end(); it++) {
+		(*it)->parent = NULL;
 		delete *it;
+	}
 }
 
 /// Template Method that sets up transformations and calls the actual 
@@ -50,5 +59,16 @@ void GraphNode::setRotation(GLfloat x, GLfloat y, GLfloat z)
 	rot.v[0] = x;
 	rot.v[1] = y;
 	rot.v[2] = z;
+}
+
+void GraphNode::addMember(GraphNode* member)
+{
+	member->parent = this;
+	members.push_back(member);
+}
+
+void GraphNode::removeMember(GraphNode* member)
+{
+	delete member;
 }
 

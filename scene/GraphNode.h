@@ -1,5 +1,5 @@
 #include <GL/gl.h>
-#include <vector>
+#include <list>
 
 /// Each graph node is a composite directing rendering of itself and its
 /// members.
@@ -13,12 +13,18 @@ private:
 		};
 	} pos, rot;
 
+protected:
+	std::list<GraphNode*> members;
+	GraphNode* parent;
+
 public:
-	std::vector<GraphNode*> members;
+	GraphNode();
 	virtual ~GraphNode();
 	virtual void render();
 	void setPosition(GLfloat x, GLfloat y, GLfloat z);
 	void setRotation(GLfloat x, GLfloat y, GLfloat z);
+	void addMember(GraphNode* member);
+	void removeMember(GraphNode* member);
 
 private:
 	virtual void doRender();

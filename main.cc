@@ -26,12 +26,12 @@ public:
 
 void reshape(int width, int height)
 {
-	GLfloat h = (GLfloat) width / (GLfloat) height;
+	GLfloat ratio = (GLfloat) width / (GLfloat) height;
 
 	glViewport(0, 0, (GLint) width, (GLint) height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0f, h, 1.0f, 10.0f);
+	gluPerspective(60.0f, ratio, 1.0f, 10.0f);
 }
 
 void init_scene()
@@ -47,7 +47,7 @@ void init_scene()
 
 	scene = new GraphNode;
 	TestTriangle *tt = new TestTriangle;
-	scene->members.push_back(tt);
+	scene->addMember(tt);
 }
 
 void draw_scene()
