@@ -42,6 +42,8 @@ void GraphNode::render()
 	if (pos.isSet() || rot.isSet()) glPopMatrix();
 }
 
+/// Concrete implementation of node's rendering.
+///
 /// Base implementation is a no-op.
 void GraphNode::doRender()
 {

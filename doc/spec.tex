@@ -1,0 +1,56 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage{polski}
+
+\title{Mech - zadanie zaliczeniowe GKOM}
+\author{Paweł Stiasny}
+\date{Semestr 12Z}
+
+\begin{document}
+\begin{titlepage}
+\maketitle
+
+%\section{Ogólny opis rozwiązania}
+\begin{abstract}
+Projekt ma realizować wizualizację kroczącego Mecha przypominajacego maszyny z
+gry Mech Warrior.  Będzie on posiadał widoczne uzbrojenie i dodatkowe efekty
+zwiększające realizm animacji.  Na obiekt zostanie nałożona tekstura
+opancerzenia.
+
+Rozwiązanie jest oparte o graf sceny zaimplementowany w C++.  Szczegółowy jego
+projekt jest opisany w sekcji~\ref{sec:klasy}.  Może być on względnie łatwo
+rozszerzany przy dalszych pracach nad projektem.
+
+Zdecydowałem się zrealizować zadanie w sposób maksymalnie przenośny między
+platformami.  Szczegóły dotyczące realizacji tego założenia opisane są w
+sekcji~\ref{sec:narz}.
+\end{abstract}
+\end{titlepage}
+
+\section{Hierarchia klas}
+\label{sec:klasy}
+\subsection{GraphNode}
+Rysowanie obiektów oparte jest o graf sceny.  Obiekty sceny reprezentowane są
+przez podklasy klasy GraphNode realizującej wzorzec Kompozyt.  GraphNode
+realizuje przesunięcie i obrót obiektu, zarządza renderowaniem siebie i dzieci w
+metodzie szablonowej render oraz może być użyty bezpośrednio jako konter na
+obiekty.
+% Tu schematy itp
+
+\subsection{Animation}
+
+\section{Użyte biblioteki i narzędzia}
+\label{sec:narz}
+\subsection{Biblioteka SDL}
+Jako biblioteki pomocniczej zdecydowałem się użyć SDL zamiast proponowanego
+glut.  Spełnia ona podobne zadania, ale jest bardziej elastyczna i w odróżnieniu
+od glut jest aktywnie rozwijana.  Obie biblioteki pozwalają na łatwe
+przenoszenie aplikacji między platformami.
+
+\subsection{Budowanie projektu za pomocą SCons}
+Do kompilowania używam Pythonicznego systemu budowania SCons.  Narzędzie to jest
+przenośne i umożliwia współpracę z docelowymi narzędziami Microsoftu.
+
+\end{document}

@@ -20,3 +20,4 @@ if ARGUMENTS.get('debug', 0):
 env.Append( LIBS = ['SDL', 'GL', 'GLU'] )
 main = env.Program( target = 'mech', source = object_list )
 
+env.PDF('doc/spec.tex')

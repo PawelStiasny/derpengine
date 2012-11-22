@@ -34,6 +34,7 @@ void reshape(int width, int height)
 	gluPerspective(60.0f, ratio, 1.0f, 10.0f);
 }
 
+/// Sets up rendering and creates the initial scene graph.
 void init_scene()
 {
 	/*static GLfloat pos[4] =
@@ -50,6 +51,7 @@ void init_scene()
 	scene->addMember(tt);
 }
 
+/// Sets up a new frame and renders the scene.
 void draw_scene()
 {
 	static float rotation = 0;
