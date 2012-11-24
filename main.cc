@@ -1,10 +1,15 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <SDL/SDL.h>
+#include <list>
+#include <algorithm>
+#include <functional>
 
 #include "scene/GraphNode.h"
+#include "animations/Animation.h"
 
 GraphNode* scene = NULL;
+std::list<Animation*> animations;
 
 class TestTriangle : public GraphNode
 {
@@ -21,6 +26,24 @@ public:
 			glColor3f(1.0f,0.0f,0.0f);			
 			glVertex3f( 1.0f,-1.0f, 0.0f);		
 		glEnd();
+	}
+};
+
+class TestSceneRotation : public Animation
+{
+private:
+	float rotation;
+	GraphNode* subject;
+
+public:
+	TestSceneRotation(GraphNode* subject) : subject(subject) 
+	{
+		rotation = 0;
+	};
+
+	virtual void update(float timestep)
+	{
+		subject->setRotation(40.0f, rotation++, 0.0f);
 	}
 };
 
@@ -49,6 +72,8 @@ void init_scene()
 	scene = new GraphNode;
 	TestTriangle *tt = new TestTriangle;
 	scene->addMember(tt);
+
+	animations.push_back(new TestSceneRotation(scene));
 }
 
 /// Sets up a new frame and renders the scene.
@@ -60,10 +85,20 @@ void draw_scene()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	scene->setPosition(0.0f, 0.0f, -3.0f);
-	scene->setRotation(40.0f, rotation++, 0.0f);
 
 	scene->render();
 	SDL_GL_SwapBuffers();
+	glFlush();
+}
+
+/// Updates scene state
+void update_scene()
+{
+	float timestep = 0.1f;
+	std::for_each(
+			animations.begin(),
+			animations.end(),
+			std::bind2nd(std::mem_fun(&Animation::update), timestep));
 }
 
 int main(int argc, char const *argv[])
@@ -106,6 +141,9 @@ int main(int argc, char const *argv[])
 		if ( keys[SDLK_ESCAPE] ) {
 			done = 1;
 		}
+
+		// update
+		update_scene();
 
 		// render
 		draw_scene();

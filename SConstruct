@@ -6,6 +6,7 @@ env = Environment()
 # Construct an object list
 sources = ['main.cc']
 sources.extend(glob.glob('scene/*.cc'))
+sources.extend(glob.glob('animations/*.cc'))
 object_list = env.Object(source = sources)
 
 if ARGUMENTS.get('debug', 0):
