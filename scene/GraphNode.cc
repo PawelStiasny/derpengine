@@ -24,6 +24,8 @@ GraphNode::~GraphNode()
 /// object and member rendering.
 void GraphNode::render()
 {
+	if (!visible) return;
+
 	// Apply transformations
 	if (pos.isSet() || rot.isSet()) glPushMatrix();
 	if (pos.isSet()) glTranslatef(pos.v[0], pos.v[1], pos.v[2]);
