@@ -87,8 +87,8 @@ void draw_scene()
 	scene->setPosition(0.0f, 0.0f, -3.0f);
 
 	scene->render();
-	SDL_GL_SwapBuffers();
 	glFlush();
+	SDL_GL_SwapBuffers();
 }
 
 /// Updates scene state
@@ -106,8 +106,15 @@ int main(int argc, char const *argv[])
 	SDL_Surface *screen;
 	Uint8 *keys;
 
-	SDL_Init(SDL_INIT_VIDEO);
-	screen = SDL_SetVideoMode(300, 300, 16, SDL_OPENGL|SDL_RESIZABLE);
+	if (0 != SDL_Init(SDL_INIT_EVERYTHING)) return 1;
+
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+	screen = SDL_SetVideoMode(640, 480, 32, SDL_OPENGL|SDL_RESIZABLE);
 	if ( ! screen ) {
 		puts(SDL_GetError());
 		SDL_Quit();
@@ -116,8 +123,6 @@ int main(int argc, char const *argv[])
 	SDL_WM_SetCaption("Mech", "mech");
 	reshape(screen->w, screen->h);
 	init_scene();
-
-	// update animations
 
 	int done = 0;
 	SDL_Event event;
