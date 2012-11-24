@@ -13,6 +13,8 @@ private:
 		};
 	} pos, rot;
 
+	bool visible;
+
 protected:
 	std::list<GraphNode*> members;
 	GraphNode* parent;
@@ -28,6 +30,8 @@ public:
 
 	void addMember(GraphNode* member);
 	void removeMember(GraphNode* member);
+
+	void setVisibility(bool v);
 
 private:
 	virtual void doRender();

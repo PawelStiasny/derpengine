@@ -5,6 +5,7 @@
 GraphNode::GraphNode()
 {
 	parent = NULL;
+	visible = true;
 }
 
 /// Scene graph manages its memory.
@@ -72,5 +73,10 @@ void GraphNode::addMember(GraphNode* member)
 void GraphNode::removeMember(GraphNode* member)
 {
 	delete member;
+}
+
+void GraphNode::setVisibility(bool v)
+{
+	visible = v;
 }
 
