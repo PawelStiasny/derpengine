@@ -126,13 +126,13 @@ int main(int argc, char const *argv[])
 
 	int done = 0;
 	SDL_Event event;
-	while ( !done ) {
-		while ( SDL_PollEvent(&event) ) {
+	while (!done) {
+		while (SDL_PollEvent(&event)) {
 			switch(event.type) {
 				case SDL_VIDEORESIZE:
 					screen = SDL_SetVideoMode(event.resize.w, event.resize.h, 16,
 							SDL_OPENGL|SDL_RESIZABLE);
-					if ( screen )
+					if (screen)
 						reshape(screen->w, screen->h);
 					break;
 
@@ -143,7 +143,7 @@ int main(int argc, char const *argv[])
 		}
 		keys = SDL_GetKeyState(NULL);
 
-		if ( keys[SDLK_ESCAPE] ) {
+		if (keys[SDLK_ESCAPE]) {
 			done = 1;
 		}
 
