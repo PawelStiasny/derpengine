@@ -1,3 +1,6 @@
+#ifndef GRAHPHNODE_H
+#define GRAHPHNODE_H
+
 #include <GL/gl.h>
 #include <list>
 
@@ -36,3 +39,5 @@ public:
 private:
 	virtual void doRender();
 };
+
+#endif
