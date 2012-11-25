@@ -43,7 +43,7 @@ public:
 
 	virtual void update(float timestep)
 	{
-		subject->setRotation(40.0f, rotation++, 0.0f);
+		subject->setRotation(40.0f, rotation += timestep, 0.0f);
 	}
 };
 
@@ -92,9 +92,8 @@ void draw_scene()
 }
 
 /// Updates scene state
-void update_scene()
+void update_scene(float timestep)
 {
-	float timestep = 0.1f;
 	std::for_each(
 			animations.begin(),
 			animations.end(),
@@ -124,6 +123,8 @@ int main(int argc, char const *argv[])
 	reshape(screen->w, screen->h);
 	init_scene();
 
+	Uint32 previous_ticks = SDL_GetTicks();
+
 	int done = 0;
 	SDL_Event event;
 	while (!done) {
@@ -148,7 +149,9 @@ int main(int argc, char const *argv[])
 		}
 
 		// update
-		update_scene();
+		Uint32 t = SDL_GetTicks();
+		update_scene((float)(t - previous_ticks) / 1000);
+		previous_ticks = t;
 
 		// render
 		draw_scene();
