@@ -6,7 +6,7 @@ class Mech : public GraphNode
 {
 private:
 	MechBody *body;
-	MechLeg *leg[2];
+	MechLeg *leg[4];
 
 public:
 	Mech();

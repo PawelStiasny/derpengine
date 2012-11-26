@@ -6,6 +6,7 @@
 #include <functional>
 
 #include "scene/GraphNode.h"
+#include "scene/Mech.h"
 #include "animations/Animation.h"
 
 GraphNode* scene = NULL;
@@ -43,7 +44,8 @@ public:
 
 	virtual void update(float timestep)
 	{
-		subject->setRotation(40.0f, rotation += timestep, 0.0f);
+		subject->setRotation(40.0f, rotation += timestep*8, 0.0f);
+		while (rotation > 360.0f) rotation -= 360.0f;
 	}
 };
 
@@ -60,18 +62,19 @@ void reshape(int width, int height)
 /// Sets up rendering and creates the initial scene graph.
 void init_scene()
 {
-	/*static GLfloat pos[4] =
+	static GLfloat pos[4] =
 	{5.0, 5.0, 10.0, 0.0};
 	glLightfv(GL_LIGHT0, GL_POSITION, pos);
 	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);*/
+	glEnable(GL_LIGHT0);
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 
 	scene = new GraphNode;
-	TestTriangle *tt = new TestTriangle;
-	scene->addMember(tt);
+	/*TestTriangle *tt = new TestTriangle;
+	scene->addMember(tt);*/
+	scene->addMember(new Mech());
 
 	animations.push_back(new TestSceneRotation(scene));
 }
@@ -79,7 +82,6 @@ void init_scene()
 /// Sets up a new frame and renders the scene.
 void draw_scene()
 {
-	static float rotation = 0;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glMatrixMode(GL_MODELVIEW);
