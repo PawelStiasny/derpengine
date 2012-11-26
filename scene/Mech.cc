@@ -25,7 +25,3 @@ Mech::Mech()
 	leg[1]->addMember(leg[3]);
 }
 
-void Mech::doRender()
-{
-
-}

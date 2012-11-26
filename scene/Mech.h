@@ -10,7 +10,4 @@ private:
 
 public:
 	Mech();
-
-private:
-	void doRender();
 };
