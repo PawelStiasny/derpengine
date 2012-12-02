@@ -1,5 +1,7 @@
+#include <GL/glew.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <glm/glm.hpp>
 #include <SDL/SDL.h>
 #include <list>
 #include <algorithm>
@@ -48,6 +50,29 @@ public:
 		while (rotation > 360.0f) rotation -= 360.0f;
 	}
 };
+
+const char* vertex_shader_source = 
+	"#version 330 core\n"
+	"in vec3 v;"
+	"void main() {"
+	"	gl_Position.xyz = v;"
+	"	gl_Position.w = 1.0;"
+	"}";
+
+void use_vertex_shader()
+{
+	GLuint shader_id = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(shader_id, 1, &vertex_shader_source, NULL);
+	glCompileShader(shader_id);
+
+	GLuint program_id = glCreateProgram();
+	glAttachShader(program_id, shader_id);
+	glLinkProgram(program_id);
+
+	glDeleteShader(shader_id);
+
+	glUseProgram(program_id);
+}
 
 void reshape(int width, int height)
 {

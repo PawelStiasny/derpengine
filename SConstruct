@@ -18,7 +18,7 @@ if ARGUMENTS.get('debug', 0):
 	# Allow clang pretty-printing
 	env['ENV']['TERM'] = os.environ['TERM']
 
-env.Append( LIBS = ['SDL', 'GL', 'GLU'] )
+env.Append( LIBS = ['SDL', 'GL', 'GLU', 'GLEW'] )
 main = env.Program( target = 'mech', source = object_list )
 
 env.PDF('doc/spec.tex')
