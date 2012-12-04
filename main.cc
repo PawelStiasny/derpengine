@@ -1,6 +1,4 @@
 #include <GL/glew.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
 #include <glm/glm.hpp>
 #include <SDL/SDL.h>
 #include <list>
@@ -52,22 +50,28 @@ public:
 };
 
 const char* vertex_shader_source = 
-	"#version 330 core\n"
-	"in vec3 v;"
-	"void main() {"
-	"	gl_Position.xyz = v;"
-	"	gl_Position.w = 1.0;"
+	"#version 130\n\n"
+	"in vec3 v;\n\n"
+	"void main() {\n"
+	"	gl_Position = ftransform();\n"
+	//"	gl_Position.w = 1.0;\n"
 	"}";
 
 void use_vertex_shader()
 {
+	char log_buff[1024];
+
 	GLuint shader_id = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(shader_id, 1, &vertex_shader_source, NULL);
 	glCompileShader(shader_id);
+	glGetShaderInfoLog(shader_id, 1023, NULL, log_buff);
+	puts(log_buff);
 
 	GLuint program_id = glCreateProgram();
 	glAttachShader(program_id, shader_id);
 	glLinkProgram(program_id);
+	glGetShaderInfoLog(shader_id, 1023, NULL, log_buff);
+	puts(log_buff);
 
 	glDeleteShader(shader_id);
 
@@ -95,6 +99,8 @@ void init_scene()
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
+
+	use_vertex_shader();
 
 	scene = new GraphNode;
 	/*TestTriangle *tt = new TestTriangle;
@@ -147,6 +153,7 @@ int main(int argc, char const *argv[])
 		exit(2);
 	}
 	SDL_WM_SetCaption("Mech", "mech");
+	glewInit();
 	reshape(screen->w, screen->h);
 	init_scene();
 
