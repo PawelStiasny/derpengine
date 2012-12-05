@@ -12,7 +12,8 @@
 #include "scene/Mech.h"
 #include "animations/Animation.h"
 
-GraphNode* scene = NULL;
+GraphNode *scene = NULL;
+RenderingContext *rc;
 std::list<Animation*> animations;
 GLuint sh_program_id;
 
@@ -30,7 +31,7 @@ public:
 
 	virtual void update(float timestep)
 	{
-		subject->setRotation(40.0f, rotation += timestep*8, 0.0f);
+		subject->setRotation(0.0f, rotation += timestep*8, 0.0f);
 		while (rotation > 360.0f) rotation -= 360.0f;
 	}
 };
@@ -96,9 +97,11 @@ void init_scene()
 	use_vertex_shader();
 
 	scene = new GraphNode;
-	/*TestTriangle *tt = new TestTriangle;
-	scene->addMember(tt);*/
-	scene->addMember(new Mech());
+	GraphNode *mech = new Mech();
+	scene->addMember(mech);
+
+	rc = new RenderingContext(scene);
+	rc->setCamera(glm::vec3(0.0f, 1.0f, -3.0f), mech);
 
 	animations.push_back(new TestSceneRotation(scene));
 }
@@ -106,12 +109,11 @@ void init_scene()
 /// Sets up a new frame and renders the scene.
 void draw_scene()
 {
-	RenderingContext rc(scene);
-	rc.program_id = sh_program_id;
+	rc->program_id = sh_program_id;
 
 	//scene->setPosition(0.0f, 0.0f, -3.0f);
 
-	rc.update();
+	rc->update();
 }
 
 /// Updates scene state

@@ -78,6 +78,19 @@ void GraphNode::setRotation(GLfloat x, GLfloat y, GLfloat z)
 	rot.v[2] = z;
 }
 
+glm::vec4 GraphNode::getWorldCoordinates(const glm::vec4& v)
+{
+	glm::mat4 mc = glm::translate(pos.v[0], pos.v[1], pos.v[2]);
+	mc = glm::rotate(mc, rot.v[0], glm::vec3(1.0f, 0.0f, 0.0f));
+	mc = glm::rotate(mc, rot.v[1], glm::vec3(0.0f, 1.0f, 0.0f));
+	mc = glm::rotate(mc, rot.v[2], glm::vec3(0.0f, 0.0f, 1.0f));
+
+	if (parent == NULL)
+		return mc * v;
+	else
+		return parent->getWorldCoordinates(mc * v);
+}
+
 void GraphNode::addMember(GraphNode* member)
 {
 	member->parent = this;

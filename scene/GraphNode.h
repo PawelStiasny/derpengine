@@ -2,6 +2,7 @@
 #define GRAHPHNODE_H
 
 #include <GL/gl.h>
+#include <glm/glm.hpp>
 #include <list>
 
 //#include "../RenderingContext.h"
@@ -33,6 +34,7 @@ public:
 
 	void setPosition(GLfloat x, GLfloat y, GLfloat z);
 	void setRotation(GLfloat x, GLfloat y, GLfloat z);
+	glm::vec4 getWorldCoordinates(const glm::vec4& v);
 
 	void addMember(GraphNode* member);
 	void removeMember(GraphNode* member);

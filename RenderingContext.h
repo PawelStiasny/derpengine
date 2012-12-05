@@ -13,8 +13,8 @@ public:
 	GraphNode* getScene();
 
 	void update();
-	void setCamera(GLfloat pos_x, GLfloat pos_y, GLfloat pos_z, GLfloat obj_x, GLfloat obj_y, GLfloat obj_z);
-	void setCamera(GLfloat pos_x, GLfloat pos_y, GLfloat pos_z, GraphNode *object);
+	void setCamera(glm::vec3 pos, glm::vec3 target);
+	void setCamera(glm::vec3 pos, GraphNode *object);
 
 	void pushMatrix();
 	void popMatrix();
