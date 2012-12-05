@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "RenderingContext.h"
 
@@ -96,7 +97,7 @@ RenderingContext::updateMatrix()
 {
 	mvp = m_projection * m_view * m_model;
 	// TODO: Pass the shader
-	glUniformMatrix4fv(glGetUniformLocation(program_id, "t"), 1, GL_FALSE, &mvp[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(program_id, "t"), 1, GL_FALSE, glm::value_ptr(mvp));
 }
 
 
