@@ -103,6 +103,7 @@ int main(int argc, char const *argv[])
 	reshape(screen->w, screen->h);
 
 	Uint32 previous_ticks = SDL_GetTicks();
+	Uint32 fps_prev_t = previous_ticks, frames = 0;
 
 	int done = 0;
 	SDL_Event event;
@@ -129,8 +130,16 @@ int main(int argc, char const *argv[])
 
 		// update
 		Uint32 t = SDL_GetTicks();
-		update_scene((float)(t - previous_ticks) / 1000);
+		update_scene((float)(t - previous_ticks) / 1000.0f);
 		previous_ticks = t;
+
+		// count FPS
+		frames++;
+		if (fps_prev_t + 5000 < t) {
+			printf("FPS: %f\n", (float)frames / ((float)(t - fps_prev_t) / 1000.0f));
+			fps_prev_t = t;
+			frames = 0;
+		}
 
 		// render
 		draw_scene();
