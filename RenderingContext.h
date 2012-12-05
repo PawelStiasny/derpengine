@@ -4,11 +4,13 @@
 #include <glm/glm.hpp>
 
 #include "scene/GraphNode.h"
+#include "shaders/VertexShader.h"
 
 class RenderingContext
 {
 public:
 	RenderingContext(GraphNode *scene);
+	~RenderingContext();
 	GraphNode* getScene();
 
 	void update();
@@ -22,12 +24,11 @@ public:
 	const glm::mat4& getModelMatrix();
 	void setModelMatrix(glm::mat4& m);
 
-	GLuint program_id; // TODO: shader passing
-
 private:
 	glm::mat4 mvp, m_model, m_view, m_projection;
 	std::list<glm::mat4> matrix_stack;
 	GraphNode *scene;
+	VertexShader *vertex_shader;
 
 	void updateMatrix();
 };

@@ -7,6 +7,7 @@ env = Environment()
 sources = ['main.cc', 'RenderingContext.cc']
 sources.extend(glob.glob('scene/*.cc'))
 sources.extend(glob.glob('animations/*.cc'))
+sources.extend(glob.glob('shaders/*.cc'))
 object_list = env.Object(source = sources)
 
 if ARGUMENTS.get('debug', 0):

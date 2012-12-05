@@ -15,7 +15,6 @@
 GraphNode *scene = NULL;
 RenderingContext *rc;
 std::list<Animation*> animations;
-GLuint sh_program_id;
 
 class TestSceneRotation : public Animation
 {
@@ -36,38 +35,6 @@ public:
 	}
 };
 
-const char* vertex_shader_source = 
-	"#version 130\n\n"
-	"uniform mat4 t;\n"
-	"in vec3 v;\n\n"
-	"void main() {\n"
-	"	gl_Position = t * vec4(v, 1.0);\n"
-	//"	gl_Position.w = 1.0;\n"
-	"}";
-
-void use_vertex_shader()
-{
-	char log_buff[1024];
-
-	GLuint shader_id = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(shader_id, 1, &vertex_shader_source, NULL);
-	glCompileShader(shader_id);
-	glGetShaderInfoLog(shader_id, 1023, NULL, log_buff);
-	puts(log_buff);
-
-	GLuint program_id = glCreateProgram();
-	glAttachShader(program_id, shader_id);
-	glLinkProgram(program_id);
-	glGetShaderInfoLog(shader_id, 1023, NULL, log_buff);
-	puts(log_buff);
-
-	glDeleteShader(shader_id);
-
-	glUseProgram(program_id);
-
-	sh_program_id = program_id;
-}
-
 void reshape(int width, int height)
 {
 	glViewport(0, 0, (GLint) width, (GLint) height);
@@ -86,15 +53,12 @@ void init_scene()
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 
-	use_vertex_shader();
-
 	scene = new GraphNode;
 	GraphNode *mech = new Mech();
 	scene->addMember(mech);
 
 	rc = new RenderingContext(scene);
 	rc->setCamera(glm::vec3(0.0f, 1.0f, -3.0f), mech);
-	rc->program_id = sh_program_id;
 
 	animations.push_back(new TestSceneRotation(scene));
 }

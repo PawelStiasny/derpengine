@@ -4,17 +4,23 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #include "RenderingContext.h"
 
 RenderingContext::RenderingContext(GraphNode *scene)
 {
 	this->scene = scene;
+	vertex_shader = new VertexShader;
+	vertex_shader->use();
 	m_projection = glm::perspective(60.0f, 4.0f/3.0f, 1.0f, 10.0f);
 	m_view = glm::mat4(1.0f);
 	m_model = glm::mat4(1.0f);
 	updateMatrix();
+}
+
+RenderingContext::~RenderingContext()
+{
+	delete vertex_shader;
 }
 
 GraphNode* RenderingContext::getScene()
@@ -78,7 +84,6 @@ void RenderingContext::setModelMatrix(glm::mat4 &m)
 void RenderingContext::updateMatrix()
 {
 	mvp = m_projection * m_view * m_model;
-	// TODO: Pass the shader
-	glUniformMatrix4fv(glGetUniformLocation(program_id, "t"), 1, GL_FALSE, glm::value_ptr(mvp));
+	vertex_shader->setUniformMVP(mvp);
 }
 
