@@ -17,16 +17,12 @@ RenderingContext::RenderingContext(GraphNode *scene)
 	updateMatrix();
 }
 
-
-GraphNode *
-RenderingContext::getScene()
+GraphNode* RenderingContext::getScene()
 {
 	return scene;
 }
 
-
-void
-RenderingContext::update()
+void RenderingContext::update()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	matrix_stack.clear();
@@ -38,68 +34,51 @@ RenderingContext::update()
 	SDL_GL_SwapBuffers();
 }
 
-
-void
-RenderingContext::setCamera(glm::vec3 pos, glm::vec3 target)
+void RenderingContext::setCamera(glm::vec3 pos, glm::vec3 target)
 {
 	m_view = glm::lookAt(pos, target, glm::vec3(0.0f,1.0f,0.0f));
 	updateMatrix();
 }
 
-
-void
-RenderingContext::setCamera(glm::vec3 pos, GraphNode *object)
+void RenderingContext::setCamera(glm::vec3 pos, GraphNode *object)
 {
 	glm::vec3 target = object->getWorldCoordinates(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)).xyz();
 	setCamera(pos, target);
 }
 
-
-void
-RenderingContext::reshape(int w, int h)
+void RenderingContext::reshape(int w, int h)
 {
 	m_projection = glm::perspective(60.0f, (float)w/(float)h, 1.0f, 10.0f);
 	updateMatrix();
 }
 
-
-void
-RenderingContext::pushMatrix()
+void RenderingContext::pushMatrix()
 {
 	matrix_stack.push_back(m_model);
 }
 
-
-void
-RenderingContext::popMatrix()
+void RenderingContext::popMatrix()
 {
 	m_model = matrix_stack.back();
 	matrix_stack.pop_back();
 	updateMatrix();
 }
 
-
-const glm::mat4 &
-RenderingContext::getModelMatrix()
+const glm::mat4 & RenderingContext::getModelMatrix()
 {
 	return m_model;
 }
 
-
-void
-RenderingContext::setModelMatrix(glm::mat4 &m)
+void RenderingContext::setModelMatrix(glm::mat4 &m)
 {
 	m_model = m;
 	updateMatrix();
 }
 
-
-void
-RenderingContext::updateMatrix()
+void RenderingContext::updateMatrix()
 {
 	mvp = m_projection * m_view * m_model;
 	// TODO: Pass the shader
 	glUniformMatrix4fv(glGetUniformLocation(program_id, "t"), 1, GL_FALSE, glm::value_ptr(mvp));
 }
-
 

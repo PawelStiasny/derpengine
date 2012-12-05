@@ -22,7 +22,7 @@ public:
 	const glm::mat4& getModelMatrix();
 	void setModelMatrix(glm::mat4& m);
 
-	GLuint program_id;
+	GLuint program_id; // TODO: shader passing
 
 private:
 	glm::mat4 mvp, m_model, m_view, m_projection;
