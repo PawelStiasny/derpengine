@@ -22,6 +22,8 @@ public:
 	const glm::mat4& getModelMatrix();
 	void setModelMatrix(glm::mat4& m);
 
+	GLuint program_id;
+
 private:
 	glm::mat4 mvp, m_model, m_view, m_projection;
 	std::list<glm::mat4> matrix_stack;

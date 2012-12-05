@@ -14,6 +14,7 @@
 
 GraphNode* scene = NULL;
 std::list<Animation*> animations;
+GLuint sh_program_id;
 
 class TestSceneRotation : public Animation
 {
@@ -63,10 +64,11 @@ void use_vertex_shader()
 
 	glUseProgram(program_id);
 
-	glm::mat4 Projection = glm::perspective(60.0f, 4.0f/3.0f, 1.0f, 10.0f);
+	/*glm::mat4 Projection = glm::perspective(60.0f, 4.0f/3.0f, 1.0f, 10.0f);
 	Projection *= glm::translate(0.0f, 0.0f, -3.0f);
 	//glm::mat4 Projection = glm::mat4(1.0);
-	glUniformMatrix4fv(glGetUniformLocation(program_id, "t"), 1, GL_FALSE, &Projection[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(program_id, "t"), 1, GL_FALSE, &Projection[0][0]);*/
+	sh_program_id = program_id;
 }
 
 void reshape(int width, int height)
@@ -105,8 +107,9 @@ void init_scene()
 void draw_scene()
 {
 	RenderingContext rc(scene);
+	rc.program_id = sh_program_id;
 
-	scene->setPosition(0.0f, 0.0f, -3.0f);
+	//scene->setPosition(0.0f, 0.0f, -3.0f);
 
 	rc.update();
 }

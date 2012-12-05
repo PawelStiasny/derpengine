@@ -1,6 +1,10 @@
-#include "GraphNode.h"
 #include <algorithm>
 #include <functional>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
+
+#include "GraphNode.h"
+#include "../RenderingContext.h"
 
 GraphNode::GraphNode()
 {
@@ -27,12 +31,19 @@ void GraphNode::render(RenderingContext *rc)
 	if (!visible) return;
 
 	// Apply transformations
-	if (pos.isSet() || rot.isSet()) glPushMatrix();
-	if (pos.isSet()) glTranslatef(pos.v[0], pos.v[1], pos.v[2]);
+	if (pos.isSet() || rot.isSet()) rc->pushMatrix();
+	if (pos.isSet()) {
+		glm::mat4 rm = glm::translate(
+				rc->getModelMatrix(),
+				pos.v[0], pos.v[1], pos.v[2]);
+		rc->setModelMatrix(rm);
+	}
 	if (rot.isSet()) {
-		glRotatef(rot.v[0], 1.0f, 0.0f, 0.0f);
-		glRotatef(rot.v[1], 0.0f, 1.0f, 0.0f);
-		glRotatef(rot.v[2], 0.0f, 0.0f, 1.0f);
+		glm::mat4 rm = rc->getModelMatrix();
+		rm = glm::rotate(rm, rot.v[0], glm::vec3(1.0f, 0.0f, 0.0f));
+		rm = glm::rotate(rm, rot.v[1], glm::vec3(0.0f, 1.0f, 0.0f));
+		rm = glm::rotate(rm, rot.v[2], glm::vec3(0.0f, 0.0f, 1.0f));
+		rc->setModelMatrix(rm);
 	}
 
 	// Call concrete rendering implementation
@@ -43,7 +54,7 @@ void GraphNode::render(RenderingContext *rc)
 			std::bind2nd(std::mem_fun(&GraphNode::render), rc));
 
 	// Revert transformations
-	if (pos.isSet() || rot.isSet()) glPopMatrix();
+	if (pos.isSet() || rot.isSet()) rc->popMatrix();
 }
 
 /// Concrete implementation of node's rendering.
