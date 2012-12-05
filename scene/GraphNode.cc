@@ -22,7 +22,7 @@ GraphNode::~GraphNode()
 
 /// Template Method that sets up transformations and calls the actual 
 /// object and member rendering.
-void GraphNode::render()
+void GraphNode::render(RenderingContext *rc)
 {
 	if (!visible) return;
 
@@ -39,7 +39,8 @@ void GraphNode::render()
 	doRender();
 
 	// Render members
-	std::for_each(members.begin(), members.end(), std::mem_fun(&GraphNode::render));
+	std::for_each(members.begin(), members.end(), 
+			std::bind2nd(std::mem_fun(&GraphNode::render), rc));
 
 	// Revert transformations
 	if (pos.isSet() || rot.isSet()) glPopMatrix();

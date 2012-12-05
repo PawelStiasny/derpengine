@@ -4,7 +4,7 @@ import os
 env = Environment()
 
 # Construct an object list
-sources = ['main.cc']
+sources = ['main.cc', 'RenderingContext.cc']
 sources.extend(glob.glob('scene/*.cc'))
 sources.extend(glob.glob('animations/*.cc'))
 object_list = env.Object(source = sources)

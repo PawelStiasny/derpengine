@@ -1,10 +1,13 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
 #include <SDL/SDL.h>
 #include <list>
 #include <algorithm>
 #include <functional>
 
+#include "RenderingContext.h"
 #include "scene/GraphNode.h"
 #include "scene/Mech.h"
 #include "animations/Animation.h"
@@ -51,9 +54,10 @@ public:
 
 const char* vertex_shader_source = 
 	"#version 130\n\n"
+	"uniform mat4 t;\n"
 	"in vec3 v;\n\n"
 	"void main() {\n"
-	"	gl_Position = ftransform();\n"
+	"	gl_Position = t * vec4(v, 1.0);\n"
 	//"	gl_Position.w = 1.0;\n"
 	"}";
 
@@ -76,6 +80,11 @@ void use_vertex_shader()
 	glDeleteShader(shader_id);
 
 	glUseProgram(program_id);
+
+	glm::mat4 Projection = glm::perspective(60.0f, 4.0f/3.0f, 1.0f, 10.0f);
+	Projection *= glm::translate(0.0f, 0.0f, -3.0f);
+	//glm::mat4 Projection = glm::mat4(1.0);
+	glUniformMatrix4fv(glGetUniformLocation(program_id, "t"), 1, GL_FALSE, &Projection[0][0]);
 }
 
 void reshape(int width, int height)
@@ -113,15 +122,11 @@ void init_scene()
 /// Sets up a new frame and renders the scene.
 void draw_scene()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	RenderingContext rc(scene);
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
 	scene->setPosition(0.0f, 0.0f, -3.0f);
 
-	scene->render();
-	glFlush();
-	SDL_GL_SwapBuffers();
+	rc.update();
 }
 
 /// Updates scene state
@@ -146,7 +151,7 @@ int main(int argc, char const *argv[])
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-	screen = SDL_SetVideoMode(640, 480, 32, SDL_OPENGL|SDL_RESIZABLE);
+	screen = SDL_SetVideoMode(800, 600, 32, SDL_OPENGL|SDL_RESIZABLE);
 	if ( ! screen ) {
 		puts(SDL_GetError());
 		SDL_Quit();

@@ -4,6 +4,9 @@
 #include <GL/gl.h>
 #include <list>
 
+//#include "../RenderingContext.h"
+class RenderingContext;
+
 /// Each graph node is a composite directing rendering of itself and its
 /// members.
 class GraphNode
@@ -26,7 +29,7 @@ public:
 	GraphNode();
 	virtual ~GraphNode();
 
-	void render();
+	void render(RenderingContext *rc);
 
 	void setPosition(GLfloat x, GLfloat y, GLfloat z);
 	void setRotation(GLfloat x, GLfloat y, GLfloat z);
