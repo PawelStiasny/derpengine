@@ -18,12 +18,6 @@ RenderingContext::RenderingContext(GraphNode *scene)
 }
 
 
-RenderingContext::RenderingContext()
-{
-	this->scene = new GraphNode;
-}
-
-
 GraphNode *
 RenderingContext::getScene()
 {
@@ -58,6 +52,14 @@ RenderingContext::setCamera(glm::vec3 pos, GraphNode *object)
 {
 	glm::vec3 target = object->getWorldCoordinates(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)).xyz();
 	setCamera(pos, target);
+}
+
+
+void
+RenderingContext::reshape(int w, int h)
+{
+	m_projection = glm::perspective(60.0f, (float)w/(float)h, 1.0f, 10.0f);
+	updateMatrix();
 }
 
 

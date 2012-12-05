@@ -65,21 +65,13 @@ void use_vertex_shader()
 
 	glUseProgram(program_id);
 
-	/*glm::mat4 Projection = glm::perspective(60.0f, 4.0f/3.0f, 1.0f, 10.0f);
-	Projection *= glm::translate(0.0f, 0.0f, -3.0f);
-	//glm::mat4 Projection = glm::mat4(1.0);
-	glUniformMatrix4fv(glGetUniformLocation(program_id, "t"), 1, GL_FALSE, &Projection[0][0]);*/
 	sh_program_id = program_id;
 }
 
 void reshape(int width, int height)
 {
-	GLfloat ratio = (GLfloat) width / (GLfloat) height;
-
 	glViewport(0, 0, (GLint) width, (GLint) height);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(60.0f, ratio, 1.0f, 10.0f);
+	rc->reshape(width, height);
 }
 
 /// Sets up rendering and creates the initial scene graph.
@@ -102,6 +94,7 @@ void init_scene()
 
 	rc = new RenderingContext(scene);
 	rc->setCamera(glm::vec3(0.0f, 1.0f, -3.0f), mech);
+	rc->program_id = sh_program_id;
 
 	animations.push_back(new TestSceneRotation(scene));
 }
@@ -109,10 +102,6 @@ void init_scene()
 /// Sets up a new frame and renders the scene.
 void draw_scene()
 {
-	rc->program_id = sh_program_id;
-
-	//scene->setPosition(0.0f, 0.0f, -3.0f);
-
 	rc->update();
 }
 
@@ -146,8 +135,8 @@ int main(int argc, char const *argv[])
 	}
 	SDL_WM_SetCaption("Mech", "mech");
 	glewInit();
-	reshape(screen->w, screen->h);
 	init_scene();
+	reshape(screen->w, screen->h);
 
 	Uint32 previous_ticks = SDL_GetTicks();
 

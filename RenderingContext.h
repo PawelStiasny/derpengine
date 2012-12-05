@@ -9,12 +9,12 @@ class RenderingContext
 {
 public:
 	RenderingContext(GraphNode *scene);
-	RenderingContext();
 	GraphNode* getScene();
 
 	void update();
 	void setCamera(glm::vec3 pos, glm::vec3 target);
 	void setCamera(glm::vec3 pos, GraphNode *object);
+	void reshape(int w, int h);
 
 	void pushMatrix();
 	void popMatrix();
