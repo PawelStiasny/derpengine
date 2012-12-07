@@ -3,6 +3,7 @@
 class VertexShader {
 public:
 	VertexShader();
+	~VertexShader();
 	void use();
 	void setUniformMVP(glm::mat4& mvp);
 private:

@@ -8,7 +8,7 @@ Mech::Mech()
 
 	leg[0] = new MechLeg(0.6, 0.3);
 	leg[0]->setPosition(-1.0f, 0.0f, 0.0f);
-	leg[0]->setRotation(90.0f, 0.0f, 0.0f);
+	leg[0]->setRotation(80.0f, 0.0f, 0.0f);
 	addMember(leg[0]);
 	leg[1] = new MechLeg(0.6, 0.3);
 	leg[1]->setPosition(1.0f, 0.0f, 0.0f);

@@ -30,6 +30,11 @@ VertexShader::VertexShader()
 	glDeleteShader(shader_id);
 }
 
+VertexShader::~VertexShader()
+{
+	glDeleteProgram(program_id);
+}
+
 void VertexShader::use()
 {
 	glUseProgram(program_id);
