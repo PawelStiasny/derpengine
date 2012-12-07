@@ -10,7 +10,7 @@
 RenderingContext::RenderingContext(GraphNode *scene)
 {
 	this->scene = scene;
-	vertex_shader = new VertexShader;
+	vertex_shader = new GLSLProgram;
 	vertex_shader->use();
 	m_projection = glm::perspective(60.0f, 4.0f/3.0f, 1.0f, 10.0f);
 	m_view = glm::mat4(1.0f);

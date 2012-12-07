@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 
 #include "scene/GraphNode.h"
-#include "shaders/VertexShader.h"
+#include "shaders/GLSLProgram.h"
 
 class RenderingContext
 {
@@ -28,7 +28,7 @@ private:
 	glm::mat4 mvp, m_model, m_view, m_projection;
 	std::list<glm::mat4> matrix_stack;
 	GraphNode *scene;
-	VertexShader *vertex_shader;
+	GLSLProgram *vertex_shader;
 
 	void updateMatrix();
 };
