@@ -13,6 +13,13 @@ const char* GLSLProgram::vertex_shader_source =
 	"	gl_Position = MVP * vec4(v, 1.0);\n"
 	"}";
 
+const char* GLSLProgram::fragment_shader_source =
+	"#version 130\n\n"
+
+	"void main() {\n"
+	"	gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);"
+	"}";
+
 GLSLProgram::GLSLProgram()
 {
 	char log_buff[1024];
@@ -21,11 +28,13 @@ GLSLProgram::GLSLProgram()
 
 	program_id = glCreateProgram();
 	glAttachShader(program_id, vertex_shader_id);
+	glAttachShader(program_id, fragment_shader_id);
 	glLinkProgram(program_id);
 	glGetShaderInfoLog(vertex_shader_id, 1023, NULL, log_buff);
 	puts(log_buff);
 
 	glDeleteShader(vertex_shader_id);
+	glDeleteShader(fragment_shader_id);
 }
 
 GLuint GLSLProgram::compileVertexShader()
@@ -43,7 +52,15 @@ GLuint GLSLProgram::compileVertexShader()
 
 GLuint GLSLProgram::compileFragmentShader()
 {
-	return 0;
+	char log_buff[1024];
+
+	GLuint shader_id = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(shader_id, 1, &fragment_shader_source, NULL);
+	glCompileShader(shader_id);
+	glGetShaderInfoLog(shader_id, 1023, NULL, log_buff);
+	puts(log_buff);
+
+	return shader_id;
 }
 
 GLSLProgram::~GLSLProgram()
@@ -58,7 +75,9 @@ void GLSLProgram::use()
 
 void GLSLProgram::setUniformMVP(glm::mat4 &mvp)
 {
-	glUniformMatrix4fv(glGetUniformLocation(program_id, "MVP"), 1, GL_FALSE, glm::value_ptr(mvp));
+	glUniformMatrix4fv(
+			glGetUniformLocation(program_id, "MVP"), 
+			1, GL_FALSE, glm::value_ptr(mvp));
 }
 
 
