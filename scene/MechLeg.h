@@ -11,5 +11,5 @@ public:
 	MechLeg(GLfloat length, GLfloat radius);
 
 private:
-	void doRender();
+	void doRender(RenderingContext *rc);
 };

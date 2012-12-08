@@ -6,6 +6,7 @@ public:
 	~GLSLProgram();
 	void use();
 	void setUniformMVP(glm::mat4& mvp);
+	void setUniformTexSampler(GLuint i);
 private:
 	GLuint program_id;
 	static const char *vertex_shader_source;

@@ -47,7 +47,7 @@ void GraphNode::render(RenderingContext *rc)
 	}
 
 	// Call concrete rendering implementation
-	doRender();
+	doRender(rc);
 
 	// Render members
 	std::for_each(members.begin(), members.end(), 
@@ -60,7 +60,7 @@ void GraphNode::render(RenderingContext *rc)
 /// Concrete implementation of node's rendering.
 ///
 /// Base implementation is a no-op.
-void GraphNode::doRender()
+void GraphNode::doRender(RenderingContext *rc)
 {
 }
 

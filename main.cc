@@ -52,6 +52,8 @@ void init_scene()
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_TEXTURE_2D);
+	//glEnable(GL_MULTISAMPLE);
 
 	scene = new GraphNode;
 	GraphNode *mech = new Mech();
@@ -91,6 +93,7 @@ int main(int argc, char const *argv[])
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+	//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 1);
 	screen = SDL_SetVideoMode(800, 600, 32, SDL_OPENGL|SDL_RESIZABLE);
 	if ( ! screen ) {
 		puts(SDL_GetError());

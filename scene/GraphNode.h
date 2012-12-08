@@ -42,7 +42,7 @@ public:
 	void setVisibility(bool v);
 
 private:
-	virtual void doRender();
+	virtual void doRender(RenderingContext *rc);
 };
 
 #endif

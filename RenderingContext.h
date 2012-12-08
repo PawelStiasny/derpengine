@@ -21,6 +21,8 @@ public:
 	void pushMatrix();
 	void popMatrix();
 
+	void setTextureSampler(GLuint i) { vertex_shader->setUniformTexSampler(i); }
+
 	const glm::mat4& getModelMatrix();
 	void setModelMatrix(glm::mat4& m);
 

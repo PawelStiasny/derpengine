@@ -7,17 +7,21 @@ const char* GLSLProgram::vertex_shader_source =
 	"#version 130\n\n"
 
 	"uniform mat4 MVP;\n"
-	"in vec3 v;\n\n"
+	"in vec3 v;\n"
 
 	"void main() {\n"
 	"	gl_Position = MVP * vec4(v, 1.0);\n"
+	"	gl_TexCoord[0] = gl_MultiTexCoord0;\n"
 	"}";
 
 const char* GLSLProgram::fragment_shader_source =
 	"#version 130\n\n"
 
+	"uniform sampler2D tex_sampler;\n"
+
 	"void main() {\n"
-	"	gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);"
+	//"	gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);"
+	"	gl_FragColor = texture2D( tex_sampler, gl_TexCoord[0].st );\n"
 	"}";
 
 GLSLProgram::GLSLProgram()
@@ -80,4 +84,8 @@ void GLSLProgram::setUniformMVP(glm::mat4 &mvp)
 			1, GL_FALSE, glm::value_ptr(mvp));
 }
 
+void GLSLProgram::setUniformTexSampler(GLuint i)
+{
+	glUniform1i(glGetUniformLocation(program_id, "tex_sampler"), i);
+}
 

@@ -23,5 +23,12 @@ Mech::Mech()
 	leg[3]->setPosition(0.0f, 0.0f, 0.6f);
 	leg[3]->setRotation(12.0f, 0.0f, 0.0f);
 	leg[1]->addMember(leg[3]);
+
+	tex = new Texture("textures/metal.bmp");
+}
+
+Mech::~Mech()
+{
+	delete tex;
 }
 

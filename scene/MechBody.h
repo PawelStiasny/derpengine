@@ -10,5 +10,5 @@ public:
 	MechBody();
 
 private:
-	void doRender();
+	void doRender(RenderingContext *rc);
 };
