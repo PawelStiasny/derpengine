@@ -13,4 +13,5 @@ private:
 public:
 	Mech();
 	~Mech();
+	void doRender(RenderingContext *rc);
 };

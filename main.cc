@@ -52,6 +52,7 @@ void init_scene()
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_TEXTURE_2D);
 	//glEnable(GL_MULTISAMPLE);
 

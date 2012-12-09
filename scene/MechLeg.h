@@ -5,7 +5,7 @@ class MechLeg : public GraphNode
 {
 private:
 	GLfloat length, radius;
-	GLUquadricObj* quad_obj;
+	GLUquadricObj *quad_obj, *quad_obj_inv;
 
 public:
 	MechLeg(GLfloat length, GLfloat radius);
