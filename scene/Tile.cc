@@ -2,21 +2,21 @@
 
 #include "Tile.h"
 
-GLfloat Tile::vertex_data[] = {
+const GLfloat Tile::vertex_data[] = {
 	-1.0f, -1.0f, 0.0f,
 	1.0f, -1.0f, 0.0f,
 	1.0f, 1.0f, 0.0f,
 	-1.0f, 1.0f, 0.0f
 };
 
-GLfloat Tile::uv_data[] = {
+const GLfloat Tile::uv_data[] = {
 	0.0f, 1.0f, 
 	1.0f, 1.0f, 
 	1.0f, 0.0f, 
 	0.0f, 0.0f, 
 };
 
-GLushort Tile::index_data[] = {
+const GLushort Tile::index_data[] = {
 	0, 2, 1,
 	0, 3, 2
 };
