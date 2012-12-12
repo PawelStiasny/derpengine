@@ -44,6 +44,8 @@ public:
 
 private:
 	virtual void doRender(RenderingContext *rc);
+	virtual void beforeRender(RenderingContext *rc);
+	virtual void afterRender(RenderingContext *rc);
 };
 
 #endif

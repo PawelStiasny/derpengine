@@ -30,6 +30,8 @@ void GraphNode::render(RenderingContext *rc)
 {
 	if (!visible) return;
 
+	beforeRender(rc);
+
 	// Apply transformations
 	if (pos.isSet() || rot.isSet()) rc->pushMatrix();
 	if (pos.isSet()) {
@@ -58,12 +60,22 @@ void GraphNode::render(RenderingContext *rc)
 
 	// Revert transformations
 	if (pos.isSet() || rot.isSet()) rc->popMatrix();
+
+	afterRender(rc);
 }
 
 /// Concrete implementation of node's rendering.
 ///
 /// Base implementation is a no-op.
 void GraphNode::doRender(RenderingContext *rc)
+{
+}
+
+void GraphNode::beforeRender(RenderingContext *rc)
+{
+}
+
+void GraphNode::afterRender(RenderingContext *rc)
 {
 }
 

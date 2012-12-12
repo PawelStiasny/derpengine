@@ -42,6 +42,21 @@ Skybox::~Skybox()
 	for (int i = 0; i < 6; i++) delete t[i];
 }
 
-void Skybox::doRender(RenderingContext *rc)
+void Skybox::beforeRender(RenderingContext *rc)
 {
+	glm::vec3 camera_pos = rc->getCameraPos();
+	glm::mat4 unit(1.0f);
+	rc->pushMatrix();
+	rc->setModelMatrix(unit);
+	setPosition(camera_pos.x, camera_pos.y, camera_pos.z);
+	glPushAttrib(GL_ENABLE_BIT);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_LIGHTING);
+	glDisable(GL_BLEND);
+}
+
+void Skybox::afterRender(RenderingContext *rc)
+{
+	glPopAttrib();
+	rc->popMatrix();
 }

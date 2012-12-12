@@ -1,4 +1,5 @@
 #include <GL/glew.h>
+#define GLM_SWIZZLE
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
@@ -31,7 +32,10 @@ public:
 
 	virtual void update(float timestep)
 	{
-		subject->setRotation(0.0f, rotation += timestep*8, 0.0f);
+		//subject->setRotation(0.0f, rotation += timestep*8, 0.0f);
+		glm::vec4 cam_pos = glm::rotate(rotation, glm::vec3(0.0f, 1.0f, 0.0f)) * glm::vec4(0.0f, -1.0f, 3.0f, 1.0f);
+		rc->setCamera(cam_pos.xyz(), subject);
+		rotation += timestep*8;
 		while (rotation > 360.0f) rotation -= 360.0f;
 	}
 };
@@ -58,6 +62,8 @@ void init_scene()
 	//glEnable(GL_MULTISAMPLE);
 
 	scene = new GraphNode;
+	scene->addMember(new Skybox);
+
 	GraphNode *mech = new Mech();
 	scene->addMember(mech);
 	//mech->setVisibility(false);
@@ -66,8 +72,6 @@ void init_scene()
 	rc->setCamera(glm::vec3(0.0f, 1.0f, -3.0f), mech);
 	//rc->setCamera(glm::vec3(0.0f, 1.0f, -3.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 	//scene->setPosition(0.0f, 0.0f, -1.0f);
-
-	scene->addMember(new Skybox);
 
 	animations.push_back(new TestSceneRotation(scene));
 }

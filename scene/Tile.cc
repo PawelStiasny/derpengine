@@ -23,9 +23,12 @@ GLushort Tile::index_data[] = {
 
 Tile::Tile(const char *texture_path)
 {
-	if (texture_path)
+	if (texture_path) {
 		tex = new Texture(texture_path, false);
-	else
+		tex->use(0);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	} else
 		tex = NULL;
 }
 

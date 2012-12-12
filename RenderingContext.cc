@@ -12,7 +12,7 @@ RenderingContext::RenderingContext(GraphNode *scene)
 	this->scene = scene;
 	vertex_shader = new GLSLProgram;
 	vertex_shader->use();
-	m_projection = glm::perspective(60.0f, 4.0f/3.0f, 1.0f, 10.0f);
+	m_projection = glm::perspective(60.0f, 4.0f/3.0f, 0.5f, 100.0f);
 	m_view = glm::mat4(1.0f);
 	m_model = glm::mat4(1.0f);
 	updateMatrix();
@@ -30,7 +30,10 @@ GraphNode* RenderingContext::getScene()
 
 void RenderingContext::update()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	// No need to clear color buffer if we always draw the skybox - save some
+	// fill time
+	// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT);
 	matrix_stack.clear();
 	m_model = glm::mat4(1.0f);
 	updateMatrix();
@@ -42,6 +45,7 @@ void RenderingContext::update()
 
 void RenderingContext::setCamera(glm::vec3 pos, glm::vec3 target)
 {
+	camera_pos = pos;
 	m_view = glm::lookAt(pos, target, glm::vec3(0.0f,1.0f,0.0f));
 	updateMatrix();
 }
@@ -52,9 +56,14 @@ void RenderingContext::setCamera(glm::vec3 pos, GraphNode *object)
 	setCamera(pos, target);
 }
 
+glm::vec3 RenderingContext::getCameraPos()
+{
+	return camera_pos;
+}
+
 void RenderingContext::reshape(int w, int h)
 {
-	m_projection = glm::perspective(60.0f, (float)w/(float)h, 1.0f, 100.0f);
+	m_projection = glm::perspective(60.0f, (float)w/(float)h, 0.5f, 100.0f);
 	updateMatrix();
 }
 
