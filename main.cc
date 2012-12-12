@@ -9,6 +9,7 @@
 
 #include "RenderingContext.h"
 #include "scene/GraphNode.h"
+#include "scene/Skybox.h"
 #include "scene/Mech.h"
 #include "animations/Animation.h"
 
@@ -59,9 +60,14 @@ void init_scene()
 	scene = new GraphNode;
 	GraphNode *mech = new Mech();
 	scene->addMember(mech);
+	//mech->setVisibility(false);
 
 	rc = new RenderingContext(scene);
 	rc->setCamera(glm::vec3(0.0f, 1.0f, -3.0f), mech);
+	//rc->setCamera(glm::vec3(0.0f, 1.0f, -3.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	//scene->setPosition(0.0f, 0.0f, -1.0f);
+
+	scene->addMember(new Skybox);
 
 	animations.push_back(new TestSceneRotation(scene));
 }
@@ -70,6 +76,9 @@ void init_scene()
 void draw_scene()
 {
 	rc->update();
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR)
+		puts((const char*)gluErrorString(error));
 }
 
 /// Updates scene state

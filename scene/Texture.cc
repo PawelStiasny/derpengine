@@ -2,9 +2,14 @@
 
 #include "Texture.h"
 
-Texture::Texture(const char *path)
+Texture::Texture(const char *path, bool mipmapped)
 {
 	data = SDL_LoadBMP(path);
+	if (!data) {
+		printf("Could not read texture %s\n", path);
+		texture_id = 0;
+		return;
+	}
 
 	glGenTextures(1, &texture_id);
 	glBindTexture(GL_TEXTURE_2D, texture_id);
@@ -12,8 +17,12 @@ Texture::Texture(const char *path)
 			GL_BGRA, GL_UNSIGNED_BYTE, data->pixels);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glGenerateMipmap(GL_TEXTURE_2D);
+	if (mipmapped) {
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	} else {
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
 }
 
 Texture::~Texture()

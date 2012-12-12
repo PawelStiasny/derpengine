@@ -40,9 +40,12 @@ void GraphNode::render(RenderingContext *rc)
 	}
 	if (rot.isSet()) {
 		glm::mat4 rm = rc->getModelMatrix();
-		rm = glm::rotate(rm, rot.v[0], glm::vec3(1.0f, 0.0f, 0.0f));
-		rm = glm::rotate(rm, rot.v[1], glm::vec3(0.0f, 1.0f, 0.0f));
-		rm = glm::rotate(rm, rot.v[2], glm::vec3(0.0f, 0.0f, 1.0f));
+		if(rot.v[0] != 0.0f)
+			rm = glm::rotate(rm, rot.v[0], glm::vec3(1.0f, 0.0f, 0.0f));
+		if(rot.v[1] != 0.0f)
+			rm = glm::rotate(rm, rot.v[1], glm::vec3(0.0f, 1.0f, 0.0f));
+		if(rot.v[2] != 0.0f)
+			rm = glm::rotate(rm, rot.v[2], glm::vec3(0.0f, 0.0f, 1.0f));
 		rc->setModelMatrix(rm);
 	}
 

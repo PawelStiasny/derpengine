@@ -1,7 +1,7 @@
 #ifndef GRAHPHNODE_H
 #define GRAHPHNODE_H
 
-#include <GL/gl.h>
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <list>
 
@@ -14,6 +14,7 @@ class GraphNode
 {
 private:
 	struct Vec3 {
+		Vec3() { v[0] = v[1] = v[2] = 0.0f; }
 		GLfloat v[3];
 		bool isSet() {
 			return (v[0] != 0.0f) || (v[1] != 0.0f) || (v[2] != 0.0f);

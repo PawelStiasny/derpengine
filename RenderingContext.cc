@@ -54,7 +54,7 @@ void RenderingContext::setCamera(glm::vec3 pos, GraphNode *object)
 
 void RenderingContext::reshape(int w, int h)
 {
-	m_projection = glm::perspective(60.0f, (float)w/(float)h, 1.0f, 10.0f);
+	m_projection = glm::perspective(60.0f, (float)w/(float)h, 1.0f, 100.0f);
 	updateMatrix();
 }
 
