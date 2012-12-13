@@ -19,7 +19,7 @@ private:
 		bool isSet() {
 			return (v[0] != 0.0f) || (v[1] != 0.0f) || (v[2] != 0.0f);
 		};
-	} pos, rot;
+	} pos, rot, scale;
 
 	bool visible;
 
@@ -36,6 +36,7 @@ public:
 	void setPosition(GLfloat x, GLfloat y, GLfloat z);
 	void setRotation(GLfloat x, GLfloat y, GLfloat z);
 	glm::vec4 getWorldCoordinates(const glm::vec4& v);
+	void setScale(GLfloat x, GLfloat y, GLfloat z);
 
 	void addMember(GraphNode* member);
 	void removeMember(GraphNode* member);

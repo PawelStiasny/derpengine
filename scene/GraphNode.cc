@@ -33,7 +33,7 @@ void GraphNode::render(RenderingContext *rc)
 	beforeRender(rc);
 
 	// Apply transformations
-	if (pos.isSet() || rot.isSet()) rc->pushMatrix();
+	if (pos.isSet() || rot.isSet() || scale.isSet()) rc->pushMatrix();
 	if (pos.isSet()) {
 		glm::mat4 rm = glm::translate(
 				rc->getModelMatrix(),
@@ -50,6 +50,12 @@ void GraphNode::render(RenderingContext *rc)
 			rm = glm::rotate(rm, rot.v[2], glm::vec3(0.0f, 0.0f, 1.0f));
 		rc->setModelMatrix(rm);
 	}
+	if (scale.isSet()) {
+		glm::mat4 sm = glm::scale(
+				rc->getModelMatrix(),
+				scale.v[0], scale.v[1], scale.v[2]);
+		rc->setModelMatrix(sm);
+	}
 
 	// Call concrete rendering implementation
 	doRender(rc);
@@ -59,7 +65,7 @@ void GraphNode::render(RenderingContext *rc)
 			std::bind2nd(std::mem_fun(&GraphNode::render), rc));
 
 	// Revert transformations
-	if (pos.isSet() || rot.isSet()) rc->popMatrix();
+	if (pos.isSet() || rot.isSet() || scale.isSet()) rc->popMatrix();
 
 	afterRender(rc);
 }
@@ -91,6 +97,13 @@ void GraphNode::setRotation(GLfloat x, GLfloat y, GLfloat z)
 	rot.v[0] = x;
 	rot.v[1] = y;
 	rot.v[2] = z;
+}
+
+void GraphNode::setScale(GLfloat x, GLfloat y, GLfloat z)
+{
+	scale.v[0] = x;
+	scale.v[1] = y;
+	scale.v[2] = z;
 }
 
 glm::vec4 GraphNode::getWorldCoordinates(const glm::vec4& v)
