@@ -11,6 +11,15 @@ Mech::Mech()
 		  upper_bone_length = 1.2, lower_bone_length = 1.2,
 		  leg_spread = 0.8f;
 
+	// Rocket launcher
+	launcher[0] = new MechLauncher;
+	launcher[0]->setPosition(0.75f, 0.5f, 0.0f);
+	addMember(launcher[0]);
+
+	launcher[1] = new MechLauncher;
+	launcher[1]->setPosition(-0.75f, 0.5f, 0.0f);
+	addMember(launcher[1]);
+
 	// Upper bones
 	leg[0] = new MechLeg(upper_bone_length, upper_bone_radius);
 	leg[0]->setPosition(-leg_spread, 0.0f, 0.0f);
