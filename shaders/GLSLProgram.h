@@ -1,3 +1,7 @@
+#ifndef GLSLPROGRAM_H
+#define GLSLPROGRAM_H
+
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 
 class GLSLProgram {
@@ -12,7 +16,7 @@ private:
 	static const char *vertex_shader_source;
 	static const char *fragment_shader_source;
 
-	GLuint compileVertexShader();
-	GLuint compileFragmentShader();
+	GLuint compileShader(GLenum type, const char* src);
 };
 
+#endif

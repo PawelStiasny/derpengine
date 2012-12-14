@@ -1,4 +1,3 @@
-#include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "GLSLProgram.h"
@@ -27,8 +26,8 @@ const char* GLSLProgram::fragment_shader_source =
 GLSLProgram::GLSLProgram()
 {
 	char log_buff[1024];
-	GLuint vertex_shader_id = compileVertexShader();
-	GLuint fragment_shader_id = compileFragmentShader();
+	GLuint vertex_shader_id = compileShader(GL_VERTEX_SHADER, vertex_shader_source);
+	GLuint fragment_shader_id = compileShader(GL_FRAGMENT_SHADER, fragment_shader_source);
 
 	program_id = glCreateProgram();
 	glAttachShader(program_id, vertex_shader_id);
@@ -41,30 +40,27 @@ GLSLProgram::GLSLProgram()
 	glDeleteShader(fragment_shader_id);
 }
 
-GLuint GLSLProgram::compileVertexShader()
+GLuint GLSLProgram::compileShader(GLenum type, const char* src)
 {
-	char log_buff[1024];
+	int log_len = 0;
+	GLint compile_success = GL_TRUE;
+	char *log_buff = NULL;
 
-	GLuint shader_id = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(shader_id, 1, &vertex_shader_source, NULL);
+	GLuint shader_id = glCreateShader(type);
+	glShaderSource(shader_id, 1, &src, NULL);
 	glCompileShader(shader_id);
-	glGetShaderInfoLog(shader_id, 1023, NULL, log_buff);
+	glGetShaderiv(shader_id, GL_COMPILE_STATUS, &compile_success);
+
+	if (compile_success == GL_TRUE)
+		return shader_id;
+
+	// If compilation failed, print the error log
+	glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &log_len);
+	log_buff = (char*)malloc(log_len);
+	glGetShaderInfoLog(shader_id, log_len, NULL, log_buff);
 	puts(log_buff);
-
-	return shader_id;
-}
-
-GLuint GLSLProgram::compileFragmentShader()
-{
-	char log_buff[1024];
-
-	GLuint shader_id = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(shader_id, 1, &fragment_shader_source, NULL);
-	glCompileShader(shader_id);
-	glGetShaderInfoLog(shader_id, 1023, NULL, log_buff);
-	puts(log_buff);
-
-	return shader_id;
+	free(log_buff);
+	return 0;
 }
 
 GLSLProgram::~GLSLProgram()
