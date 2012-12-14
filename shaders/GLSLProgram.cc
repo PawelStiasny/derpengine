@@ -1,34 +1,20 @@
+#include <fstream>
+#include <string>
+#include <iterator>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "GLSLProgram.h"
 
-const char* GLSLProgram::vertex_shader_source = 
-	"#version 130\n\n"
-
-	"uniform mat4 MVP;\n"
-	"in vec3 v;\n"
-
-	"void main() {\n"
-	"	gl_Position = MVP * vec4(v, 1.0);\n"
-	"	gl_TexCoord[0] = gl_MultiTexCoord0;\n"
-	"}";
-
-const char* GLSLProgram::fragment_shader_source =
-	"#version 130\n\n"
-
-	"uniform sampler2D tex_sampler;\n"
-
-	"void main() {\n"
-	//"	gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);"
-	"	gl_FragColor = texture2D( tex_sampler, gl_TexCoord[0].st );\n"
-	"}";
-
-GLSLProgram::GLSLProgram()
+GLSLProgram::GLSLProgram(
+		const char *vertex_shader_path, 
+		const char *fragment_shader_path)
 {
-	char log_buff[1024];
-	GLuint vertex_shader_id = compileShader(GL_VERTEX_SHADER, vertex_shader_source);
-	GLuint fragment_shader_id = compileShader(GL_FRAGMENT_SHADER, fragment_shader_source);
+	program_id = 0;
+	
+	GLuint vertex_shader_id = compileFromFile(GL_VERTEX_SHADER, vertex_shader_path);
+	GLuint fragment_shader_id = compileFromFile(GL_FRAGMENT_SHADER, fragment_shader_path);
 
+	char log_buff[1024];
 	program_id = glCreateProgram();
 	glAttachShader(program_id, vertex_shader_id);
 	glAttachShader(program_id, fragment_shader_id);
@@ -38,6 +24,24 @@ GLSLProgram::GLSLProgram()
 
 	glDeleteShader(vertex_shader_id);
 	glDeleteShader(fragment_shader_id);
+
+	uni_mvp = glGetUniformLocation(program_id, "MVP");
+	uni_tex_sampler = glGetUniformLocation(program_id, "tex_sampler");
+}
+
+GLuint GLSLProgram::compileFromFile(GLenum type, const char *path)
+{
+	std::ifstream source_stream(path);
+	if (!source_stream) {
+		printf("Could not open shader %s\n", path);
+		return 0;
+	}
+
+	std::string source(
+			(std::istreambuf_iterator<char>(source_stream)),
+			std::istreambuf_iterator<char>());
+
+	return compileShader(type, source.c_str());
 }
 
 GLuint GLSLProgram::compileShader(GLenum type, const char* src)
@@ -75,13 +79,17 @@ void GLSLProgram::use()
 
 void GLSLProgram::setUniformMVP(glm::mat4 &mvp)
 {
+	if (program_id == 0) return;
+
 	glUniformMatrix4fv(
-			glGetUniformLocation(program_id, "MVP"), 
+			uni_mvp,
 			1, GL_FALSE, glm::value_ptr(mvp));
 }
 
 void GLSLProgram::setUniformTexSampler(GLuint i)
 {
-	glUniform1i(glGetUniformLocation(program_id, "tex_sampler"), i);
+	if (program_id == 0) return;
+
+	glUniform1i(uni_tex_sampler, i);
 }
 
