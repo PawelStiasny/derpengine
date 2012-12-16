@@ -14,8 +14,8 @@ public:
 	GraphNode* getScene();
 
 	void update();
-	void setCamera(glm::vec3 pos, glm::vec3 target);
-	void setCamera(glm::vec3 pos, GraphNode *object);
+	void setCamera(const glm::vec3& pos, const glm::vec3& target);
+	void setCamera(const glm::vec3& pos, GraphNode *object);
 	glm::vec3 getCameraPos();
 	void reshape(int w, int h);
 

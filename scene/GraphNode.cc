@@ -11,6 +11,7 @@ GraphNode::GraphNode()
 	parent = NULL;
 	visible = true;
 	material = NULL;
+	scale.v[0] = scale.v[1] = scale.v[2] = 1.0f;
 }
 
 /// Scene graph manages its memory.
@@ -37,7 +38,7 @@ void GraphNode::render(RenderingContext *rc)
 		rc->setMaterial(material);
 
 	// Apply transformations
-	if (pos.isSet() || rot.isSet() || scale.isSet()) rc->pushMatrix();
+	if (pos.isSet() || rot.isSet() || scale.isOnes()) rc->pushMatrix();
 	if (pos.isSet()) {
 		glm::mat4 rm = glm::translate(
 				rc->getModelMatrix(),
@@ -54,7 +55,7 @@ void GraphNode::render(RenderingContext *rc)
 			rm = glm::rotate(rm, rot.v[2], glm::vec3(0.0f, 0.0f, 1.0f));
 		rc->setModelMatrix(rm);
 	}
-	if (scale.isSet()) {
+	if (scale.isOnes()) {
 		glm::mat4 sm = glm::scale(
 				rc->getModelMatrix(),
 				scale.v[0], scale.v[1], scale.v[2]);
@@ -69,7 +70,7 @@ void GraphNode::render(RenderingContext *rc)
 			std::bind2nd(std::mem_fun(&GraphNode::render), rc));
 
 	// Revert transformations
-	if (pos.isSet() || rot.isSet() || scale.isSet()) rc->popMatrix();
+	if (pos.isSet() || rot.isSet() || scale.isOnes()) rc->popMatrix();
 
 	afterRender(rc);
 }
@@ -116,11 +117,18 @@ glm::vec4 GraphNode::getWorldCoordinates(const glm::vec4& v)
 	mc = glm::rotate(mc, rot.v[0], glm::vec3(1.0f, 0.0f, 0.0f));
 	mc = glm::rotate(mc, rot.v[1], glm::vec3(0.0f, 1.0f, 0.0f));
 	mc = glm::rotate(mc, rot.v[2], glm::vec3(0.0f, 0.0f, 1.0f));
+	mc = glm::scale(mc, scale.v[0], scale.v[1], scale.v[2]);
 
 	if (parent == NULL)
 		return mc * v;
 	else
 		return parent->getWorldCoordinates(mc * v);
+}
+
+glm::vec4 GraphNode::getWorldCoordinates()
+{
+	glm::vec4 zero(0.0f, 0.0f, 0.0f, 1.0f);
+	return getWorldCoordinates(zero);
 }
 
 void GraphNode::addMember(GraphNode* member)

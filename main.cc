@@ -33,11 +33,30 @@ public:
 
 	virtual void update(float timestep)
 	{
-		//subject->setRotation(0.0f, rotation += timestep*8, 0.0f);
-		glm::vec4 cam_pos = glm::rotate(rotation, glm::vec3(0.0f, 1.0f, 0.0f)) * glm::vec4(0.0f, 1.0f, 3.0f, 1.0f);
+		glm::vec4 cam_pos = 
+			subject->getWorldCoordinates(
+				glm::rotate(rotation, glm::vec3(0.0f, 1.0f, 0.0f)) * 
+				glm::vec4(0.0f, 1.0f, 3.0f, 1.0f));
 		rc->setCamera(cam_pos.xyz(), subject);
 		rotation += timestep*8;
 		while (rotation > 360.0f) rotation -= 360.0f;
+	}
+};
+
+class MechWalk : public Animation
+{
+private:
+	Mech* subject;
+	Terrain* terrain;
+
+public:
+	MechWalk(Mech* subject, Terrain* terrain) : subject(subject), terrain(terrain) {};
+
+	virtual void update(float timestep)
+	{
+		glm::vec4 current_pos = subject->getWorldCoordinates();
+		glm::vec3 new_pos(current_pos.x, terrain->getHeight(current_pos.x, current_pos.z), current_pos.z);
+		subject->setPosition(new_pos.x, new_pos.y, new_pos.z);
 	}
 };
 
@@ -65,18 +84,18 @@ void init_scene()
 	scene = new GraphNode;
 	scene->addMember(new Skybox);
 
-	GraphNode *mech = new Mech();
+	Mech *mech = new Mech();
 	scene->addMember(mech);
 	//mech->setVisibility(false);
 	
-	scene->addMember(new Terrain("textures/heightmap.bmp", 3.0f));
+	Terrain *terrain = new Terrain("textures/heightmap.bmp", 5.0f);
+	scene->addMember(terrain);
 
 	rc = new RenderingContext(scene);
 	rc->setCamera(glm::vec3(0.0f, 1.0f, -3.0f), mech);
-	//rc->setCamera(glm::vec3(0.0f, 1.0f, -3.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-	//scene->setPosition(0.0f, 0.0f, -1.0f);
 
-	animations.push_back(new TestSceneRotation(scene));
+	animations.push_back(new TestSceneRotation(mech));
+	animations.push_back(new MechWalk(mech, terrain));
 }
 
 /// Sets up a new frame and renders the scene.

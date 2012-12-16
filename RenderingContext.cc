@@ -43,16 +43,16 @@ void RenderingContext::update()
 	SDL_GL_SwapBuffers();
 }
 
-void RenderingContext::setCamera(glm::vec3 pos, glm::vec3 target)
+void RenderingContext::setCamera(const glm::vec3& pos, const glm::vec3& target)
 {
 	camera_pos = pos;
 	m_view = glm::lookAt(pos, target, glm::vec3(0.0f,1.0f,0.0f));
 	updateMatrix();
 }
 
-void RenderingContext::setCamera(glm::vec3 pos, GraphNode *object)
+void RenderingContext::setCamera(const glm::vec3& pos, GraphNode *object)
 {
-	glm::vec3 target = object->getWorldCoordinates(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)).xyz();
+	glm::vec3 target = object->getWorldCoordinates().xyz();
 	setCamera(pos, target);
 }
 
