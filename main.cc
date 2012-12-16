@@ -11,6 +11,7 @@
 #include "RenderingContext.h"
 #include "scene/GraphNode.h"
 #include "scene/Skybox.h"
+#include "scene/Terrain.h"
 #include "scene/Mech.h"
 #include "animations/Animation.h"
 
@@ -33,7 +34,7 @@ public:
 	virtual void update(float timestep)
 	{
 		//subject->setRotation(0.0f, rotation += timestep*8, 0.0f);
-		glm::vec4 cam_pos = glm::rotate(rotation, glm::vec3(0.0f, 1.0f, 0.0f)) * glm::vec4(0.0f, -1.0f, 3.0f, 1.0f);
+		glm::vec4 cam_pos = glm::rotate(rotation, glm::vec3(0.0f, 1.0f, 0.0f)) * glm::vec4(0.0f, 1.0f, 3.0f, 1.0f);
 		rc->setCamera(cam_pos.xyz(), subject);
 		rotation += timestep*8;
 		while (rotation > 360.0f) rotation -= 360.0f;
@@ -67,6 +68,8 @@ void init_scene()
 	GraphNode *mech = new Mech();
 	scene->addMember(mech);
 	//mech->setVisibility(false);
+	
+	scene->addMember(new Terrain("textures/heightmap.bmp", 3.0f));
 
 	rc = new RenderingContext(scene);
 	rc->setCamera(glm::vec3(0.0f, 1.0f, -3.0f), mech);
