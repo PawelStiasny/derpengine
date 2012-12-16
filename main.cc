@@ -123,6 +123,14 @@ int main(int argc, char const *argv[])
 
 	if (0 != SDL_Init(SDL_INIT_EVERYTHING)) return 1;
 
+	// Do we have a joystick?
+	printf("%i joysticks were found.\n", SDL_NumJoysticks() );
+	for (int i=0; i < SDL_NumJoysticks(); i++) 
+	{
+		printf("    %s\n", SDL_JoystickName(i));
+	}
+
+	// Set up an OpenGL window
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
