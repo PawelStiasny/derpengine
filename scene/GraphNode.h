@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 #include <list>
 
+#include "../shaders/Material.h"
+
 //#include "../RenderingContext.h"
 class RenderingContext;
 
@@ -22,6 +24,7 @@ private:
 	} pos, rot, scale;
 
 	bool visible;
+	Material *material;
 
 protected:
 	std::list<GraphNode*> members;
@@ -42,6 +45,7 @@ public:
 	void removeMember(GraphNode* member);
 
 	void setVisibility(bool v);
+	void setMaterial(Material *m);
 
 private:
 	virtual void doRender(RenderingContext *rc);

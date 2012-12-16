@@ -10,7 +10,7 @@
 RenderingContext::RenderingContext(GraphNode *scene)
 {
 	this->scene = scene;
-	vertex_shader = new GLSLProgram;
+	vertex_shader = GLSLProgramPool::getInstance()->getDefaultShaders();
 	vertex_shader->use();
 	m_projection = glm::perspective(60.0f, 4.0f/3.0f, 0.5f, 100.0f);
 	m_view = glm::mat4(1.0f);
@@ -20,7 +20,7 @@ RenderingContext::RenderingContext(GraphNode *scene)
 
 RenderingContext::~RenderingContext()
 {
-	delete vertex_shader;
+	//delete vertex_shader;
 }
 
 GraphNode* RenderingContext::getScene()
@@ -76,6 +76,18 @@ void RenderingContext::popMatrix()
 {
 	m_model = matrix_stack.back();
 	matrix_stack.pop_back();
+	updateMatrix();
+}
+
+void RenderingContext::setTextureSampler(GLuint i)
+{
+	vertex_shader->setUniformTexSampler(i);
+}
+
+void RenderingContext::setMaterial(Material *m)
+{
+	m->use();
+	vertex_shader = m->getShaders();
 	updateMatrix();
 }
 

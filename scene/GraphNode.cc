@@ -10,6 +10,7 @@ GraphNode::GraphNode()
 {
 	parent = NULL;
 	visible = true;
+	material = NULL;
 }
 
 /// Scene graph manages its memory.
@@ -31,6 +32,9 @@ void GraphNode::render(RenderingContext *rc)
 	if (!visible) return;
 
 	beforeRender(rc);
+
+	if (material)
+		rc->setMaterial(material);
 
 	// Apply transformations
 	if (pos.isSet() || rot.isSet() || scale.isSet()) rc->pushMatrix();
@@ -133,5 +137,10 @@ void GraphNode::removeMember(GraphNode* member)
 void GraphNode::setVisibility(bool v)
 {
 	visible = v;
+}
+
+void GraphNode::setMaterial(Material *m)
+{
+	material = m;
 }
 
