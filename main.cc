@@ -22,13 +22,13 @@ std::list<Animation*> animations;
 class TestSceneRotation : public Animation
 {
 private:
-	float rotation;
 	GraphNode* subject;
 
 public:
 	TestSceneRotation(GraphNode* subject) : subject(subject) 
 	{
 		rotation = 0;
+		y = 0;
 	};
 
 	virtual void update(float timestep)
@@ -36,12 +36,14 @@ public:
 		glm::vec4 cam_pos = 
 			subject->getWorldCoordinates(
 				glm::rotate(rotation, glm::vec3(0.0f, 1.0f, 0.0f)) * 
-				glm::vec4(0.0f, 1.0f, 3.0f, 1.0f));
+				glm::vec4(0.0f, y, 3.0f, 1.0f));
 		rc->setCamera(cam_pos.xyz(), subject);
-		rotation += timestep*8;
 		while (rotation > 360.0f) rotation -= 360.0f;
-	}
-};
+	};
+
+	float y;
+	float rotation;
+} *scene_rot;
 
 class MechWalk : public Animation
 {
@@ -94,7 +96,8 @@ void init_scene()
 	rc = new RenderingContext(scene);
 	rc->setCamera(glm::vec3(0.0f, 1.0f, -3.0f), mech);
 
-	animations.push_back(new TestSceneRotation(mech));
+	scene_rot = new TestSceneRotation(mech);
+	animations.push_back(scene_rot);
 	animations.push_back(new MechWalk(mech, terrain));
 }
 
@@ -162,6 +165,11 @@ int main(int argc, char const *argv[])
 							SDL_OPENGL|SDL_RESIZABLE);
 					if (screen)
 						reshape(screen->w, screen->h);
+					break;
+
+				case SDL_MOUSEMOTION:
+					scene_rot->y = 4.0f * (float)(event.motion.y) / (float)(screen->h) - 2.0f;
+					scene_rot->rotation = -360.0f * (float)(event.motion.x) / (float)(screen->w);
 					break;
 
 				case SDL_QUIT:
