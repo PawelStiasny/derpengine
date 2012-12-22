@@ -2,7 +2,7 @@
 #include "MechBody.h"
 #include "MechLeg.h"
 #include "MechLauncher.h"
-#include "Texture.h"
+#include "../shaders/Material.h"
 
 class Mech : public GraphNode
 {
@@ -10,7 +10,7 @@ private:
 	MechBody *body;
 	MechLauncher *launcher[2];
 	MechLeg *leg[4];
-	Texture *tex;
+	Material *m;
 
 public:
 	Mech();

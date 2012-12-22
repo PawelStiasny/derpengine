@@ -1,5 +1,5 @@
 #include "GraphNode.h"
-#include "Texture.h"
+#include "../shaders/Material.h"
 
 /// Represents a flat tile with optional texture
 class Tile : public GraphNode

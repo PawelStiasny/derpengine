@@ -6,6 +6,7 @@
 Material::Material()
 {
 	shaders = GLSLProgramPool::getInstance()->getDefaultShaders();
+	texture = NULL;
 }
 
 Material::~Material()
@@ -18,5 +19,6 @@ void Material::use()
 	//shaders->setUniform...
 	glMaterialfv(GL_FRONT, GL_AMBIENT, glm::value_ptr(ambient));
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, glm::value_ptr(diffuse));
+	if (texture) texture->use(0);
 }
 
