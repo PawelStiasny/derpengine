@@ -104,7 +104,6 @@ void RenderingContext::setModelMatrix(glm::mat4 &m)
 
 void RenderingContext::updateMatrix()
 {
-	mvp = m_projection * m_view * m_model;
-	vertex_shader->setUniformMVP(mvp);
+	vertex_shader->setUniformMVP(m_model, m_view, m_projection);
 }
 

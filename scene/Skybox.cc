@@ -1,5 +1,6 @@
 #include "Skybox.h"
 #include "../RenderingContext.h"
+#include "../shaders/Material.h"
 
 #include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -35,6 +36,11 @@ Skybox::Skybox()
 	t[BOTTOM]->setRotation(90.0f, 0.0f, 0.0f);
 	for (int i = 0; i < 6; i++)
 		addMember(t[i]);
+
+	Material *m = new Material();
+	m->ambient = glm::vec4(1.0f);
+	m->diffuse = glm::vec4(0.0f);
+	setMaterial(m);
 }
 
 Skybox::~Skybox()

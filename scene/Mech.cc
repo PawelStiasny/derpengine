@@ -49,6 +49,11 @@ Mech::Mech()
 	leg[1]->addMember(leg[3]);
 
 	tex = new Texture("textures/metal.bmp");
+
+	Material *m = new Material();
+	m->ambient = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+	m->diffuse = glm::vec4(1.0f);
+	setMaterial(m);
 }
 
 Mech::~Mech()

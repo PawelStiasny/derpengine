@@ -1,3 +1,6 @@
+#ifndef GLSLPROGRAMPOOL_H
+#define GLSLPROGRAMPOOL_H
+
 #include "GLSLProgram.h"
 
 class GLSLProgramPool
@@ -15,4 +18,6 @@ private:
 
 	static GLSLProgramPool *instance;
 };
+
+#endif
 

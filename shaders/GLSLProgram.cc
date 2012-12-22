@@ -13,7 +13,9 @@ GLSLProgram::GLSLProgram(
 	program_id = 0;
 	
 	GLuint vertex_shader_id = compileFromFile(GL_VERTEX_SHADER, vertex_shader_path);
+	if (!vertex_shader_id) printf("Shader %s failed to compile\n", vertex_shader_path);
 	GLuint fragment_shader_id = compileFromFile(GL_FRAGMENT_SHADER, fragment_shader_path);
+	if (!fragment_shader_id) printf("Shader %s failed to compile\n", fragment_shader_path);
 
 	char log_buff[1024];
 	program_id = glCreateProgram();
@@ -27,6 +29,8 @@ GLSLProgram::GLSLProgram(
 	glDeleteShader(fragment_shader_id);
 
 	uni_mvp = glGetUniformLocation(program_id, "MVP");
+	uni_mv = glGetUniformLocation(program_id, "MV");
+	uni_normal = glGetUniformLocation(program_id, "NormalMx");
 	uni_tex_sampler = glGetUniformLocation(program_id, "tex_sampler");
 }
 
@@ -78,13 +82,19 @@ void GLSLProgram::use()
 	glUseProgram(program_id);
 }
 
-void GLSLProgram::setUniformMVP(glm::mat4 &mvp)
+void GLSLProgram::setUniformMVP(
+		const glm::mat4& model,
+		const glm::mat4& view,
+		const glm::mat4& projection)
 {
 	if (program_id == 0) return;
 
-	glUniformMatrix4fv(
-			uni_mvp,
-			1, GL_FALSE, glm::value_ptr(mvp));
+	glm::mat4 mv = view * model;
+	glm::mat4 mvp = projection * mv;
+	glm::mat3 normal = glm::transpose(glm::inverse(glm::mat3(model)));
+	glUniformMatrix4fv(uni_mvp, 1, GL_FALSE, glm::value_ptr(mvp));
+	glUniformMatrix4fv(uni_mv, 1, GL_FALSE, glm::value_ptr(mv));
+	glUniformMatrix3fv(uni_normal, 1, GL_FALSE, glm::value_ptr(normal));
 }
 
 void GLSLProgram::setUniformTexSampler(GLuint i)

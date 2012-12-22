@@ -72,7 +72,7 @@ void reshape(int width, int height)
 void init_scene()
 {
 	static GLfloat pos[4] =
-	{5.0, 5.0, 10.0, 0.0};
+	{30.0, 15.0, -30.0, 0.0};
 	glLightfv(GL_LIGHT0, GL_POSITION, pos);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
@@ -149,6 +149,7 @@ int main(int argc, char const *argv[])
 	}
 	SDL_WM_SetCaption("Mech", "mech");
 	glewInit();
+	printf("OpenGL version: %s\n", glGetString(GL_VERSION));
 	init_scene();
 	reshape(screen->w, screen->h);
 
