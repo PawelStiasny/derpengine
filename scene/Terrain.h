@@ -9,7 +9,7 @@ public:
 	GLfloat getHeight(GLfloat x, GLfloat z);
 
 private:
-	GLfloat *vertex_data;
+	GLfloat *vertex_data, *normal_data, *uv_data;
 	GLuint *index_data;
 	GLuint x_res, z_res;
 	GLfloat vertical_scaling;

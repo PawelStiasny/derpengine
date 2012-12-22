@@ -63,7 +63,7 @@ glm::vec3 RenderingContext::getCameraPos()
 
 void RenderingContext::reshape(int w, int h)
 {
-	m_projection = glm::perspective(60.0f, (float)w/(float)h, 0.5f, 100.0f);
+	m_projection = glm::perspective(60.0f, (float)w/(float)h, 0.5f, 200.0f);
 	updateMatrix();
 }
 

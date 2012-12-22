@@ -1,6 +1,13 @@
 #include <SDL/SDL.h>
+#include <glm/gtx/fast_square_root.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "Terrain.h"
+
+#define vindex(x, z) (3 * ((z) * x_res + x))
+#define vecx(x, z) vertex_data[vindex(x,z)]
+#define vecy(x, z) vertex_data[vindex(x,z)+1]
+#define vecz(x, z) vertex_data[vindex(x,z)+2]
 
 Terrain::Terrain(const char *hmap_path, GLfloat vertical_scaling)
 {
@@ -20,28 +27,66 @@ Terrain::Terrain(const char *hmap_path, GLfloat vertical_scaling)
 	unsigned char *data = (unsigned char*)heightmap->pixels;
 
 	vertex_data = (GLfloat*)malloc(x_res * z_res * 3 * sizeof(GLfloat));
-	index_data = (GLuint*)malloc((x_res - 1) * (z_res - 1) * 4 * sizeof(GLuint));
+	normal_data = (GLfloat*)malloc(x_res * z_res * 3 * sizeof(GLfloat));
+	uv_data = (GLfloat*)malloc(x_res * z_res * 2 * sizeof(GLfloat));
+	index_data = (GLuint*)malloc((x_res - 1) * (z_res - 1) * 6 * sizeof(GLuint));
 
-	// Load vertex coordinates
-	for (int i = 0; i < x_res; i++)
-		for (int j = 0; j < z_res; j++) {
-			unsigned int index_low = 3 * (i * x_res + j);
-			vertex_data[index_low] = (GLfloat)i - ((GLfloat)x_res / 2.0f);
-			vertex_data[index_low+1] = (GLfloat)(data[i * x_res + j]) * vertical_scaling / 256.0f;
-			vertex_data[index_low+2] = (GLfloat)j - ((GLfloat)z_res / 2.0f);
+	// Load vertex coordinates and uv data
+	for (int z = 0; z < z_res; z++)
+		for (int x = 0; x < x_res; x++) {
+			// Vertex coords
+			unsigned int index_low = vindex(x, z);
+			vertex_data[index_low] = (GLfloat)x - ((GLfloat)x_res / 2.0f);
+			vertex_data[index_low+1] = (GLfloat)(data[z * x_res + x]) * vertical_scaling / 256.0f;
+			vertex_data[index_low+2] = (GLfloat)z - ((GLfloat)z_res / 2.0f);
+
+			// Vertex UV
+			unsigned int uv_index_low = 2 * (z * x_res + x);
+			uv_data[uv_index_low] = z % 2 ? 0.0f : 1.0f;
+			uv_data[uv_index_low+1] = x % 2 ? 0.0f : 1.0f;
 		}
 
-	// Generate quad indices
-	for (int i = 0; i < (x_res - 1); i++)
-		for (int j = 0; j < (z_res - 1); j++) {
-			unsigned int index_low = 4 * (i * x_res + j);
-			index_data[index_low] = i * x_res + j;
-			index_data[index_low+1] = i * x_res + j + 1;
-			index_data[index_low+2] = (i+1) * x_res + j + 1;
-			index_data[index_low+3] = (i+1) * x_res + j;
+	// Generate triangle indices
+	for (int z = 0; z < (z_res - 1); z++)
+		for (int x = 0; x < (x_res - 1); x++) {
+			unsigned int index_low = 6 * (z * x_res + x);
+
+			index_data[index_low+0] = z * x_res + x + 1;
+			index_data[index_low+1] = z * x_res + x;
+			index_data[index_low+2] = (z+1) * x_res + x + 1;
+
+			index_data[index_low+3] = z * x_res + x;
+			index_data[index_low+4] = (z+1) * x_res + x;
+			index_data[index_low+5] = (z+1) * x_res + x + 1;
+		}
+
+	// Compute normals
+	for (int z = 1; z < (z_res - 1); z++)
+		for (int x = 1; x < (x_res - 1); x++) {
+			glm::vec3 mid(vecx(x,z), vecy(x,z), vecz(x,z)),
+				west(vertex_data[vindex(x-1,z)], vertex_data[vindex(x-1,z)+1], vertex_data[vindex(x-1,z)+2]),
+				north(vertex_data[vindex(x,z+1)], vertex_data[vindex(x,z+1)+1], vertex_data[vindex(x,z+1)+2]),
+				east(vertex_data[vindex(x+1,z)], vertex_data[vindex(x+1,z)+1], vertex_data[vindex(x+1,z)+2]),
+				south(vertex_data[vindex(x,z-1)], vertex_data[vindex(x,z-1)+1], vertex_data[vindex(x,z-1)+2]);
+
+			glm::vec3 triangle_normal_acc;
+			triangle_normal_acc = glm::fastNormalize(glm::cross(mid - north, west - north));
+			triangle_normal_acc += glm::fastNormalize(glm::cross(mid - east, north - east));
+			triangle_normal_acc += glm::fastNormalize(glm::cross(mid - south, east - south));
+			triangle_normal_acc += glm::fastNormalize(glm::cross(mid - west, south - west));
+			triangle_normal_acc *= 0.25f;
+
+			memcpy(&normal_data[vindex(x,z)], (float*)glm::value_ptr(triangle_normal_acc), sizeof(float)*3);
 		}
 
 	SDL_FreeSurface(heightmap);
+
+	Material *m = new Material();
+	m->ambient = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+	//m->ambient = glm::vec4(0,0,0,1);
+	m->diffuse = glm::vec4(1.0f);
+	m->texture = new Texture("textures/ground.bmp");
+	setMaterial(m);
 }
 
 Terrain::~Terrain()
@@ -52,14 +97,19 @@ Terrain::~Terrain()
 
 void Terrain::doRender(RenderingContext *rc)
 {
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, vertex_data);
-	glDrawElements(GL_QUADS, 4*(x_res-1)*(z_res-1), GL_UNSIGNED_INT, index_data);
-	glDisableClientState(GL_VERTEX_ARRAY);
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glNormalPointer(GL_FLOAT, 0, normal_data);
+
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glTexCoordPointer(2, GL_FLOAT, 0, uv_data);
+
+	glDrawElements(GL_TRIANGLES, 6*(x_res-1)*(z_res-1), GL_UNSIGNED_INT, index_data);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 /// Returns interpolate height for the given (x,z) coordinates.

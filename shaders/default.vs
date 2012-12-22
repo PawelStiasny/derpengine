@@ -12,7 +12,7 @@ out vec3 normal;
 void main() {
 	gl_Position = MVP * vec4(v, 1.0);
 	pos = MV * vec4(v, 1.0);
-	light_pos = gl_LightSource[0].position;
+	light_pos = normalize(gl_LightSource[0].position - pos);
 	normal = NormalMx * gl_Normal;
 	gl_TexCoord[0] = gl_MultiTexCoord0;
 }
