@@ -1,4 +1,4 @@
-#include <SDL/SDL.h>
+#include "SDL.h"
 #include <glm/gtx/fast_square_root.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -49,7 +49,7 @@ Terrain::Terrain(const char *hmap_path, GLfloat vertical_scaling)
 	// Generate triangle indices
 	for (int z = 0; z < (z_res - 1); z++)
 		for (int x = 0; x < (x_res - 1); x++) {
-			unsigned int index_low = 6 * (z * x_res + x);
+			unsigned int index_low = 6 * (z * (x_res-1) + x);
 
 			index_data[index_low+0] = z * x_res + x + 1;
 			index_data[index_low+1] = z * x_res + x;

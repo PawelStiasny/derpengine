@@ -16,7 +16,7 @@ public:
 
 private:
 	GLuint program_id;
-	GLuint uni_mvp, uni_mv, uni_normal, uni_tex_sampler;
+	GLint uni_mvp, uni_mv, uni_normal, uni_tex_sampler;
 
 	GLuint compileShader(GLenum type, const char* src);
 	GLuint compileFromFile(GLenum type, const char* path);

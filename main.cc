@@ -3,7 +3,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
-#include <SDL/SDL.h>
+#include "SDL.h"
+#include "SDL_video.h"
+#undef main
 #include <list>
 #include <algorithm>
 #include <functional>
@@ -14,6 +16,9 @@
 #include "scene/Terrain.h"
 #include "scene/Mech.h"
 #include "animations/Animation.h"
+
+static SDL_Window *win;
+static SDL_GLContext context;
 
 GraphNode *scene = NULL;
 RenderingContext *rc;
@@ -86,7 +91,7 @@ void init_scene()
 	//glEnable(GL_MULTISAMPLE);
 
 	scene = new GraphNode;
-	scene->addMember(new Skybox);
+	//scene->addMember(new Skybox);
 
 	Mech *mech = new Mech();
 	scene->addMember(mech);
@@ -110,6 +115,9 @@ void draw_scene()
 	GLenum error = glGetError();
 	if (error != GL_NO_ERROR)
 		puts((const char*)gluErrorString(error));
+
+	glFlush();
+	SDL_GL_SwapWindow(win);
 }
 
 /// Updates scene state
@@ -123,17 +131,15 @@ void update_scene(float timestep)
 
 int main(int argc, char const *argv[])
 {
-	SDL_Surface *screen;
+	//SDL_Surface *screen;
 	Uint8 *keys;
+	int w = 800, h = 600;
+
+	//CommonState *state;
+
+	printf("Hello!\n");
 
 	if (0 != SDL_Init(SDL_INIT_EVERYTHING)) return 1;
-
-	// Do we have a joystick?
-	printf("%i joysticks were found.\n", SDL_NumJoysticks() );
-	for (int i=0; i < SDL_NumJoysticks(); i++) 
-	{
-		printf("    %s\n", SDL_JoystickName(i));
-	}
 
 	// Set up an OpenGL window
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
@@ -142,18 +148,37 @@ int main(int argc, char const *argv[])
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 	//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 1);
-	screen = SDL_SetVideoMode(800, 600, 32, SDL_OPENGL|SDL_RESIZABLE);
-	if ( ! screen ) {
+	//screen = SDL_SetVideoMode(800, 600, 32, SDL_OPENGL|SDL_RESIZABLE);
+	win = SDL_CreateWindow("Mech",
+        SDL_WINDOWPOS_CENTERED,
+        SDL_WINDOWPOS_CENTERED,
+        w, h,
+        SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+
+	if ( ! win ) {
 		puts(SDL_GetError());
 		SDL_Quit();
 		exit(2);
 	}
-	SDL_WM_SetCaption("Mech", "mech");
-	glewInit();
+	//SDL_WM_SetCaption("Mech", "mech");
+
+	context = SDL_GL_CreateContext(win);
+
+	GLenum err = glewInit();
+	if (GLEW_OK != err)
+	{
+	  printf("glewInit error: %s\n", glewGetErrorString(err));
+	}
+	printf("Using GLEW %s\n", glewGetString(GLEW_VERSION));
+
 	printf("OpenGL version: %s\n", glGetString(GL_VERSION));
 	init_scene();
-	reshape(screen->w, screen->h);
+	//reshape(screen->w, screen->h);
+	reshape(w, h);
 
 	Uint32 previous_ticks = SDL_GetTicks();
 	Uint32 fps_prev_t = previous_ticks, frames = 0;
@@ -163,16 +188,16 @@ int main(int argc, char const *argv[])
 	while (!done) {
 		while (SDL_PollEvent(&event)) {
 			switch(event.type) {
-				case SDL_VIDEORESIZE:
+				/*case SDL_VIDEORESIZE:
 					screen = SDL_SetVideoMode(event.resize.w, event.resize.h, 16,
 							SDL_OPENGL|SDL_RESIZABLE);
 					if (screen)
 						reshape(screen->w, screen->h);
 					break;
-
+					*/
 				case SDL_MOUSEMOTION:
-					scene_rot->y = 4.0f * (float)(event.motion.y) / (float)(screen->h) - 2.0f;
-					scene_rot->rotation = -360.0f * (float)(event.motion.x) / (float)(screen->w);
+					scene_rot->y = 4.0f * (float)(event.motion.y) / (float)(h) - 2.0f;
+					scene_rot->rotation = -360.0f * (float)(event.motion.x) / (float)(w);
 					break;
 
 				case SDL_QUIT:
@@ -180,7 +205,7 @@ int main(int argc, char const *argv[])
 					break;
 			}
 		}
-		keys = SDL_GetKeyState(NULL);
+		/*keys = SDL_GetKeyState(NULL);
 
 		if (keys[SDLK_ESCAPE]) {
 			done = 1;
@@ -191,7 +216,7 @@ int main(int argc, char const *argv[])
 		else if (keys[SDLK_s])
 			move_forward = -1;
 		else
-			move_forward = 0;
+			move_forward = 0;*/
 
 		// update
 		Uint32 t = SDL_GetTicks();

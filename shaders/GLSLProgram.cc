@@ -29,9 +29,25 @@ GLSLProgram::GLSLProgram(
 	glDeleteShader(fragment_shader_id);
 
 	uni_mvp = glGetUniformLocation(program_id, "MVP");
+	if (uni_mvp == -1)
+		printf("shader %s,%s: failed to get location of the MVP uniform: %s.\n", 
+			vertex_shader_path, fragment_shader_path, (const char*)gluErrorString(glGetError()));
+
 	uni_mv = glGetUniformLocation(program_id, "MV");
+	if (uni_mv == -1)
+		printf("shader %s,%s: failed to get location of the MV uniform: %s.\n", 
+			vertex_shader_path, fragment_shader_path, (const char*)gluErrorString(glGetError()));
+
 	uni_normal = glGetUniformLocation(program_id, "NormalMx");
+	if (uni_normal== -1)
+		printf("shader %s,%s: failed to get location of the NormalMx uniform: %s.\n", 
+			vertex_shader_path, fragment_shader_path, (const char*)gluErrorString(glGetError()));
+
 	uni_tex_sampler = glGetUniformLocation(program_id, "tex_sampler");
+	if (uni_tex_sampler == -1)
+		printf("shader %s,%s: failed to get location of the tex_sampler uniform: %s.\n", 
+			vertex_shader_path, fragment_shader_path, (const char*)gluErrorString(glGetError()));
+
 }
 
 GLuint GLSLProgram::compileFromFile(GLenum type, const char *path)
@@ -92,15 +108,19 @@ void GLSLProgram::setUniformMVP(
 	glm::mat4 mv = view * model;
 	glm::mat4 mvp = projection * mv;
 	glm::mat3 normal = glm::transpose(glm::inverse(glm::mat3(model)));
-	glUniformMatrix4fv(uni_mvp, 1, GL_FALSE, glm::value_ptr(mvp));
-	glUniformMatrix4fv(uni_mv, 1, GL_FALSE, glm::value_ptr(mv));
-	glUniformMatrix3fv(uni_normal, 1, GL_FALSE, glm::value_ptr(normal));
+	if (uni_mvp != -1)
+		glUniformMatrix4fv(uni_mvp, 1, GL_FALSE, glm::value_ptr(mvp));
+	if (uni_mv != -1)
+		glUniformMatrix4fv(uni_mv, 1, GL_FALSE, glm::value_ptr(mv));
+	if (uni_normal != -1)
+		glUniformMatrix3fv(uni_normal, 1, GL_FALSE, glm::value_ptr(normal));
 }
 
 void GLSLProgram::setUniformTexSampler(GLuint i)
 {
 	if (program_id == 0) return;
 
-	glUniform1i(uni_tex_sampler, i);
+	if (uni_tex_sampler != -1)
+		glUniform1i(uni_tex_sampler, i);
 }
 

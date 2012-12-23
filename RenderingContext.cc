@@ -1,4 +1,4 @@
-#include <SDL/SDL.h>
+#include "SDL.h"
 #include <GL/glew.h>
 #define GLM_SWIZZLE
 #include <glm/glm.hpp>
@@ -32,15 +32,14 @@ void RenderingContext::update()
 {
 	// No need to clear color buffer if we always draw the skybox - save some
 	// fill time
-	// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClear(GL_DEPTH_BUFFER_BIT);
+	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_DEPTH_BUFFER_BIT);
 	matrix_stack.clear();
 	m_model = glm::mat4(1.0f);
 	updateMatrix();
 
 	scene->render(this);
-	glFlush();
-	SDL_GL_SwapBuffers();
 }
 
 void RenderingContext::setCamera(const glm::vec3& pos, const glm::vec3& target)
