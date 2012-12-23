@@ -63,12 +63,14 @@ Terrain::Terrain(const char *hmap_path, GLfloat vertical_scaling)
 	// Compute normals
 	for (int z = 1; z < (z_res - 1); z++)
 		for (int x = 1; x < (x_res - 1); x++) {
+			// coordinates of neighbour vertices
 			glm::vec3 mid(vecx(x,z), vecy(x,z), vecz(x,z)),
-				west(vertex_data[vindex(x-1,z)], vertex_data[vindex(x-1,z)+1], vertex_data[vindex(x-1,z)+2]),
-				north(vertex_data[vindex(x,z+1)], vertex_data[vindex(x,z+1)+1], vertex_data[vindex(x,z+1)+2]),
-				east(vertex_data[vindex(x+1,z)], vertex_data[vindex(x+1,z)+1], vertex_data[vindex(x+1,z)+2]),
-				south(vertex_data[vindex(x,z-1)], vertex_data[vindex(x,z-1)+1], vertex_data[vindex(x,z-1)+2]);
+				west(vecx(x-1,z), vecy(x-1,z), vecz(x-1,z)),
+				north(vecx(x,z+1), vecy(x,z+1), vecz(x,z+1)),
+				east(vecx(x+1,z), vecy(x+1,z), vecz(x+1,z)),
+				south(vecx(x,z-1), vecy(x,z-1), vecz(x,z-1));
 
+			// average face normals for a smooth vertex normal
 			glm::vec3 triangle_normal_acc;
 			triangle_normal_acc = glm::fastNormalize(glm::cross(mid - north, west - north));
 			triangle_normal_acc += glm::fastNormalize(glm::cross(mid - east, north - east));
@@ -112,19 +114,27 @@ void Terrain::doRender(RenderingContext *rc)
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
-/// Returns interpolate height for the given (x,z) coordinates.
+/// Returns interpolated height for the given (x,z) coordinates.
 // The coordinates are in object space, (0,0) beeing the center.
 GLfloat Terrain::getHeight(GLfloat x, GLfloat z)
 {
+	int ix = (int)floor(x) + x_res / 2;
+	int iz = (int)floor(z) + z_res / 2;
+
 	// check boundaries
 	if (
-			((int)x < -((int)x_res/2)) || 
-			((int)x > ((int)x_res/2)) || 
-			((int)z < -((int)z_res/2)) || 
-			((int)z > ((int)z_res/2)))
+			(ix < 0) || 
+			((ix+1) >= x_res) || 
+			(iz < 0) || 
+			((iz+1) >= z_res))
 		return 0.0f;
 
-	// interpolate height value
-	return 1.0f * vertical_scaling;
+	float dx = x - floor(x);
+	float dz = z - floor(z);
+
+	// bilinear interpolation of height values
+	float h0 = (1.0f - dx) * vecy(ix,iz) + dx * vecy(ix+1, iz);
+	float h1 = (1.0f - dx) * vecy(ix,iz+1) + dx * vecy(ix+1, iz+1);
+	return (1.0f - dz) * h0 + dz * h1;
 }
 

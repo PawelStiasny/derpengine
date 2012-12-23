@@ -11,7 +11,7 @@ public:
 private:
 	GLfloat *vertex_data, *normal_data, *uv_data;
 	GLuint *index_data;
-	GLuint x_res, z_res;
+	GLint x_res, z_res;
 	GLfloat vertical_scaling;
 };
 

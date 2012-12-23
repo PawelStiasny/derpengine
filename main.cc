@@ -18,6 +18,7 @@
 GraphNode *scene = NULL;
 RenderingContext *rc;
 std::list<Animation*> animations;
+int move_forward = 0;
 
 class TestSceneRotation : public Animation
 {
@@ -57,7 +58,8 @@ public:
 	virtual void update(float timestep)
 	{
 		glm::vec4 current_pos = subject->getWorldCoordinates();
-		glm::vec3 new_pos(current_pos.x, terrain->getHeight(current_pos.x, current_pos.z), current_pos.z);
+		current_pos.z += move_forward * timestep;
+		glm::vec3 new_pos(current_pos.x, terrain->getHeight(current_pos.x, current_pos.z) + 1.5f, current_pos.z);
 		subject->setPosition(new_pos.x, new_pos.y, new_pos.z);
 	}
 };
@@ -183,6 +185,13 @@ int main(int argc, char const *argv[])
 		if (keys[SDLK_ESCAPE]) {
 			done = 1;
 		}
+
+		if (keys[SDLK_w])
+			move_forward = 1;
+		else if (keys[SDLK_s])
+			move_forward = -1;
+		else
+			move_forward = 0;
 
 		// update
 		Uint32 t = SDL_GetTicks();
