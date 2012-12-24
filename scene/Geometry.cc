@@ -1,3 +1,9 @@
+#define GLM_SWIZZLE
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtx/fast_square_root.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include "Geometry.h"
 
 Geometry::Geometry()
@@ -6,6 +12,9 @@ Geometry::Geometry()
 	vertex_data = normal_data = uv_data = NULL;
 	index_data = NULL;
 	glGenBuffers(3, buffer_objects);
+
+	construction_mx = glm::mat4(1.0f);
+	vertex_cursor = index_cursor = 0;
 }
 
 
@@ -74,5 +83,136 @@ void Geometry::syncBuffers()
 			vertex_count * 2 * sizeof(GLfloat), uv_data,
 			GL_STATIC_DRAW);
 
+}
+
+/// Creates a sphere in Geometry's data arrays.
+//  Arrays of proper size must be allocated beforehand.
+//  vertex_cursor and index_cursor have to be set properly and will be advanced
+//  accordingly.
+//  Set construction_mx to transform resulting geometry.
+void Geometry::constructSphere(float radius, int slices, int stacks, float u_repeat, float v_repeat)
+{
+	unsigned int initial_vertex_cursor = vertex_cursor;
+	int i, j;
+
+	if (vertex_count - initial_vertex_cursor < (slices+1) * (stacks+1))
+		printf("warning: probably too few vertices allocated to construct a sphere\n");
+
+	for (j = 0; j <= slices+1; j++) {
+		for (i = 0; i <= stacks; i++) {
+			glm::mat4 rot(1.0f); 
+
+			rot = glm::rotate(
+					rot, 
+					(float)j * (360.0f / (float)slices),
+					glm::vec3(0.0f,1.0f,0.0f));
+
+			rot = glm::rotate(
+					rot,
+					(float)i * (180.0f / (float)stacks), 
+					glm::vec3(1.0f,0.0f,0.0f));
+
+			glm::vec4 rvec = rot * glm::vec4(0.0f, radius, 0.0f, 1.0f);
+			glm::vec3 normal = glm::mat3(construction_mx) * glm::fastNormalize(rvec).xyz();
+			glm::vec3 pos = (construction_mx * rvec).xyz();
+
+			memcpy(
+					&(vertex_data[vertex_cursor * 3]),
+					(float*)glm::value_ptr(pos),
+					3*sizeof(float));
+
+			memcpy(
+					&(normal_data[vertex_cursor * 3]),
+					(float*)glm::value_ptr(normal),
+					3*sizeof(float));
+
+			uv_data[vertex_cursor*2] = (float)j / (float)slices * u_repeat;
+			uv_data[vertex_cursor*2+1] = (float)i / (float)stacks * v_repeat;
+
+			vertex_cursor++;
+		}
+	}
+
+	j = i = 0;
+	for (j = 0; j < slices + 1; j++) {
+		for (i = 0; i < stacks; i++) {
+			int ijvertex = j * stacks + i + initial_vertex_cursor;
+			index_data[index_cursor+0] = ijvertex;
+			index_data[index_cursor+1] = ijvertex + 1;
+			index_data[index_cursor+2] = ijvertex + (stacks+1) + 1;
+
+			index_data[index_cursor+3] = ijvertex + (stacks+1);
+			index_data[index_cursor+4] = ijvertex;
+			index_data[index_cursor+5] = ijvertex + (stacks+1) + 1;
+
+			index_cursor += 6;
+		}
+	}
+}
+
+/// Creates a cylinder in Geometry's data arrays.
+//  Arrays of proper size must be allocated beforehand.
+//  vertex_cursor and index_cursor have to be set properly and will be advanced
+//  accordingly.
+//  Set construction_mx to transform resulting geometry.
+void Geometry::constructCylinder(float radius, float len,
+			int slices, int stacks, 
+			float u_repeat, float v_repeat)
+{
+	unsigned int initial_vertex_cursor = vertex_cursor;
+	int i, j;
+
+	if (vertex_count - initial_vertex_cursor < (slices+1) * (stacks+1))
+		printf("warning: probably too few vertices allocated to construct a cylinder\n");
+
+	for (j = 0; j <= slices; j++) {
+		//printf("%f\n", (float)j * (360.0f / (float)slices));
+		glm::mat4 rot = glm::rotate(
+				(float)j * (360.0f / (float)slices),
+				glm::vec3(0.0f,0.0f,1.0f));
+
+		glm::vec3 normal = (construction_mx * rot * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f)).xyz();
+
+		for (i = 0; i <= stacks; i++) {
+			glm::mat4 trans = glm::translate(
+					rot,
+					(float)i * (len / (float)stacks) *  
+					glm::vec3(0.0f,0.0f,1.0f));
+
+			glm::vec4 rvec = trans * glm::vec4(0.0f, radius, 0.0f, 1.0f);
+			glm::vec3 pos = (construction_mx * rvec).xyz();
+
+			memcpy(
+					&(vertex_data[vertex_cursor * 3]),
+					(float*)glm::value_ptr(pos),
+					3*sizeof(float));
+
+			memcpy(
+					&(normal_data[vertex_cursor * 3]),
+					(float*)glm::value_ptr(normal),
+					3*sizeof(float));
+
+			uv_data[vertex_cursor*2] = (float)j / (float)slices * u_repeat;
+			uv_data[vertex_cursor*2+1] = (float)i / (float)stacks * v_repeat;
+
+			vertex_cursor++;
+		}
+	}
+
+	j = i = 0;
+	for (j = 0; j < slices; j++) {
+		for (i = 0; i < stacks; i++) {
+			int ijvertex = j * stacks + i + initial_vertex_cursor;
+			index_data[index_cursor+0] = ijvertex;
+			index_data[index_cursor+1] = ijvertex + 1;
+			index_data[index_cursor+2] = ijvertex + (stacks) + 1;
+
+			index_data[index_cursor+3] = ijvertex + (stacks);
+			index_data[index_cursor+4] = ijvertex;
+			index_data[index_cursor+5] = ijvertex + (stacks) + 1;
+
+			index_cursor += 6;
+		}
+	}
 }
 

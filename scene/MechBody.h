@@ -1,14 +1,12 @@
-#include "GraphNode.h"
+#include "Geometry.h"
 #include <GL/glu.h>
 
-class MechBody : public GraphNode
+class MechBody : public Geometry
 {
 private:
-	GLUquadricObj* quad_obj;
 
 public:
 	MechBody();
 
 private:
-	void doRender(RenderingContext *rc);
 };
