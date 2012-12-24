@@ -1,16 +1,17 @@
-#include "GraphNode.h"
+#include "Geometry.h"
 #include "../shaders/Material.h"
 
 /// Represents a flat tile with optional texture
-class Tile : public GraphNode
+class Tile : public Geometry
 {
 public:
 	Tile(const char *texture_path = NULL);
 	~Tile();
 	virtual void doRender(RenderingContext *rc);
+
 private:
-	static const GLfloat vertex_data[4*3], uv_data[4*2];
-	static const GLushort index_data[6];
+	static const GLfloat s_vertex_data[4*3], s_normal_data[4*3], s_uv_data[4*2];
+	static const GLushort s_index_data[6];
 	Texture *tex;
 };
 

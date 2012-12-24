@@ -2,21 +2,27 @@
 
 #include "Tile.h"
 
-const GLfloat Tile::vertex_data[] = {
+const GLfloat Tile::s_vertex_data[] = {
 	-1.0f, -1.0f, 0.0f,
 	1.0f, -1.0f, 0.0f,
 	1.0f, 1.0f, 0.0f,
 	-1.0f, 1.0f, 0.0f
 };
 
-const GLfloat Tile::uv_data[] = {
+const GLfloat Tile::s_normal_data[] = {
+	0.0f, 0.0f, -1.0f,
+	0.0f, 0.0f, -1.0f,
+	0.0f, 0.0f, -1.0f,
+	0.0f, 0.0f, -1.0f
+};
+const GLfloat Tile::s_uv_data[] = {
 	0.0f, 1.0f, 
 	1.0f, 1.0f, 
 	1.0f, 0.0f, 
 	0.0f, 0.0f, 
 };
 
-const GLushort Tile::index_data[] = {
+const GLushort Tile::s_index_data[] = {
 	0, 2, 1,
 	0, 3, 2
 };
@@ -30,6 +36,13 @@ Tile::Tile(const char *texture_path)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	} else
 		tex = NULL;
+
+	vertex_count = 4;
+	triangle_count = 2;
+	vertex_data = (GLfloat*)s_vertex_data;
+	normal_data = (GLfloat*)s_normal_data;
+	uv_data = (GLfloat*)s_uv_data;
+	index_data = (GLushort*)s_index_data;
 }
 
 Tile::~Tile()
@@ -40,17 +53,6 @@ Tile::~Tile()
 void Tile::doRender(RenderingContext *rc)
 {
 	if (tex) tex->use(0);
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, vertex_data);
-
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glTexCoordPointer(2, GL_FLOAT, 0, uv_data);
-
-	//glDrawArrays(GL_TRIANGLES, 0, 12*3);
-	glDrawElements(GL_TRIANGLES, 2*3, GL_UNSIGNED_SHORT, index_data);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	Geometry::doRender(rc);
 }
 

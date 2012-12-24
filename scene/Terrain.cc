@@ -26,10 +26,7 @@ Terrain::Terrain(const char *hmap_path, GLfloat vertical_scaling)
 	// Assume 8-bit data
 	unsigned char *data = (unsigned char*)heightmap->pixels;
 
-	vertex_data = (GLfloat*)malloc(x_res * z_res * 3 * sizeof(GLfloat));
-	normal_data = (GLfloat*)malloc(x_res * z_res * 3 * sizeof(GLfloat));
-	uv_data = (GLfloat*)malloc(x_res * z_res * 2 * sizeof(GLfloat));
-	index_data = (GLuint*)malloc((x_res - 1) * (z_res - 1) * 6 * sizeof(GLuint));
+	allocCount(x_res * z_res, (x_res - 1) * (z_res - 1) * 2);
 
 	// Load vertex coordinates and uv data
 	for (int z = 0; z < z_res; z++)
@@ -49,7 +46,7 @@ Terrain::Terrain(const char *hmap_path, GLfloat vertical_scaling)
 	// Generate triangle indices
 	for (int z = 0; z < (z_res - 1); z++)
 		for (int x = 0; x < (x_res - 1); x++) {
-			unsigned int index_low = 6 * (z * x_res + x);
+			unsigned int index_low = 6 * (z * (x_res - 1) + x);
 
 			index_data[index_low+0] = z * x_res + x + 1;
 			index_data[index_low+1] = z * x_res + x;
@@ -95,23 +92,6 @@ Terrain::~Terrain()
 {
 	free(vertex_data);
 	free(index_data);
-}
-
-void Terrain::doRender(RenderingContext *rc)
-{
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, vertex_data);
-
-	glEnableClientState(GL_NORMAL_ARRAY);
-	glNormalPointer(GL_FLOAT, 0, normal_data);
-
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glTexCoordPointer(2, GL_FLOAT, 0, uv_data);
-
-	glDrawElements(GL_TRIANGLES, 6*(x_res-1)*(z_res-1), GL_UNSIGNED_INT, index_data);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 /// Returns interpolated height for the given (x,z) coordinates.
