@@ -2,11 +2,8 @@
 
 MechBody::MechBody()
 {
-	quad_obj = gluNewQuadric();
-	gluQuadricTexture(quad_obj, GL_TRUE);
+	allocCount(22 * 22, 21 * 21 * 2);
+	constructSphere(0.7f, 20, 20, 4.0f, 2.0f);
+	syncBuffers();
 }
 
-void MechBody::doRender(RenderingContext *rc)
-{
-	gluSphere(quad_obj, 0.7, 20, 20);
-}

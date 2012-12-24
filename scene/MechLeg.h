@@ -1,15 +1,13 @@
-#include "GraphNode.h"
+#include "Geometry.h"
 #include <GL/glu.h>
 
-class MechLeg : public GraphNode
+class MechLeg : public Geometry
 {
 private:
 	GLfloat length, radius;
-	GLUquadricObj *quad_obj, *quad_obj_inv;
 
 public:
 	MechLeg(GLfloat length, GLfloat radius);
 
 private:
-	void doRender(RenderingContext *rc);
 };

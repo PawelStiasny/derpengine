@@ -91,8 +91,10 @@ Terrain::Terrain(const char *hmap_path, GLfloat vertical_scaling)
 
 Terrain::~Terrain()
 {
-	free(vertex_data);
-	free(index_data);
+	delete vertex_data;
+	delete uv_data;
+	delete normal_data;
+	delete index_data;
 }
 
 /// Returns interpolated height for the given (x,z) coordinates.
