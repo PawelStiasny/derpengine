@@ -78,6 +78,7 @@ Terrain::Terrain(const char *hmap_path, GLfloat vertical_scaling)
 			memcpy(&normal_data[vindex(x,z)], (float*)glm::value_ptr(triangle_normal_acc), sizeof(float)*3);
 		}
 
+	syncBuffers();
 	SDL_FreeSurface(heightmap);
 
 	Material *m = new Material();

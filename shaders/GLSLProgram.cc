@@ -11,7 +11,7 @@ GLSLProgram::GLSLProgram(
 		const char *fragment_shader_path)
 {
 	program_id = 0;
-	
+
 	GLuint vertex_shader_id = compileFromFile(GL_VERTEX_SHADER, vertex_shader_path);
 	if (!vertex_shader_id) printf("Shader %s failed to compile\n", vertex_shader_path);
 	GLuint fragment_shader_id = compileFromFile(GL_FRAGMENT_SHADER, fragment_shader_path);
@@ -19,6 +19,10 @@ GLSLProgram::GLSLProgram(
 
 	char log_buff[1024];
 	program_id = glCreateProgram();
+	glBindAttribLocation(program_id, 0, "v");
+	glBindAttribLocation(program_id, 1, "n");
+	glBindAttribLocation(program_id, 2, "uv");
+	
 	glAttachShader(program_id, vertex_shader_id);
 	glAttachShader(program_id, fragment_shader_id);
 	glLinkProgram(program_id);
@@ -32,6 +36,10 @@ GLSLProgram::GLSLProgram(
 	uni_mv = glGetUniformLocation(program_id, "MV");
 	uni_normal = glGetUniformLocation(program_id, "NormalMx");
 	uni_tex_sampler = glGetUniformLocation(program_id, "tex_sampler");
+
+	printf("v = #%d\n", glGetAttribLocation(program_id, "v"));
+	printf("n = #%d\n", glGetAttribLocation(program_id, "n"));
+	printf("uv = #%d\n", glGetAttribLocation(program_id, "uv"));
 }
 
 GLuint GLSLProgram::compileFromFile(GLenum type, const char *path)

@@ -43,6 +43,7 @@ Tile::Tile(const char *texture_path)
 	normal_data = (GLfloat*)s_normal_data;
 	uv_data = (GLfloat*)s_uv_data;
 	index_data = (GLushort*)s_index_data;
+	syncBuffers();
 }
 
 Tile::~Tile()
