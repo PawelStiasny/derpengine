@@ -91,7 +91,7 @@ void init_scene()
 	//glEnable(GL_MULTISAMPLE);
 
 	scene = new GraphNode;
-	//scene->addMember(new Skybox);
+	scene->addMember(new Skybox);
 
 	Mech *mech = new Mech();
 	scene->addMember(mech);
