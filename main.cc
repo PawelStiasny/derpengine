@@ -123,6 +123,7 @@ void update_scene(float timestep)
 
 int main(int argc, char const *argv[])
 {
+	bool conf_enable_msaa = false;
 	SDL_Surface *screen;
 	Uint8 *keys;
 
@@ -142,7 +143,11 @@ int main(int argc, char const *argv[])
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-	//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 1);
+
+	if (conf_enable_msaa) {
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+	}
 	screen = SDL_SetVideoMode(800, 600, 32, SDL_OPENGL|SDL_RESIZABLE);
 	if ( ! screen ) {
 		puts(SDL_GetError());
