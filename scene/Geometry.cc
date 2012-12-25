@@ -98,17 +98,16 @@ void Geometry::constructSphere(float radius, int slices, int stacks, float u_rep
 	if (vertex_count - initial_vertex_cursor < (slices+1) * (stacks+1))
 		printf("warning: probably too few vertices allocated to construct a sphere\n");
 
-	for (j = 0; j <= slices+1; j++) {
+	for (j = 0; j <= slices; j++) {
+		// Rotate around Y-axis by j units
+		glm::mat4 rot2 = glm::rotate(
+				(float)j * (360.0f / (float)slices),
+				glm::vec3(0.0f,1.0f,0.0f));
+
 		for (i = 0; i <= stacks; i++) {
-			glm::mat4 rot(1.0f); 
-
-			rot = glm::rotate(
-					rot, 
-					(float)j * (360.0f / (float)slices),
-					glm::vec3(0.0f,1.0f,0.0f));
-
-			rot = glm::rotate(
-					rot,
+			// Rotate around X-axis by i units
+			glm::mat4 rot = glm::rotate(
+					rot2,
 					(float)i * (180.0f / (float)stacks), 
 					glm::vec3(1.0f,0.0f,0.0f));
 
@@ -133,10 +132,9 @@ void Geometry::constructSphere(float radius, int slices, int stacks, float u_rep
 		}
 	}
 
-	j = i = 0;
-	for (j = 0; j < slices + 1; j++) {
+	for (j = 0; j < slices ; j++) {
 		for (i = 0; i < stacks; i++) {
-			int ijvertex = j * stacks + i + initial_vertex_cursor;
+			int ijvertex = j * (stacks+1) + i + initial_vertex_cursor;
 			index_data[index_cursor+0] = ijvertex;
 			index_data[index_cursor+1] = ijvertex + 1;
 			index_data[index_cursor+2] = ijvertex + (stacks+1) + 1;
@@ -166,9 +164,8 @@ void Geometry::constructCylinder(float radius, float len,
 		printf("warning: probably too few vertices allocated to construct a cylinder\n");
 
 	for (j = 0; j <= slices; j++) {
-		//printf("%f\n", (float)j * (360.0f / (float)slices));
 		glm::mat4 rot = glm::rotate(
-				(float)j * (360.0f / (float)slices),
+				-(float)j * (360.0f / (float)slices),
 				glm::vec3(0.0f,0.0f,1.0f));
 
 		glm::vec3 normal = (construction_mx * rot * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f)).xyz();
@@ -199,17 +196,16 @@ void Geometry::constructCylinder(float radius, float len,
 		}
 	}
 
-	j = i = 0;
 	for (j = 0; j < slices; j++) {
 		for (i = 0; i < stacks; i++) {
-			int ijvertex = j * stacks + i + initial_vertex_cursor;
+			int ijvertex = j * (stacks+1) + i + initial_vertex_cursor;
 			index_data[index_cursor+0] = ijvertex;
 			index_data[index_cursor+1] = ijvertex + 1;
-			index_data[index_cursor+2] = ijvertex + (stacks) + 1;
+			index_data[index_cursor+2] = ijvertex + (stacks+1) + 1;
 
-			index_data[index_cursor+3] = ijvertex + (stacks);
+			index_data[index_cursor+3] = ijvertex + (stacks+1);
 			index_data[index_cursor+4] = ijvertex;
-			index_data[index_cursor+5] = ijvertex + (stacks) + 1;
+			index_data[index_cursor+5] = ijvertex + (stacks+1) + 1;
 
 			index_cursor += 6;
 		}

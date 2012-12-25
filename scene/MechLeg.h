@@ -8,6 +8,10 @@ private:
 
 public:
 	MechLeg(GLfloat length, GLfloat radius);
-
-private:
+	virtual void beforeRender(RenderingContext *rc) {
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	virtual void afterRender(RenderingContext *rc) {
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
 };
