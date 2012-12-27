@@ -3,6 +3,8 @@ import os
 
 env = Environment()
 
+env['CPPPATH'] = ['.', '/usr/include/SDL']
+
 # Construct an object list
 sources = ['main.cc', 'RenderingContext.cc']
 sources.extend(glob.glob('scene/*.cc'))
