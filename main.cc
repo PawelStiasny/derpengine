@@ -226,18 +226,18 @@ int main(int argc, char const *argv[])
 					break;
 			}
 		}
-		/*keys = SDL_GetKeyState(NULL);
+		keys = SDL_GetKeyboardState(NULL);
 
-		if (keys[SDLK_ESCAPE]) {
+		if (keys[SDL_SCANCODE_ESCAPE]) {
 			done = 1;
 		}
 
-		if (keys[SDLK_w])
+		if (keys[SDL_SCANCODE_W])
 			move_forward = 1;
 		else if (keys[SDLK_s])
 			move_forward = -1;
 		else
-			move_forward = 0;*/
+			move_forward = 0;
 
 		// update
 		Uint32 t = SDL_GetTicks();
