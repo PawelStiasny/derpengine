@@ -51,16 +51,37 @@ class MechWalk : public Animation
 private:
 	Mech* subject;
 	Terrain* terrain;
+	float leg_bend;
+	int leg_state;
 
 public:
-	MechWalk(Mech* subject, Terrain* terrain) : subject(subject), terrain(terrain) {};
+	MechWalk(Mech* subject, Terrain* terrain) : subject(subject), terrain(terrain)
+	{
+		leg_state = 0;
+		leg_bend = 90.0f;
+	};
 
 	virtual void update(float timestep)
 	{
+		if (move_forward) {
+			subject->bendLeg(0, 35.0f + leg_bend);
+			subject->bendLeg(1, 95.0f - leg_bend);
+			subject->bendLeg(2, 35.0f + leg_bend);
+			subject->bendLeg(3, 95.0f - leg_bend);
+			if (leg_state) {
+				leg_bend--;
+				if (leg_bend <= 0.0f) leg_state = 0;
+			} else {
+				leg_bend++;
+				if (leg_bend >= 60.0f) leg_state = 1;
+			}
+		}
+
 		glm::vec4 current_pos = subject->getWorldCoordinates();
 		current_pos.z += move_forward * timestep;
-		glm::vec3 new_pos(current_pos.x, terrain->getHeight(current_pos.x, current_pos.z) + 1.5f, current_pos.z);
+		glm::vec3 new_pos(current_pos.x, terrain->getHeight(current_pos.x, current_pos.z) + subject->getDistanceToGround(), current_pos.z);
 		subject->setPosition(new_pos.x, new_pos.y, new_pos.z);
+
 	}
 };
 

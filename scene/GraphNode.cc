@@ -113,22 +113,26 @@ void GraphNode::setScale(GLfloat x, GLfloat y, GLfloat z)
 
 glm::vec4 GraphNode::getWorldCoordinates(const glm::vec4& v)
 {
-	glm::mat4 mc = glm::translate(pos.v[0], pos.v[1], pos.v[2]);
-	mc = glm::rotate(mc, rot.v[0], glm::vec3(1.0f, 0.0f, 0.0f));
-	mc = glm::rotate(mc, rot.v[1], glm::vec3(0.0f, 1.0f, 0.0f));
-	mc = glm::rotate(mc, rot.v[2], glm::vec3(0.0f, 0.0f, 1.0f));
-	mc = glm::scale(mc, scale.v[0], scale.v[1], scale.v[2]);
-
 	if (parent == NULL)
-		return mc * v;
+		return getRelativeCoordinates(v);
 	else
-		return parent->getWorldCoordinates(mc * v);
+		return parent->getWorldCoordinates(getRelativeCoordinates(v));
 }
 
 glm::vec4 GraphNode::getWorldCoordinates()
 {
 	glm::vec4 zero(0.0f, 0.0f, 0.0f, 1.0f);
 	return getWorldCoordinates(zero);
+}
+
+glm::vec4 GraphNode::getRelativeCoordinates(const glm::vec4& v)
+{
+	glm::mat4 mc = glm::translate(pos.v[0], pos.v[1], pos.v[2]);
+	mc = glm::rotate(mc, rot.v[0], glm::vec3(1.0f, 0.0f, 0.0f));
+	mc = glm::rotate(mc, rot.v[1], glm::vec3(0.0f, 1.0f, 0.0f));
+	mc = glm::rotate(mc, rot.v[2], glm::vec3(0.0f, 0.0f, 1.0f));
+	mc = glm::scale(mc, scale.v[0], scale.v[1], scale.v[2]);
+	return mc * v;
 }
 
 void GraphNode::addMember(GraphNode* member)

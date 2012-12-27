@@ -16,4 +16,6 @@ public:
 	Mech();
 	~Mech();
 	void doRender(RenderingContext *rc);
+	void bendLeg(int num, float degree);
+	float getDistanceToGround();
 };
