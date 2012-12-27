@@ -13,8 +13,8 @@ if sys.platform == 'win32':
 	env.Append( LIBS = ['SDL', 'OpenGL32', 'GLU32', 'GLEW32'] )
 else:
 	env = Environment()
-	env['CPPPATH'] = ['.', '/usr/include/SDL']
-	env.Append( LIBS = ['SDL', 'GL', 'GLU', 'GLEW'] )
+	env['CPPPATH'] = ['.', '/usr/include/SDL2']
+	env.Append( LIBS = ['SDL2', 'GL', 'GLU', 'GLEW'] )
 
 # Construct an object list
 sources = ['main.cc', 'RenderingContext.cc']
