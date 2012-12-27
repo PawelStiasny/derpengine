@@ -32,6 +32,8 @@ protected:
 			int slices, int stacks, 
 			float u_repeat, float v_repeat);
 
+	void constructCap(float radius, int slices, bool inverted);
+
 private:
 	enum buffer_object_type { BUF_VERTEX, BUF_NORMAL, BUF_UV };
 	GLuint buffer_objects[3];

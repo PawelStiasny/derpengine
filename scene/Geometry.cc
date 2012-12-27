@@ -212,3 +212,72 @@ void Geometry::constructCylinder(float radius, float len,
 	}
 }
 
+void Geometry::constructCap(float radius, int slices, bool inverted)
+{
+	unsigned int initial_vertex_cursor = vertex_cursor;
+	int j;
+
+	if (vertex_count - initial_vertex_cursor < (slices + 2))
+		printf("warning: probably too few vertices allocated to construct a cylinder\n");
+
+	// Middle vertex
+	glm::vec3 mver = (construction_mx * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)).xyz();
+	memcpy(
+			&(vertex_data[vertex_cursor * 3]),
+			(float*)glm::value_ptr(mver),
+			3*sizeof(float));
+	glm::vec3 mnor = (construction_mx * glm::vec4(0.0f, 0.0f, -1.0f, 0.0f)).xyz();
+	memcpy(
+			&(normal_data[vertex_cursor * 3]),
+			(float*)glm::value_ptr(mnor),
+			3*sizeof(float));
+	uv_data[vertex_cursor*2] = 0.5f;
+	uv_data[vertex_cursor*2+1] = 0.5f;
+	vertex_cursor++;
+
+	for (j = 0; j <= slices; j++) {
+		glm::mat4 rot = glm::rotate(
+				-(float)j * (360.0f / (float)slices),
+				glm::vec3(0.0f,0.0f,1.0f));
+
+		glm::vec4 rvec = rot * glm::vec4(0.0f, radius, 0.0f, 1.0f);
+		glm::vec3 pos = (construction_mx * rvec).xyz();
+
+		memcpy(
+				&(vertex_data[vertex_cursor * 3]),
+				(float*)glm::value_ptr(pos),
+				3*sizeof(float));
+
+		glm::vec3 normal = (construction_mx * glm::vec4(0.0f, 0.0f, -1.0f, 0.0f)).xyz();
+		if (inverted) normal = -normal;
+		memcpy(
+				&(normal_data[vertex_cursor * 3]),
+				(float*)glm::value_ptr(normal),
+				3*sizeof(float));
+
+		glm::vec2 uv = (rot * glm::vec4(0.0f, 0.5f, 0.0f, 1.0f)).xy();
+		uv += glm::vec2(0.5f, 0.5f);
+
+		memcpy(
+				&(uv_data[vertex_cursor * 2]),
+				(float*)glm::value_ptr(uv),
+				2*sizeof(float));
+
+		vertex_cursor++;
+	}
+
+	for (j = 0; j < slices; j++) {
+		if (inverted) { 
+			index_data[index_cursor+0] = j + initial_vertex_cursor + 2;
+			index_data[index_cursor+1] = j + initial_vertex_cursor + 1;
+		} else {
+			index_data[index_cursor+0] = j + initial_vertex_cursor + 1;
+			index_data[index_cursor+1] = j + initial_vertex_cursor + 2;
+		}
+		index_data[index_cursor+2] = initial_vertex_cursor;
+
+		index_cursor += 3;
+	}
+}
+
+
