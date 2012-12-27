@@ -1,5 +1,4 @@
-
-#version 120
+#version 130
 
 uniform mat4x4 MVP;
 uniform mat4x4 MV;
