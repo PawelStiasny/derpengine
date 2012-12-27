@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "Mech.h"
 
 /// Constructs the mech body and its members
@@ -80,5 +82,5 @@ float Mech::getDistanceToGround()
 			leg[2]->getRelativeCoordinates(glm::vec4(0.0f, 0.0f, 1.2f, 1.0f)));
 	glm::vec4 leg_end_2 = leg[1]->getRelativeCoordinates(
 			leg[3]->getRelativeCoordinates(glm::vec4(0.0f, 0.0f, 1.2f, 1.0f)));
-	return -fmin(leg_end_1.y, leg_end_2.y);
+	return -std::min(leg_end_1.y, leg_end_2.y);
 }

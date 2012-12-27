@@ -4,6 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 #include "SDL.h"
+#undef main
 #include <list>
 #include <algorithm>
 #include <functional>
