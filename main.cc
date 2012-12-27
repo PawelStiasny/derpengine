@@ -247,7 +247,7 @@ int main(int argc, char const *argv[])
 
 		if (keys[SDL_SCANCODE_W])
 			move_forward = 1;
-		else if (keys[SDLK_s])
+		else if (keys[SDL_SCANCODE_S])
 			move_forward = -1;
 		else
 			move_forward = 0;
