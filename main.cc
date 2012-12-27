@@ -63,16 +63,17 @@ public:
 	MechWalk(Mech* subject, Terrain* terrain) : subject(subject), terrain(terrain)
 	{
 		leg_state = 0;
-		leg_bend = 90.0f;
+		leg_bend = 30.0f;
 	};
 
 	virtual void update(float timestep)
 	{
+		subject->bendLeg(0, 35.0f + leg_bend);
+		subject->bendLeg(1, 95.0f - leg_bend);
+		subject->bendLeg(2, 35.0f + leg_bend);
+		subject->bendLeg(3, 95.0f - leg_bend);
+
 		if (move_forward) {
-			subject->bendLeg(0, 35.0f + leg_bend);
-			subject->bendLeg(1, 95.0f - leg_bend);
-			subject->bendLeg(2, 35.0f + leg_bend);
-			subject->bendLeg(3, 95.0f - leg_bend);
 			if (leg_state) {
 				leg_bend--;
 				if (leg_bend <= 0.0f) leg_state = 0;
@@ -80,6 +81,9 @@ public:
 				leg_bend++;
 				if (leg_bend >= 60.0f) leg_state = 1;
 			}
+		} else {
+			leg_state = 0;
+			leg_bend = 30.0f;
 		}
 
 		glm::vec4 current_pos = subject->getWorldCoordinates();
