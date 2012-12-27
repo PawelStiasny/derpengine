@@ -10,9 +10,11 @@ if sys.platform == 'win32':
 	env['CPPFLAGS'] = ['/MTd']
 	env['LINKFLAGS'] = ['/SUBSYSTEM:WINDOWS','/MACHINE:I386','/SUBSYSTEM:CONSOLE']
 	env['LIBPATH'] = ['.\include\SDL-1.2.15\lib\\x86', '.\include\glew-1.9.0\lib']
+	env.Append( LIBS = ['SDL', 'OpenGL32', 'GLU32', 'GLEW32'] )
 else:
 	env = Environment()
 	env['CPPPATH'] = ['.', '/usr/include/SDL']
+	env.Append( LIBS = ['SDL', 'GL', 'GLU', 'GLEW'] )
 
 # Construct an object list
 sources = ['main.cc', 'RenderingContext.cc']
@@ -21,6 +23,5 @@ sources.extend(glob.glob('animations/*.cc'))
 sources.extend(glob.glob('shaders/*.cc'))
 object_list = env.Object(source = sources)
 
-env.Append( LIBS = ['SDL', 'OpenGL32', 'GLU32', 'GLEW32'] )
-main = env.Program( target = 'mech', source = object_list ) 
+main = env.Program( target = 'mech', source = object_list )
 
