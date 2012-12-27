@@ -43,6 +43,7 @@ public:
 	void setRotation(GLfloat x, GLfloat y, GLfloat z);
 	glm::vec4 getWorldCoordinates(const glm::vec4& v);
 	glm::vec4 getWorldCoordinates();
+	glm::vec4 getRelativeCoordinates(const glm::vec4& v);
 	void setScale(GLfloat x, GLfloat y, GLfloat z);
 
 	void addMember(GraphNode* member);
