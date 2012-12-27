@@ -18,6 +18,7 @@
 
 static SDL_Window *win;
 static SDL_GLContext context;
+bool conf_enable_msaa;
 
 GraphNode *scene = NULL;
 RenderingContext *rc;
@@ -151,6 +152,19 @@ void update_scene(float timestep)
 
 int main(int argc, char const *argv[])
 {
+#ifdef WIN32
+	conf_enable_msaa = true;
+#else
+	conf_enable_msaa = false;
+#endif
+
+	while(*++argv) {
+		if (!strcmp(*argv, "--enable-msaa"))
+			conf_enable_msaa = true;
+		else if (!strcmp(*argv, "--disable-msaa"))
+			conf_enable_msaa = false;
+	}
+
 	Uint8 *keys;
 	int w = 800, h = 600;
 
@@ -168,8 +182,11 @@ int main(int argc, char const *argv[])
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+
+	if (conf_enable_msaa) {
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+	}
 
 	win = SDL_CreateWindow("Mech",
 			SDL_WINDOWPOS_CENTERED,
