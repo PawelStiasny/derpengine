@@ -151,11 +151,8 @@ void update_scene(float timestep)
 
 int main(int argc, char const *argv[])
 {
-	//SDL_Surface *screen;
 	Uint8 *keys;
 	int w = 800, h = 600;
-
-	//CommonState *state;
 
 	printf("Hello!\n");
 
@@ -173,32 +170,30 @@ int main(int argc, char const *argv[])
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
-	//screen = SDL_SetVideoMode(800, 600, 32, SDL_OPENGL|SDL_RESIZABLE);
+
 	win = SDL_CreateWindow("Mech",
-        SDL_WINDOWPOS_CENTERED,
-        SDL_WINDOWPOS_CENTERED,
-        w, h,
-        SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+			SDL_WINDOWPOS_CENTERED,
+			SDL_WINDOWPOS_CENTERED,
+			w, h,
+			SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
 	if ( ! win ) {
 		puts(SDL_GetError());
 		SDL_Quit();
 		exit(2);
 	}
-	//SDL_WM_SetCaption("Mech", "mech");
 
 	context = SDL_GL_CreateContext(win);
 
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
 	{
-	  printf("glewInit error: %s\n", glewGetErrorString(err));
+		printf("glewInit error: %s\n", glewGetErrorString(err));
 	}
 	printf("Using GLEW %s\n", glewGetString(GLEW_VERSION));
 
 	printf("OpenGL version: %s\n", glGetString(GL_VERSION));
 	init_scene();
-	//reshape(screen->w, screen->h);
 	reshape(w, h);
 
 	Uint32 previous_ticks = SDL_GetTicks();
@@ -209,13 +204,14 @@ int main(int argc, char const *argv[])
 	while (!done) {
 		while (SDL_PollEvent(&event)) {
 			switch(event.type) {
-				/*case SDL_VIDEORESIZE:
-					screen = SDL_SetVideoMode(event.resize.w, event.resize.h, 16,
-							SDL_OPENGL|SDL_RESIZABLE);
-					if (screen)
-						reshape(screen->w, screen->h);
+				case SDL_WINDOWEVENT:
+					if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
+						w = event.window.data1;
+						h = event.window.data2;
+						reshape(w,h);
+					}
 					break;
-					*/
+
 				case SDL_MOUSEMOTION:
 					scene_rot->y = 4.0f * (float)(event.motion.y) / (float)(h) - 2.0f;
 					scene_rot->rotation = -360.0f * (float)(event.motion.x) / (float)(w);
