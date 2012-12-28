@@ -161,12 +161,17 @@ int main(int argc, char const *argv[])
 #else
 	conf_enable_msaa = false;
 #endif
+	int opengl_version_major = 3, opengl_version_minor = 0;
 
 	while(*++argv) {
 		if (!strcmp(*argv, "--enable-msaa"))
 			conf_enable_msaa = true;
 		else if (!strcmp(*argv, "--disable-msaa"))
 			conf_enable_msaa = false;
+		else if (!strcmp(*argv, "-g")) {
+			opengl_version_major = atoi(*++argv);
+			opengl_version_minor = atoi(*++argv);
+		}
 	}
 
 	Uint8 *keys;
@@ -184,8 +189,8 @@ int main(int argc, char const *argv[])
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, opengl_version_major);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, opengl_version_minor);
 
 	if (conf_enable_msaa) {
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
