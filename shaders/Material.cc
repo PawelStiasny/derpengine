@@ -7,6 +7,10 @@ Material::Material()
 {
 	shaders = GLSLProgramPool::getInstance()->getDefaultShaders();
 	texture = NULL;
+	ambient = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
+	diffuse = glm::vec4(1.0f);
+	specular = glm::vec4(0.0f);
+	shininess = 1;
 }
 
 Material::~Material()
@@ -19,6 +23,8 @@ void Material::use()
 	//shaders->setUniform...
 	glMaterialfv(GL_FRONT, GL_AMBIENT, glm::value_ptr(ambient));
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, glm::value_ptr(diffuse));
+	glMaterialfv(GL_FRONT, GL_SPECULAR, glm::value_ptr(specular));
+	glMaterialf(GL_FRONT, GL_SHININESS, shininess);
 	if (texture) texture->use(0);
 }
 

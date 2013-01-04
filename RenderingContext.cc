@@ -103,6 +103,6 @@ void RenderingContext::setModelMatrix(glm::mat4 &m)
 
 void RenderingContext::updateMatrix()
 {
-	vertex_shader->setUniformMVP(m_model, m_view, m_projection);
+	vertex_shader->setUniformMVP(m_model, m_view, m_projection, camera_pos);
 }
 

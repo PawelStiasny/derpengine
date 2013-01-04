@@ -12,10 +12,18 @@ GLSLProgram::GLSLProgram(
 {
 	program_id = 0;
 
-	GLuint vertex_shader_id = compileFromFile(GL_VERTEX_SHADER, vertex_shader_path);
-	if (!vertex_shader_id) printf("Shader %s failed to compile\n", vertex_shader_path);
-	GLuint fragment_shader_id = compileFromFile(GL_FRAGMENT_SHADER, fragment_shader_path);
-	if (!fragment_shader_id) printf("Shader %s failed to compile\n", fragment_shader_path);
+	printf("Compiling shaders: %s, %s\n",
+			vertex_shader_path, fragment_shader_path);
+
+	GLuint vertex_shader_id = compileFromFile(
+			GL_VERTEX_SHADER, vertex_shader_path);
+	if (!vertex_shader_id)
+		printf("Shader %s failed to compile\n", vertex_shader_path);
+
+	GLuint fragment_shader_id = compileFromFile(
+			GL_FRAGMENT_SHADER, fragment_shader_path);
+	if (!fragment_shader_id)
+		printf("Shader %s failed to compile\n", fragment_shader_path);
 
 	char log_buff[1024];
 	program_id = glCreateProgram();
@@ -32,29 +40,26 @@ GLSLProgram::GLSLProgram(
 	glDeleteShader(vertex_shader_id);
 	glDeleteShader(fragment_shader_id);
 
-	uni_mvp = glGetUniformLocation(program_id, "MVP");
-	if (uni_mvp == -1)
-		printf("shader %s,%s: failed to get location of the MVP uniform: %s.\n", 
-			vertex_shader_path, fragment_shader_path, (const char*)gluErrorString(glGetError()));
-
-	uni_mv = glGetUniformLocation(program_id, "MV");
-	if (uni_mv == -1)
-		printf("shader %s,%s: failed to get location of the MV uniform: %s.\n", 
-			vertex_shader_path, fragment_shader_path, (const char*)gluErrorString(glGetError()));
-
-	uni_normal = glGetUniformLocation(program_id, "NormalMx");
-	if (uni_normal== -1)
-		printf("shader %s,%s: failed to get location of the NormalMx uniform: %s.\n", 
-			vertex_shader_path, fragment_shader_path, (const char*)gluErrorString(glGetError()));
-
-	uni_tex_sampler = glGetUniformLocation(program_id, "tex_sampler");
-	if (uni_tex_sampler == -1)
-		printf("shader %s,%s: failed to get location of the tex_sampler uniform: %s.\n", 
-			vertex_shader_path, fragment_shader_path, (const char*)gluErrorString(glGetError()));
+	uni_mvp = getUniformLocation("MVP");
+	uni_m = getUniformLocation("M");
+	uni_normal = getUniformLocation("NormalMx");
+	uni_cam_pos = getUniformLocation("cam_pos");
+	uni_tex_sampler = getUniformLocation("tex_sampler");
 
 	printf("v = #%d\n", glGetAttribLocation(program_id, "v"));
 	printf("n = #%d\n", glGetAttribLocation(program_id, "n"));
 	printf("uv = #%d\n", glGetAttribLocation(program_id, "uv"));
+}
+
+GLint GLSLProgram::getUniformLocation(const char *name)
+{
+	GLuint r = -1;
+
+	r = glGetUniformLocation(program_id, name);
+	if (r == -1)
+		printf("Failed to get location of the %s uniform.\n", name);
+
+	return r;
 }
 
 GLuint GLSLProgram::compileFromFile(GLenum type, const char *path)
@@ -108,19 +113,25 @@ void GLSLProgram::use()
 void GLSLProgram::setUniformMVP(
 		const glm::mat4& model,
 		const glm::mat4& view,
-		const glm::mat4& projection)
+		const glm::mat4& projection,
+		const glm::vec3& cam_pos)
 {
 	if (program_id == 0) return;
 
-	glm::mat4 mv = view * model;
-	glm::mat4 mvp = projection * mv;
+	//glm::mat4 mv = view * model;
+	//glm::mat4 mvp = projection * mv;
+	glm::mat4 mvp = projection * view * model;
 	glm::mat3 normal = glm::transpose(glm::inverse(glm::mat3(model)));
+
 	if (uni_mvp != -1)
 		glUniformMatrix4fv(uni_mvp, 1, GL_FALSE, glm::value_ptr(mvp));
-	if (uni_mv != -1)
-		glUniformMatrix4fv(uni_mv, 1, GL_FALSE, glm::value_ptr(mv));
+	if (uni_m != -1)
+		glUniformMatrix4fv(uni_m, 1, GL_FALSE, glm::value_ptr(model));
 	if (uni_normal != -1)
 		glUniformMatrix3fv(uni_normal, 1, GL_FALSE, glm::value_ptr(normal));
+
+	if (uni_cam_pos != -1)
+		glUniform3fv(uni_cam_pos, 1, glm::value_ptr(cam_pos));
 }
 
 void GLSLProgram::setUniformTexSampler(GLuint i)

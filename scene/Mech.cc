@@ -54,6 +54,8 @@ Mech::Mech()
 	m = new Material();
 	m->ambient = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
 	m->diffuse = glm::vec4(1.0f);
+	m->specular = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+	m->shininess = 10.0f;
 	m->texture = new Texture("textures/metal.bmp");
 	setMaterial(m);
 }

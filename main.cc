@@ -104,7 +104,7 @@ void reshape(int width, int height)
 void init_scene()
 {
 	static GLfloat pos[4] =
-	{3000.0, 1000.0, -3000.0, 0.0};
+	{300.0, 100.0, -300.0, 0.0};
 	glLightfv(GL_LIGHT0, GL_POSITION, pos);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);

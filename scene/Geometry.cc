@@ -227,6 +227,7 @@ void Geometry::constructCap(float radius, int slices, bool inverted)
 			(float*)glm::value_ptr(mver),
 			3*sizeof(float));
 	glm::vec3 mnor = (construction_mx * glm::vec4(0.0f, 0.0f, -1.0f, 0.0f)).xyz();
+	if (inverted) mnor = -mnor;
 	memcpy(
 			&(normal_data[vertex_cursor * 3]),
 			(float*)glm::value_ptr(mnor),
