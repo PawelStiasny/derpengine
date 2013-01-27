@@ -22,6 +22,7 @@ bool conf_enable_msaa;
 
 GraphNode *scene = NULL;
 RenderingContext *rc;
+Camera *mechcam = NULL;
 std::list<Animation*> animations;
 int move_forward = 0;
 
@@ -39,11 +40,11 @@ public:
 
 	virtual void update(float timestep)
 	{
-		glm::vec4 cam_pos = 
-			subject->getWorldCoordinates(
-				glm::rotate(rotation, glm::vec3(0.0f, 1.0f, 0.0f)) * 
-				glm::vec4(0.0f, y, 3.0f, 1.0f));
-		rc->setCamera(cam_pos.xyz(), subject);
+		glm::vec3 cam_pos = 
+			(glm::rotate(rotation, glm::vec3(0.0f, 1.0f, 0.0f)) * 
+			 glm::vec4(0.0f, y, 3.0f, 1.0f)).xyz();
+		mechcam->setPosition(cam_pos);
+		mechcam->setTarget(subject);
 		while (rotation > 360.0f) rotation -= 360.0f;
 	};
 
@@ -120,13 +121,18 @@ void init_scene()
 
 	Mech *mech = new Mech();
 	scene->addMember(mech);
+
+	mechcam = new Camera();
+	mechcam->setPosition(0.0f, 1.0f, -2.0f);
+	mech->addMember(mechcam);
+	mechcam->setTarget(mech);
 	//mech->setVisibility(false);
 	
 	Terrain *terrain = new Terrain("textures/heightmap.bmp", 20.0f);
 	scene->addMember(terrain);
 
 	rc = new RenderingContext(scene);
-	rc->setCamera(glm::vec3(0.0f, 1.0f, -3.0f), mech);
+	rc->setCamera(mechcam);
 
 	scene_rot = new TestSceneRotation(mech);
 	animations.push_back(scene_rot);

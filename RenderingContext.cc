@@ -10,8 +10,12 @@
 RenderingContext::RenderingContext(GraphNode *scene)
 {
 	this->scene = scene;
+	active_camera = &default_cam;
+
 	vertex_shader = GLSLProgramPool::getInstance()->getDefaultShaders();
 	vertex_shader->use();
+
+	aspect_ratio = 4.0f/3.0f;
 	m_projection = glm::perspective(60.0f, 4.0f/3.0f, 0.5f, 100.0f);
 	m_view = glm::mat4(1.0f);
 	m_model = glm::mat4(1.0f);
@@ -32,37 +36,36 @@ void RenderingContext::update()
 {
 	// No need to clear color buffer if we always draw the skybox - save some
 	// fill time
-	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glClear(GL_DEPTH_BUFFER_BIT);
+	//glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
 	matrix_stack.clear();
 	m_model = glm::mat4(1.0f);
+	m_projection = active_camera->getProjectionMatrix(aspect_ratio);
+	m_view = active_camera->getViewMatrix();
 	updateMatrix();
 
 	scene->render(this);
 }
 
-void RenderingContext::setCamera(const glm::vec3& pos, const glm::vec3& target)
+void RenderingContext::setCamera(Camera *c)
 {
-	camera_pos = pos;
-	m_view = glm::lookAt(pos, target, glm::vec3(0.0f,1.0f,0.0f));
+	active_camera = c;
+	m_projection = c->getProjectionMatrix(aspect_ratio);
+	m_view = c->getViewMatrix();
 	updateMatrix();
-}
-
-void RenderingContext::setCamera(const glm::vec3& pos, GraphNode *object)
-{
-	glm::vec3 target = object->getWorldCoordinates().xyz();
-	setCamera(pos, target);
 }
 
 glm::vec3 RenderingContext::getCameraPos()
 {
-	return camera_pos;
+	return active_camera->getWorldCoordinates().xyz();
 }
 
 void RenderingContext::reshape(int w, int h)
 {
-	m_projection = glm::perspective(60.0f, (float)w/(float)h, 0.5f, 200.0f);
+	aspect_ratio = (float)w/(float)h;
+	m_projection = active_camera->getProjectionMatrix(aspect_ratio);
 	updateMatrix();
 }
 
@@ -103,6 +106,8 @@ void RenderingContext::setModelMatrix(glm::mat4 &m)
 
 void RenderingContext::updateMatrix()
 {
-	vertex_shader->setUniformMVP(m_model, m_view, m_projection, camera_pos);
+	vertex_shader->setUniformMVP(
+			m_model, m_view, m_projection,
+			getCameraPos());
 }
 

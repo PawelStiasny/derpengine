@@ -5,6 +5,7 @@
 
 #include "scene/GraphNode.h"
 #include "shaders/GLSLProgram.h"
+#include "scene/Camera.h"
 
 class RenderingContext
 {
@@ -14,8 +15,7 @@ public:
 	GraphNode* getScene();
 
 	void update();
-	void setCamera(const glm::vec3& pos, const glm::vec3& target);
-	void setCamera(const glm::vec3& pos, GraphNode *object);
+	void setCamera(Camera *c);
 	glm::vec3 getCameraPos();
 	void reshape(int w, int h);
 
@@ -33,7 +33,8 @@ private:
 	std::list<glm::mat4> matrix_stack;
 	GraphNode *scene;
 	GLSLProgram *vertex_shader;
-	glm::vec3 camera_pos;
+	float aspect_ratio;
+	Camera default_cam, *active_camera;
 
 	void updateMatrix();
 };
