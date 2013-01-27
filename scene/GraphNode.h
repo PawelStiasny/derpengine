@@ -40,6 +40,7 @@ public:
 	void render(RenderingContext *rc);
 
 	void setPosition(GLfloat x, GLfloat y, GLfloat z);
+	void setPosition(const glm::vec3& pos);
 	void setRotation(GLfloat x, GLfloat y, GLfloat z);
 	glm::vec4 getWorldCoordinates(const glm::vec4& v);
 	glm::vec4 getWorldCoordinates();

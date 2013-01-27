@@ -97,6 +97,13 @@ void GraphNode::setPosition(GLfloat x, GLfloat y, GLfloat z)
 	pos.v[2] = z;
 }
 
+void GraphNode::setPosition(const glm::vec3& pos)
+{
+	this->pos.v[0] = pos.x;
+	this->pos.v[1] = pos.y;
+	this->pos.v[2] = pos.z;
+}
+
 void GraphNode::setRotation(GLfloat x, GLfloat y, GLfloat z)
 {
 	rot.v[0] = x;
