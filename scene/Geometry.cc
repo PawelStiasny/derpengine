@@ -35,15 +35,15 @@ void Geometry::doRender(RenderingContext *rc)
 
 	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, buffer_objects[BUF_NORMAL]);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	glVertexAttribPointer(GLSLProgram::ATTR_NORMAL, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
 	glEnableVertexAttribArray(2);
 	glBindBuffer(GL_ARRAY_BUFFER, buffer_objects[BUF_UV]);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+	glVertexAttribPointer(GLSLProgram::ATTR_UV, 2, GL_FLOAT, GL_FALSE, 0, NULL);
 
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, buffer_objects[BUF_VERTEX]);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	glVertexAttribPointer(GLSLProgram::ATTR_POSITION, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
 	glDrawElements(GL_TRIANGLES, 3 * triangle_count, GL_UNSIGNED_SHORT, index_data);
 

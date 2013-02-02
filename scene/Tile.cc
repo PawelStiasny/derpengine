@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 
 #include "Tile.h"
+#include "../shaders/GLSLProgram.h"
 
 const GLfloat Tile::s_vertex_data[] = {
 	-1.0f, -1.0f, 0.0f,
@@ -53,7 +54,7 @@ Tile::~Tile()
 
 void Tile::doRender(RenderingContext *rc)
 {
-	if (tex) tex->use(0);
+	if (tex) tex->use(GLSLProgram::default_tex_sampler);
 	Geometry::doRender(rc);
 }
 

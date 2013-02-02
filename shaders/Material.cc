@@ -2,6 +2,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Material.h"
+#include "GLSLProgram.h"
 
 Material::Material()
 {
@@ -25,6 +26,6 @@ void Material::use()
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, glm::value_ptr(diffuse));
 	glMaterialfv(GL_FRONT, GL_SPECULAR, glm::value_ptr(specular));
 	glMaterialf(GL_FRONT, GL_SHININESS, shininess);
-	if (texture) texture->use(0);
+	if (texture) texture->use(GLSLProgram::default_tex_sampler);
 }
 

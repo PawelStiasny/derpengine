@@ -11,8 +11,18 @@ public:
 		const char *fragment_shader_path = "shaders/default.fs");
 	~GLSLProgram();
 	void use();
-	void setUniformMVP(const glm::mat4& model, const glm::mat4& view, const glm::mat4& projection, const glm::vec3& cam_pos);
-	void setUniformTexSampler(GLuint i);
+	void setUniformMVP(
+			const glm::mat4& model,
+			const glm::mat4& view,
+			const glm::mat4& projection,
+			const glm::vec3& cam_pos);
+
+	static const GLuint default_tex_sampler = 0;
+	enum {
+		ATTR_POSITION	= 0,
+		ATTR_NORMAL 	= 1,
+		ATTR_UV			= 2
+	};
 
 private:
 	GLuint program_id;

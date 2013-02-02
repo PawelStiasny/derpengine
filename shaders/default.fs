@@ -2,15 +2,16 @@
 
 uniform mat3x3 NormalMx;
 uniform sampler2D tex_sampler;
-uniform vec4 light_pos;
+//uniform vec4 light_pos;
+const vec4 light_pos = vec4(300.0, 100.0, -300.0, 0.0);
 uniform vec3 cam_pos;
 
 smooth in vec4 pos;
-//in vec4 light_dir
 smooth in vec3 normal;
+smooth in vec2 tex_coord;
 
 void main() {
-	vec4 lp = gl_LightSource[0].position;
+	vec4 lp = light_pos;
 	vec3 light_dir;
 	if (lp.w == 0.0)
 		light_dir = normalize(lp).xyz;
@@ -31,7 +32,7 @@ void main() {
 	else
 		specular = vec4(0,0,0,0);
 
-	vec4 texel = texture2D(tex_sampler, gl_TexCoord[0].st);
+	vec4 texel = texture2D(tex_sampler, tex_coord);
 	gl_FragColor = (diffuse + ambient + specular) * texel;
 }
 

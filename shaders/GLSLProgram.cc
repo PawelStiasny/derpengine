@@ -27,9 +27,9 @@ GLSLProgram::GLSLProgram(
 
 	char log_buff[1024];
 	program_id = glCreateProgram();
-	glBindAttribLocation(program_id, 0, "v");
-	glBindAttribLocation(program_id, 1, "n");
-	glBindAttribLocation(program_id, 2, "uv");
+	glBindAttribLocation(program_id, ATTR_POSITION, "v");
+	glBindAttribLocation(program_id, ATTR_NORMAL, "n");
+	glBindAttribLocation(program_id, ATTR_UV, "uv");
 	
 	glAttachShader(program_id, vertex_shader_id);
 	glAttachShader(program_id, fragment_shader_id);
@@ -132,13 +132,5 @@ void GLSLProgram::setUniformMVP(
 
 	if (uni_cam_pos != -1)
 		glUniform3fv(uni_cam_pos, 1, glm::value_ptr(cam_pos));
-}
-
-void GLSLProgram::setUniformTexSampler(GLuint i)
-{
-	if (program_id == 0) return;
-
-	if (uni_tex_sampler != -1)
-		glUniform1i(uni_tex_sampler, i);
 }
 

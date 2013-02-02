@@ -12,8 +12,8 @@ RenderingContext::RenderingContext(GraphNode *scene)
 	this->scene = scene;
 	active_camera = &default_cam;
 
-	vertex_shader = GLSLProgramPool::getInstance()->getDefaultShaders();
-	vertex_shader->use();
+	active_glsl_program = GLSLProgramPool::getInstance()->getDefaultShaders();
+	active_glsl_program->use();
 
 	aspect_ratio = 4.0f/3.0f;
 	m_projection = glm::perspective(60.0f, 4.0f/3.0f, 0.5f, 100.0f);
@@ -24,7 +24,6 @@ RenderingContext::RenderingContext(GraphNode *scene)
 
 RenderingContext::~RenderingContext()
 {
-	//delete vertex_shader;
 }
 
 GraphNode* RenderingContext::getScene()
@@ -81,15 +80,10 @@ void RenderingContext::popMatrix()
 	updateMatrix();
 }
 
-void RenderingContext::setTextureSampler(GLuint i)
-{
-	vertex_shader->setUniformTexSampler(i);
-}
-
 void RenderingContext::setMaterial(Material *m)
 {
 	m->use();
-	vertex_shader = m->getShaders();
+	active_glsl_program = m->getShaders();
 	updateMatrix();
 }
 
@@ -106,7 +100,7 @@ void RenderingContext::setModelMatrix(glm::mat4 &m)
 
 void RenderingContext::updateMatrix()
 {
-	vertex_shader->setUniformMVP(
+	active_glsl_program->setUniformMVP(
 			m_model, m_view, m_projection,
 			getCameraPos());
 }

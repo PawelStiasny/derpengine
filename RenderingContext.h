@@ -21,18 +21,16 @@ public:
 
 	void pushMatrix();
 	void popMatrix();
+	const glm::mat4& getModelMatrix();
+	void setModelMatrix(glm::mat4 &m);
 
 	void setMaterial(Material *m);
-	void setTextureSampler(GLuint i);
-
-	const glm::mat4& getModelMatrix();
-	void setModelMatrix(glm::mat4& m);
 
 private:
 	glm::mat4 mvp, m_model, m_view, m_projection;
 	std::list<glm::mat4> matrix_stack;
 	GraphNode *scene;
-	GLSLProgram *vertex_shader;
+	GLSLProgram *active_glsl_program;
 	float aspect_ratio;
 	Camera default_cam, *active_camera;
 

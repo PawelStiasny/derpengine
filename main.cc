@@ -38,16 +38,9 @@ void reshape(int width, int height)
 /// Sets up rendering and creates the initial scene graph.
 void init_scene()
 {
-	static GLfloat pos[4] =
-	{300.0, 100.0, -300.0, 0.0};
-	glLightfv(GL_LIGHT0, GL_POSITION, pos);
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glEnable(GL_NORMALIZE);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
-	glEnable(GL_TEXTURE_2D);
 	if (conf_enable_msaa)
 		glEnable(GL_MULTISAMPLE);
 	else
@@ -121,7 +114,7 @@ int main(int argc, char const *argv[])
 	Uint8 *keys;
 	int w = 800, h = 600;
 
-	printf("Hello!\n");
+	printf("derpengine development build\n");
 
 	if (0 != SDL_Init(SDL_INIT_EVERYTHING)) return 1;
 

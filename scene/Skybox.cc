@@ -57,7 +57,6 @@ void Skybox::beforeRender(RenderingContext *rc)
 	setPosition(camera_pos.x, camera_pos.y, camera_pos.z);
 	glPushAttrib(GL_ENABLE_BIT);
 	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_LIGHTING);
 	glDisable(GL_BLEND);
 }
 
