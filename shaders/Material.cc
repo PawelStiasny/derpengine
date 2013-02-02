@@ -21,11 +21,7 @@ Material::~Material()
 void Material::use()
 {
 	shaders->use();
-	//shaders->setUniform...
-	glMaterialfv(GL_FRONT, GL_AMBIENT, glm::value_ptr(ambient));
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, glm::value_ptr(diffuse));
-	glMaterialfv(GL_FRONT, GL_SPECULAR, glm::value_ptr(specular));
-	glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+	shaders->setUniformMaterial(ambient, diffuse, specular, shininess);
 	if (texture) texture->use(GLSLProgram::default_tex_sampler);
 }
 

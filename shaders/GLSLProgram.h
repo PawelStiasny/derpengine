@@ -16,6 +16,11 @@ public:
 			const glm::mat4& view,
 			const glm::mat4& projection,
 			const glm::vec3& cam_pos);
+	void setUniformMaterial(
+			const glm::vec4& mat_ambient,
+			const glm::vec4& mat_diffuse,
+			const glm::vec4& mat_specular,
+			float mat_shininess);
 
 	static const GLuint default_tex_sampler = 0;
 	enum {
@@ -26,11 +31,13 @@ public:
 
 private:
 	GLuint program_id;
-	GLint uni_mvp, uni_m, uni_normal, uni_cam_pos, uni_tex_sampler;
+	GLint uni_mvp, uni_m, uni_normal, uni_cam_pos, uni_tex_sampler,
+		  uni_mat_ambient, uni_mat_diffuse, uni_mat_specular, uni_mat_shininess;
 
 	GLuint compileShader(GLenum type, const char* src);
 	GLuint compileFromFile(GLenum type, const char* path);
 	GLint getUniformLocation(const char *name);
+	bool canSetUniform();
 };
 
 #endif

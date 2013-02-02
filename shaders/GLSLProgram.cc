@@ -45,6 +45,10 @@ GLSLProgram::GLSLProgram(
 	uni_normal = getUniformLocation("NormalMx");
 	uni_cam_pos = getUniformLocation("cam_pos");
 	uni_tex_sampler = getUniformLocation("tex_sampler");
+	uni_mat_ambient = getUniformLocation("mat_ambient");
+	uni_mat_diffuse = getUniformLocation("mat_diffuse");
+	uni_mat_specular = getUniformLocation("mat_specular");
+	uni_mat_shininess = getUniformLocation("mat_shininess");
 
 	printf("v = #%d\n", glGetAttribLocation(program_id, "v"));
 	printf("n = #%d\n", glGetAttribLocation(program_id, "n"));
@@ -110,18 +114,25 @@ void GLSLProgram::use()
 	glUseProgram(program_id);
 }
 
+bool GLSLProgram::canSetUniform()
+{
+	if (program_id == 0) return false;
+
+	// use() must be called before setting an uniform
+	GLint current_program;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &current_program);
+	assert(current_program == program_id);
+
+	return true;
+}
+
 void GLSLProgram::setUniformMVP(
 		const glm::mat4& model,
 		const glm::mat4& view,
 		const glm::mat4& projection,
 		const glm::vec3& cam_pos)
 {
-	if (program_id == 0) return;
-
-	// use() must be called before setting an uniform
-	GLint current_program;
-	glGetIntegerv(GL_CURRENT_PROGRAM, &current_program);
-	assert(current_program == program_id);
+	if (!canSetUniform()) return;
 
 	//glm::mat4 mv = view * model;
 	//glm::mat4 mvp = projection * mv;
@@ -137,5 +148,23 @@ void GLSLProgram::setUniformMVP(
 
 	if (uni_cam_pos != -1)
 		glUniform3fv(uni_cam_pos, 1, glm::value_ptr(cam_pos));
+}
+
+void GLSLProgram::setUniformMaterial(
+		const glm::vec4& mat_ambient,
+		const glm::vec4& mat_diffuse,
+		const glm::vec4& mat_specular,
+		float mat_shininess)
+{
+	if (!canSetUniform()) return;
+
+	if (uni_mat_ambient != -1)
+		glUniform4fv(uni_mat_ambient, 1, glm::value_ptr(mat_ambient));
+	if (uni_mat_diffuse != -1)
+		glUniform4fv(uni_mat_diffuse, 1, glm::value_ptr(mat_diffuse));
+	if (uni_mat_specular != -1)
+		glUniform4fv(uni_mat_specular, 1, glm::value_ptr(mat_specular));
+	if (uni_mat_shininess != -1)
+		glUniform1f(uni_mat_shininess, mat_shininess);
 }
 
