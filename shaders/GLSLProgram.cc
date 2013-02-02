@@ -118,6 +118,11 @@ void GLSLProgram::setUniformMVP(
 {
 	if (program_id == 0) return;
 
+	// use() must be called before setting an uniform
+	GLint current_program;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &current_program);
+	assert(current_program == program_id);
+
 	//glm::mat4 mv = view * model;
 	//glm::mat4 mvp = projection * mv;
 	glm::mat4 mvp = projection * view * model;
