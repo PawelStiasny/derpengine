@@ -14,7 +14,8 @@
 #include "scene/Skybox.h"
 #include "scene/Terrain.h"
 #include "scene/Mech.h"
-#include "animations/Animation.h"
+#include "animations/CameraTracking.h"
+#include "animations/MechWalk.h"
 
 static SDL_Window *win;
 static SDL_GLContext context;
@@ -24,76 +25,9 @@ GraphNode *scene = NULL;
 RenderingContext *rc;
 Camera *mechcam = NULL;
 std::list<Animation*> animations;
-int move_forward = 0;
 
-class TestSceneRotation : public Animation
-{
-private:
-	GraphNode* subject;
-
-public:
-	TestSceneRotation(GraphNode* subject) : subject(subject) 
-	{
-		rotation = 0;
-		y = 0;
-	};
-
-	virtual void update(float timestep)
-	{
-		glm::vec3 cam_pos = 
-			(glm::rotate(rotation, glm::vec3(0.0f, 1.0f, 0.0f)) * 
-			 glm::vec4(0.0f, y, 3.0f, 1.0f)).xyz();
-		mechcam->setPosition(cam_pos);
-		mechcam->setTarget(subject);
-		while (rotation > 360.0f) rotation -= 360.0f;
-	};
-
-	float y;
-	float rotation;
-} *scene_rot;
-
-class MechWalk : public Animation
-{
-private:
-	Mech* subject;
-	Terrain* terrain;
-	float leg_bend;
-	int leg_state;
-
-public:
-	MechWalk(Mech* subject, Terrain* terrain) : subject(subject), terrain(terrain)
-	{
-		leg_state = 0;
-		leg_bend = 30.0f;
-	};
-
-	virtual void update(float timestep)
-	{
-		subject->bendLeg(0, 35.0f + leg_bend);
-		subject->bendLeg(1, 95.0f - leg_bend);
-		subject->bendLeg(2, 35.0f + leg_bend);
-		subject->bendLeg(3, 95.0f - leg_bend);
-
-		if (move_forward) {
-			if (leg_state) {
-				leg_bend--;
-				if (leg_bend <= 0.0f) leg_state = 0;
-			} else {
-				leg_bend++;
-				if (leg_bend >= 60.0f) leg_state = 1;
-			}
-		} else {
-			leg_state = 0;
-			leg_bend = 30.0f;
-		}
-
-		glm::vec4 current_pos = subject->getWorldCoordinates();
-		current_pos.z += move_forward * timestep;
-		glm::vec3 new_pos(current_pos.x, terrain->getHeight(current_pos.x, current_pos.z) + subject->getDistanceToGround(), current_pos.z);
-		subject->setPosition(new_pos.x, new_pos.y, new_pos.z);
-
-	}
-};
+CameraTracking *scene_rot;
+MechWalk *walk_animation;
 
 void reshape(int width, int height)
 {
@@ -137,9 +71,10 @@ void init_scene()
 	rc = new RenderingContext(scene);
 	rc->setCamera(mechcam);
 
-	scene_rot = new TestSceneRotation(mech);
+	scene_rot = new CameraTracking(mech, mechcam);
 	animations.push_back(scene_rot);
-	animations.push_back(new MechWalk(mech, terrain));
+	walk_animation = new MechWalk(mech, terrain);
+	animations.push_back(walk_animation);
 }
 
 /// Sets up a new frame and renders the scene.
@@ -264,11 +199,11 @@ int main(int argc, char const *argv[])
 		}
 
 		if (keys[SDL_SCANCODE_W])
-			move_forward = 1;
+			walk_animation->move_forward = 1;
 		else if (keys[SDL_SCANCODE_S])
-			move_forward = -1;
+			walk_animation->move_forward = -1;
 		else
-			move_forward = 0;
+			walk_animation->move_forward = 0;
 
 		// update
 		Uint32 t = SDL_GetTicks();
