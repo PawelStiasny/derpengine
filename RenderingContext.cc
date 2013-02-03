@@ -19,7 +19,10 @@ RenderingContext::RenderingContext(GraphNode *scene)
 	m_projection = glm::perspective(60.0f, 4.0f/3.0f, 0.5f, 100.0f);
 	m_view = glm::mat4(1.0f);
 	m_model = glm::mat4(1.0f);
-	updateMatrix();
+
+	light_pos = glm::vec4(300.0f, 100.0f, -300.0, 0.0);
+
+	onProgramChange(active_glsl_program);
 }
 
 RenderingContext::~RenderingContext()
@@ -84,7 +87,7 @@ void RenderingContext::setMaterial(Material *m)
 {
 	m->use();
 	active_glsl_program = m->getShaders();
-	updateMatrix();
+	onProgramChange(active_glsl_program);
 }
 
 const glm::mat4 & RenderingContext::getModelMatrix()
@@ -96,6 +99,19 @@ void RenderingContext::setModelMatrix(glm::mat4 &m)
 {
 	m_model = m;
 	updateMatrix();
+}
+
+void RenderingContext::setLight(const glm::vec4 &new_pos)
+{
+	light_pos = new_pos;
+	active_glsl_program->setUniformLight(new_pos);
+}
+
+/// Called when a new GLSL shader program is set as active
+void RenderingContext::onProgramChange(GLSLProgram* new_program)
+{
+	updateMatrix();
+	new_program->setUniformLight(light_pos);
 }
 
 void RenderingContext::updateMatrix()

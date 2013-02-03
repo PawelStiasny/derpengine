@@ -15,9 +15,10 @@ public:
 	GraphNode* getScene();
 
 	void update();
+	void reshape(int w, int h);
+
 	void setCamera(Camera *c);
 	glm::vec3 getCameraPos();
-	void reshape(int w, int h);
 
 	void pushMatrix();
 	void popMatrix();
@@ -26,6 +27,8 @@ public:
 
 	void setMaterial(Material *m);
 
+	void setLight(const glm::vec4 &new_pos);
+
 private:
 	glm::mat4 mvp, m_model, m_view, m_projection;
 	std::list<glm::mat4> matrix_stack;
@@ -33,7 +36,9 @@ private:
 	GLSLProgram *active_glsl_program;
 	float aspect_ratio;
 	Camera default_cam, *active_camera;
+	glm::vec4 light_pos;
 
+	void onProgramChange(GLSLProgram* new_program);
 	void updateMatrix();
 };
 

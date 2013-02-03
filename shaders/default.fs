@@ -4,8 +4,7 @@ uniform mat3x3 NormalMx;
 uniform sampler2D tex_sampler;
 uniform vec4 mat_ambient, mat_diffuse, mat_specular;
 uniform float mat_shininess;
-//uniform vec4 light_pos;
-const vec4 light_pos = vec4(300.0, 100.0, -300.0, 0.0);
+uniform vec4 light_pos;
 uniform vec3 cam_pos;
 
 smooth in vec4 pos;
