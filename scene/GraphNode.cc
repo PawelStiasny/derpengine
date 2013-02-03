@@ -39,7 +39,7 @@ void GraphNode::render(RenderingContext *rc)
 		rc->setMaterial(material);
 
 	// Apply transformations
-	if (pos.isSet() || rot.isSet() || scale.isOnes()) {
+	if (pos.isSet() || rot.isSet() || !scale.isOnes()) {
 		rc->pushMatrix();
 		rc->setModelMatrix(rc->getModelMatrix() * m_transform);
 	}
@@ -52,7 +52,7 @@ void GraphNode::render(RenderingContext *rc)
 			std::bind2nd(std::mem_fun(&GraphNode::render), rc));
 
 	// Revert transformations
-	if (pos.isSet() || rot.isSet() || scale.isOnes()) rc->popMatrix();
+	if (pos.isSet() || rot.isSet() || !scale.isOnes()) rc->popMatrix();
 
 	afterRender(rc);
 }
@@ -120,7 +120,7 @@ void GraphNode::updateTransformMatrix()
 		if(rot.v[2] != 0.0f)
 			m_transform = glm::rotate(m_transform, rot.v[2], glm::vec3(0.0f, 0.0f, 1.0f));
 	}
-	if (scale.isOnes()) {
+	if (!scale.isOnes()) {
 		m_transform = glm::scale(
 				m_transform,
 				scale.v[0], scale.v[1], scale.v[2]);
