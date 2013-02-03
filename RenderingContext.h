@@ -23,7 +23,7 @@ public:
 	void pushMatrix();
 	void popMatrix();
 	const glm::mat4& getModelMatrix();
-	void setModelMatrix(glm::mat4 &m);
+	void setModelMatrix(const glm::mat4 &m);
 
 	void setMaterial(Material *m);
 

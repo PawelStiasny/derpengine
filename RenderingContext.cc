@@ -95,7 +95,7 @@ const glm::mat4 & RenderingContext::getModelMatrix()
 	return m_model;
 }
 
-void RenderingContext::setModelMatrix(glm::mat4 &m)
+void RenderingContext::setModelMatrix(const glm::mat4 &m)
 {
 	m_model = m;
 	updateMatrix();

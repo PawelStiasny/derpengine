@@ -15,6 +15,7 @@ else:
 	env = Environment()
 	env['CPPPATH'] = ['.', '/usr/local/include/SDL2']
 	env.Append( LIBS = ['SDL2', 'GL', 'GLU', 'GLEW'] )
+	env.Append( CPPFLAGS = ['-Ofast', '-march=native'] )
 
 # Construct an object list
 sources = ['main.cc', 'RenderingContext.cc']

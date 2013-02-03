@@ -12,6 +12,7 @@ GraphNode::GraphNode()
 	visible = true;
 	material = NULL;
 	scale.v[0] = scale.v[1] = scale.v[2] = 1.0f;
+	m_transform = glm::mat4(1.0f);
 }
 
 /// Scene graph manages its memory.
@@ -38,28 +39,9 @@ void GraphNode::render(RenderingContext *rc)
 		rc->setMaterial(material);
 
 	// Apply transformations
-	if (pos.isSet() || rot.isSet() || scale.isOnes()) rc->pushMatrix();
-	if (pos.isSet()) {
-		glm::mat4 rm = glm::translate(
-				rc->getModelMatrix(),
-				pos.v[0], pos.v[1], pos.v[2]);
-		rc->setModelMatrix(rm);
-	}
-	if (rot.isSet()) {
-		glm::mat4 rm = rc->getModelMatrix();
-		if(rot.v[0] != 0.0f)
-			rm = glm::rotate(rm, rot.v[0], glm::vec3(1.0f, 0.0f, 0.0f));
-		if(rot.v[1] != 0.0f)
-			rm = glm::rotate(rm, rot.v[1], glm::vec3(0.0f, 1.0f, 0.0f));
-		if(rot.v[2] != 0.0f)
-			rm = glm::rotate(rm, rot.v[2], glm::vec3(0.0f, 0.0f, 1.0f));
-		rc->setModelMatrix(rm);
-	}
-	if (scale.isOnes()) {
-		glm::mat4 sm = glm::scale(
-				rc->getModelMatrix(),
-				scale.v[0], scale.v[1], scale.v[2]);
-		rc->setModelMatrix(sm);
+	if (pos.isSet() || rot.isSet() || scale.isOnes()) {
+		rc->pushMatrix();
+		rc->setModelMatrix(rc->getModelMatrix() * m_transform);
 	}
 
 	// Call concrete rendering implementation
@@ -95,6 +77,7 @@ void GraphNode::setPosition(GLfloat x, GLfloat y, GLfloat z)
 	pos.v[0] = x;
 	pos.v[1] = y;
 	pos.v[2] = z;
+	updateTransformMatrix();
 }
 
 void GraphNode::setPosition(const glm::vec3& pos)
@@ -102,6 +85,7 @@ void GraphNode::setPosition(const glm::vec3& pos)
 	this->pos.v[0] = pos.x;
 	this->pos.v[1] = pos.y;
 	this->pos.v[2] = pos.z;
+	updateTransformMatrix();
 }
 
 void GraphNode::setRotation(GLfloat x, GLfloat y, GLfloat z)
@@ -109,6 +93,7 @@ void GraphNode::setRotation(GLfloat x, GLfloat y, GLfloat z)
 	rot.v[0] = x;
 	rot.v[1] = y;
 	rot.v[2] = z;
+	updateTransformMatrix();
 }
 
 void GraphNode::setScale(GLfloat x, GLfloat y, GLfloat z)
@@ -116,6 +101,30 @@ void GraphNode::setScale(GLfloat x, GLfloat y, GLfloat z)
 	scale.v[0] = x;
 	scale.v[1] = y;
 	scale.v[2] = z;
+	updateTransformMatrix();
+}
+
+void GraphNode::updateTransformMatrix()
+{
+	m_transform = glm::mat4(1.0f);
+	if (pos.isSet()) {
+		m_transform = glm::translate(
+				m_transform,
+				pos.v[0], pos.v[1], pos.v[2]);
+	}
+	if (rot.isSet()) {
+		if(rot.v[0] != 0.0f)
+			m_transform = glm::rotate(m_transform, rot.v[0], glm::vec3(1.0f, 0.0f, 0.0f));
+		if(rot.v[1] != 0.0f)
+			m_transform = glm::rotate(m_transform, rot.v[1], glm::vec3(0.0f, 1.0f, 0.0f));
+		if(rot.v[2] != 0.0f)
+			m_transform = glm::rotate(m_transform, rot.v[2], glm::vec3(0.0f, 0.0f, 1.0f));
+	}
+	if (scale.isOnes()) {
+		m_transform = glm::scale(
+				m_transform,
+				scale.v[0], scale.v[1], scale.v[2]);
+	}
 }
 
 glm::vec4 GraphNode::getWorldCoordinates(const glm::vec4& v)
@@ -134,12 +143,7 @@ glm::vec4 GraphNode::getWorldCoordinates()
 
 glm::vec4 GraphNode::getRelativeCoordinates(const glm::vec4& v)
 {
-	glm::mat4 mc = glm::translate(pos.v[0], pos.v[1], pos.v[2]);
-	mc = glm::rotate(mc, rot.v[0], glm::vec3(1.0f, 0.0f, 0.0f));
-	mc = glm::rotate(mc, rot.v[1], glm::vec3(0.0f, 1.0f, 0.0f));
-	mc = glm::rotate(mc, rot.v[2], glm::vec3(0.0f, 0.0f, 1.0f));
-	mc = glm::scale(mc, scale.v[0], scale.v[1], scale.v[2]);
-	return mc * v;
+	return m_transform * v;
 }
 
 void GraphNode::addMember(GraphNode* member)

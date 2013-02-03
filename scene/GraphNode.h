@@ -25,6 +25,7 @@ private:
 			return (v[0] != 1.0f) || (v[1] != 1.0f) || (v[2] != 1.0f);
 		};
 	} pos, rot, scale;
+	glm::mat4 m_transform;
 
 	bool visible;
 	Material *material;
@@ -57,6 +58,7 @@ private:
 	virtual void doRender(RenderingContext *rc);
 	virtual void beforeRender(RenderingContext *rc);
 	virtual void afterRender(RenderingContext *rc);
+	void updateTransformMatrix();
 };
 
 #endif
