@@ -14,6 +14,32 @@ class RenderingContext;
 /// members.
 class GraphNode
 {
+public:
+	GraphNode();
+	virtual ~GraphNode();
+
+	void render(RenderingContext *rc);
+
+	void setPosition(GLfloat x, GLfloat y, GLfloat z);
+	void setPosition(const glm::vec3& pos);
+	void setRotation(GLfloat x, GLfloat y, GLfloat z);
+	void setScale(GLfloat x, GLfloat y, GLfloat z);
+
+	glm::vec4 getWorldCoordinates(const glm::vec4& v);
+	glm::vec4 getWorldCoordinates();
+	glm::vec4 getRelativeCoordinates(const glm::vec4& v);
+
+	void addMember(GraphNode* member);
+	void removeMember(GraphNode* member);
+
+	void setVisibility(bool v);
+	void setMaterial(Material *m);
+
+protected:
+	virtual void doRender(RenderingContext *rc);
+	virtual void beforeRender(RenderingContext *rc);
+	virtual void afterRender(RenderingContext *rc);
+
 private:
 	struct Vec3 {
 		Vec3() { v[0] = v[1] = v[2] = 0.0f; }
@@ -30,34 +56,9 @@ private:
 	bool visible;
 	Material *material;
 
-protected:
 	std::list<GraphNode*> members;
 	GraphNode* parent;
 
-public:
-	GraphNode();
-	virtual ~GraphNode();
-
-	void render(RenderingContext *rc);
-
-	void setPosition(GLfloat x, GLfloat y, GLfloat z);
-	void setPosition(const glm::vec3& pos);
-	void setRotation(GLfloat x, GLfloat y, GLfloat z);
-	glm::vec4 getWorldCoordinates(const glm::vec4& v);
-	glm::vec4 getWorldCoordinates();
-	glm::vec4 getRelativeCoordinates(const glm::vec4& v);
-	void setScale(GLfloat x, GLfloat y, GLfloat z);
-
-	void addMember(GraphNode* member);
-	void removeMember(GraphNode* member);
-
-	void setVisibility(bool v);
-	void setMaterial(Material *m);
-
-private:
-	virtual void doRender(RenderingContext *rc);
-	virtual void beforeRender(RenderingContext *rc);
-	virtual void afterRender(RenderingContext *rc);
 	void updateTransformMatrix();
 };
 
