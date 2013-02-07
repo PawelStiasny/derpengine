@@ -1,4 +1,4 @@
-#include "SDL.h"
+#include <SDL2/SDL.h>
 #include <glm/gtx/fast_square_root.hpp>
 #include <glm/gtc/type_ptr.hpp>
 

@@ -1,4 +1,4 @@
-#include "SDL.h"
+#include <SDL2/SDL.h>
 #include <GL/glew.h>
 #define GLM_SWIZZLE
 #include <glm/glm.hpp>
