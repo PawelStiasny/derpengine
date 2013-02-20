@@ -1,3 +1,6 @@
+#ifndef MECH_H
+#define MECH_H
+
 #include "GraphNode.h"
 #include "MechBody.h"
 #include "MechLeg.h"
@@ -19,3 +22,5 @@ public:
 	void bendLeg(int num, float degree);
 	float getDistanceToGround();
 };
+
+#endif

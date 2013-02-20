@@ -1,3 +1,6 @@
+#ifndef CAMERA_H
+#define CAMERA_H
+
 #include <glm/glm.hpp>
 
 #include "GraphNode.h"
@@ -18,3 +21,4 @@ private:
 	float fov, clip_near, clip_far;
 };
 
+#endif

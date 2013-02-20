@@ -10,12 +10,17 @@
 #include <functional>
 
 #include "RenderingContext.h"
-#include "scene/GraphNode.h"
-#include "scene/Skybox.h"
-#include "scene/Terrain.h"
-#include "scene/Mech.h"
+#include "animations/Animation.h"
+
+// defined in init_scene.cc
+GraphNode * init_scene();
+void setup_context(RenderingContext *rc);
+void init_animations(std::list<Animation*> &animations);
+// TODO
 #include "animations/CameraTracking.h"
 #include "animations/MechWalk.h"
+extern CameraTracking *scene_rot;
+extern MechWalk *walk_animation;
 
 static SDL_Window *win;
 static SDL_GLContext context;
@@ -23,51 +28,12 @@ bool conf_enable_msaa;
 
 GraphNode *scene = NULL;
 RenderingContext *rc;
-Camera *mechcam = NULL;
 std::list<Animation*> animations;
-
-CameraTracking *scene_rot;
-MechWalk *walk_animation;
 
 void reshape(int width, int height)
 {
 	glViewport(0, 0, (GLint) width, (GLint) height);
 	rc->reshape(width, height);
-}
-
-/// Sets up rendering and creates the initial scene graph.
-void init_scene()
-{
-	glEnable(GL_CULL_FACE);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-	if (conf_enable_msaa)
-		glEnable(GL_MULTISAMPLE);
-	else
-		glDisable(GL_MULTISAMPLE);
-
-	scene = new GraphNode;
-	scene->addMember(new Skybox);
-
-	Mech *mech = new Mech();
-	scene->addMember(mech);
-
-	mechcam = new Camera();
-	mechcam->setPosition(0.0f, 1.0f, -2.0f);
-	mech->addMember(mechcam);
-	mechcam->setTarget(mech);
-	//mech->setVisibility(false);
-	
-	Terrain *terrain = new Terrain("textures/heightmap.bmp", 20.0f);
-	scene->addMember(terrain);
-
-	rc = new RenderingContext(scene);
-	rc->setCamera(mechcam);
-
-	scene_rot = new CameraTracking(mech, mechcam);
-	animations.push_back(scene_rot);
-	walk_animation = new MechWalk(mech, terrain);
-	animations.push_back(walk_animation);
 }
 
 /// Sets up a new frame and renders the scene.
@@ -154,9 +120,21 @@ int main(int argc, char const *argv[])
 		printf("glewInit error: %s\n", glewGetErrorString(err));
 	}
 	printf("Using GLEW %s\n", glewGetString(GLEW_VERSION));
-
 	printf("OpenGL version: %s\n", glGetString(GL_VERSION));
-	init_scene();
+
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+	if (conf_enable_msaa)
+		glEnable(GL_MULTISAMPLE);
+	else
+		glDisable(GL_MULTISAMPLE);
+
+	scene = init_scene();
+	rc = new RenderingContext(scene);
+	setup_context(rc);
+	init_animations(animations);
+
 	reshape(w, h);
 
 	Uint32 previous_ticks = SDL_GetTicks();

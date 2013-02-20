@@ -1,3 +1,6 @@
+#ifndef TERRAIN_H
+#define TERRAIN_H
+
 #include "Geometry.h"
 
 class Terrain : public Geometry
@@ -12,3 +15,4 @@ private:
 	GLfloat vertical_scaling;
 };
 
+#endif
