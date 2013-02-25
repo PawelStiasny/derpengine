@@ -7,9 +7,8 @@
 
 #include "RenderingContext.h"
 
-RenderingContext::RenderingContext(GraphNode *scene)
+RenderingContext::RenderingContext()
 {
-	this->scene = scene;
 	active_camera = &default_cam;
 
 	active_glsl_program = GLSLProgramPool::getInstance()->getDefaultShaders();
@@ -29,12 +28,7 @@ RenderingContext::~RenderingContext()
 {
 }
 
-GraphNode* RenderingContext::getScene()
-{
-	return scene;
-}
-
-void RenderingContext::update()
+void RenderingContext::clear()
 {
 	// No need to clear color buffer if we always draw the skybox - save some
 	// fill time
@@ -47,8 +41,6 @@ void RenderingContext::update()
 	m_projection = active_camera->getProjectionMatrix(aspect_ratio);
 	m_view = active_camera->getViewMatrix();
 	updateMatrix();
-
-	scene->render(this);
 }
 
 void RenderingContext::setCamera(Camera *c)

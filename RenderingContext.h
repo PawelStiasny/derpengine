@@ -10,11 +10,10 @@
 class RenderingContext
 {
 public:
-	RenderingContext(GraphNode *scene);
+	RenderingContext();
 	~RenderingContext();
-	GraphNode* getScene();
 
-	void update();
+	void clear();
 	void reshape(int w, int h);
 
 	void setCamera(Camera *c);
@@ -32,7 +31,6 @@ public:
 private:
 	glm::mat4 mvp, m_model, m_view, m_projection;
 	std::list<glm::mat4> matrix_stack;
-	GraphNode *scene;
 	GLSLProgram *active_glsl_program;
 	float aspect_ratio;
 	Camera default_cam, *active_camera;

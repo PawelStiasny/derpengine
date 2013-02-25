@@ -5,41 +5,26 @@
 #include <glm/gtx/transform.hpp>
 #include <SDL2/SDL.h>
 #undef main
-#include <list>
-#include <algorithm>
-#include <functional>
 
-#include "RenderingContext.h"
-#include "animations/Animation.h"
-
-// defined in init_scene.cc
-GraphNode * init_scene();
-void setup_context(RenderingContext *rc);
-void init_animations(std::list<Animation*> &animations);
-// TODO
-#include "animations/CameraTracking.h"
-#include "animations/MechWalk.h"
-extern CameraTracking *scene_rot;
-extern MechWalk *walk_animation;
+#include "SceneManager.h"
+#include "DemoSceneManager.h"
 
 static SDL_Window *win;
-static SDL_GLContext context;
+static SDL_GLContext gl_context;
 bool conf_enable_msaa;
 
-GraphNode *scene = NULL;
-RenderingContext *rc;
-std::list<Animation*> animations;
+SceneManager *active_scene_manager = NULL;
 
 void reshape(int width, int height)
 {
 	glViewport(0, 0, (GLint) width, (GLint) height);
-	rc->reshape(width, height);
+	active_scene_manager->onViewportReshape(width, height);
 }
 
 /// Sets up a new frame and renders the scene.
 void draw_scene()
 {
-	rc->update();
+	active_scene_manager->render();
 	GLenum error = glGetError();
 	if (error != GL_NO_ERROR)
 		puts((const char*)gluErrorString(error));
@@ -51,10 +36,7 @@ void draw_scene()
 /// Updates scene state
 void update_scene(float timestep)
 {
-	std::for_each(
-			animations.begin(),
-			animations.end(),
-			std::bind2nd(std::mem_fun(&Animation::update), timestep));
+	active_scene_manager->update(timestep);
 }
 
 int main(int argc, char const *argv[])
@@ -112,7 +94,7 @@ int main(int argc, char const *argv[])
 		exit(2);
 	}
 
-	context = SDL_GL_CreateContext(win);
+	gl_context = SDL_GL_CreateContext(win);
 
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
@@ -130,10 +112,7 @@ int main(int argc, char const *argv[])
 	else
 		glDisable(GL_MULTISAMPLE);
 
-	scene = init_scene();
-	rc = new RenderingContext(scene);
-	setup_context(rc);
-	init_animations(animations);
+	active_scene_manager = new DemoSceneManager;
 
 	reshape(w, h);
 
@@ -154,8 +133,8 @@ int main(int argc, char const *argv[])
 					break;
 
 				case SDL_MOUSEMOTION:
-					scene_rot->y = 4.0f * (float)(event.motion.y) / (float)(h) - 2.0f;
-					scene_rot->rotation = -360.0f * (float)(event.motion.x) / (float)(w);
+					//scene_rot->y = 4.0f * (float)(event.motion.y) / (float)(h) - 2.0f;
+					//scene_rot->rotation = -360.0f * (float)(event.motion.x) / (float)(w);
 					break;
 
 				case SDL_QUIT:
@@ -169,12 +148,12 @@ int main(int argc, char const *argv[])
 			done = 1;
 		}
 
-		if (keys[SDL_SCANCODE_W])
+		/*if (keys[SDL_SCANCODE_W])
 			walk_animation->move_forward = 1;
 		else if (keys[SDL_SCANCODE_S])
 			walk_animation->move_forward = -1;
 		else
-			walk_animation->move_forward = 0;
+			walk_animation->move_forward = 0;*/
 
 		// update
 		Uint32 t = SDL_GetTicks();
@@ -193,6 +172,6 @@ int main(int argc, char const *argv[])
 		draw_scene();
 	}
 	SDL_Quit();
-	delete scene;
+	delete active_scene_manager;
 	return 0;
 }
