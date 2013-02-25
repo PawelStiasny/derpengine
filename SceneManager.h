@@ -1,6 +1,7 @@
 #ifndef SCENEMANAGER_H
 #define SCENEMANAGER_H 
 
+#include "InputState.h"
 #include "scene/GraphNode.h"
 #include "RenderingContext.h"
 #include "animations/Animation.h"
@@ -15,6 +16,7 @@ public:
 	virtual void update(float timestep);
 	virtual void render();
 	virtual void onViewportReshape(int width, int height);
+	virtual void handleInput(InputState *st) {};
 
 protected:
 	GraphNode *scene;

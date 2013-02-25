@@ -11,6 +11,7 @@ class DemoSceneManager : public SceneManager
 {
 public:
 	DemoSceneManager();
+	virtual void handleInput(InputState *st);
 
 private:
 	Camera *mechcam;

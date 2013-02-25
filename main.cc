@@ -8,6 +8,7 @@
 
 #include "SceneManager.h"
 #include "DemoSceneManager.h"
+#include "InputState.h"
 
 static SDL_Window *win;
 static SDL_GLContext gl_context;
@@ -59,12 +60,12 @@ int main(int argc, char const *argv[])
 		}
 	}
 
-	Uint8 *keys;
 	int w = 800, h = 600;
 
 	printf("derpengine development build\n");
 
 	if (0 != SDL_Init(SDL_INIT_EVERYTHING)) return 1;
+	InputState input_state;
 
 	// Set up an OpenGL window
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
@@ -115,6 +116,8 @@ int main(int argc, char const *argv[])
 	active_scene_manager = new DemoSceneManager;
 
 	reshape(w, h);
+	input_state.w = w;
+	input_state.h = h;
 
 	Uint32 previous_ticks = SDL_GetTicks();
 	Uint32 fps_prev_t = previous_ticks, frames = 0;
@@ -128,13 +131,15 @@ int main(int argc, char const *argv[])
 					if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
 						w = event.window.data1;
 						h = event.window.data2;
+						input_state.w = w;
+						input_state.h = h;
 						reshape(w,h);
 					}
 					break;
 
 				case SDL_MOUSEMOTION:
-					//scene_rot->y = 4.0f * (float)(event.motion.y) / (float)(h) - 2.0f;
-					//scene_rot->rotation = -360.0f * (float)(event.motion.x) / (float)(w);
+					input_state.mouse_x = event.motion.x;
+					input_state.mouse_y = event.motion.y;
 					break;
 
 				case SDL_QUIT:
@@ -142,18 +147,14 @@ int main(int argc, char const *argv[])
 					break;
 			}
 		}
-		keys = SDL_GetKeyboardState(NULL);
 
-		if (keys[SDL_SCANCODE_ESCAPE]) {
+		input_state.readInputState();
+
+		if (input_state.getKeyState(InputState::KF_EXIT)) {
 			done = 1;
 		}
 
-		/*if (keys[SDL_SCANCODE_W])
-			walk_animation->move_forward = 1;
-		else if (keys[SDL_SCANCODE_S])
-			walk_animation->move_forward = -1;
-		else
-			walk_animation->move_forward = 0;*/
+		active_scene_manager->handleInput(&input_state);
 
 		// update
 		Uint32 t = SDL_GetTicks();

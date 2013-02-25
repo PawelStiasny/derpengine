@@ -23,3 +23,17 @@ DemoSceneManager::DemoSceneManager()
 	walk_animation = new MechWalk(mech, terrain);
 	animations.push_back(walk_animation);
 }
+
+void DemoSceneManager::handleInput(InputState *st)
+{
+	if (st->getKeyState(InputState::KF_FORWARDS))
+		walk_animation->move_forward = 1;
+	else if (st->getKeyState(InputState::KF_BACKWARDS))
+		walk_animation->move_forward = -1;
+	else
+		walk_animation->move_forward = 0;
+
+	scene_rot->y = 4.0f * st->getMouseY() - 2.0f;
+	scene_rot->rotation = -360.0f * st->getMouseX();
+}
+
