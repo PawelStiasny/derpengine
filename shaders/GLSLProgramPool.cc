@@ -11,17 +11,32 @@ GLSLProgramPool * GLSLProgramPool::getInstance()
 
 GLSLProgram * GLSLProgramPool::getDefaultShaders()
 {
-	return default_prog_instance;
+	return getShaders("shaders/default.vs", "shaders/default.fs");
+}
+
+GLSLProgram * GLSLProgramPool::getShaders(const std::string vertex, const std::string fragment)
+{
+	std::map< std::pair<std::string, std::string>, GLSLProgram* >::iterator it = pool.find(std::make_pair(vertex, fragment));
+	if (it == pool.end()) {
+		GLSLProgram *new_prog = new GLSLProgram(vertex.c_str(), fragment.c_str());
+		pool.insert(std::make_pair(
+					std::make_pair(vertex, fragment), new_prog));
+		return new_prog;
+	} else 
+		return it->second;
 }
 
 GLSLProgramPool::GLSLProgramPool()
 {
-	default_prog_instance = new GLSLProgram;
 }
 
 GLSLProgramPool::~GLSLProgramPool()
 {
-	delete default_prog_instance;
+	// Currently not called
+	std::map< std::pair<std::string, std::string>, GLSLProgram* >::iterator it = pool.begin();
+	while (it++ != pool.end())
+		delete it->second;
+	printf("GLSLProgramPool destroyed \n");
 }
 
 

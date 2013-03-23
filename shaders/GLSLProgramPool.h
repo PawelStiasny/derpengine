@@ -3,10 +3,15 @@
 
 #include "GLSLProgram.h"
 
+#include <map>
+#include <string>
+#include <utility>
+
 class GLSLProgramPool
 {
 public:
 	GLSLProgram * getDefaultShaders();
+	GLSLProgram * getShaders(const std::string vertex, const std::string fragment);
 
 	static GLSLProgramPool * getInstance();
 
@@ -14,7 +19,7 @@ private:
 	GLSLProgramPool();
 	~GLSLProgramPool();
 
-	GLSLProgram *default_prog_instance;
+	std::map< std::pair<std::string, std::string>, GLSLProgram* > pool;
 
 	static GLSLProgramPool *instance;
 };
