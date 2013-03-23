@@ -14,7 +14,10 @@ if sys.platform == 'win32':
 else:
 	env = Environment()
 	env.Append( LIBS = ['SDL2', 'GL', 'GLU', 'GLEW'] )
-	env.Append( CPPFLAGS = ['-Ofast', '-march=native'] )
+	if ARGUMENTS.get('debug', 0):
+		env.Append( CPPFLAGS = ['-O0', '-march=native', '-g'] )
+	else:
+		env.Append( CPPFLAGS = ['-Ofast', '-march=native'] )
 
 # Construct an object list
 sources = ['main.cc', 'RenderingContext.cc', 'SceneManager.cc', 'DemoSceneManager.cc', 'InputState.cc']
