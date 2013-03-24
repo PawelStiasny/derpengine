@@ -7,10 +7,11 @@ class Texture
 {
 public:
 	Texture(const char* path, bool mipmapped = true);
-	~Texture();
+	virtual ~Texture();
 	void use(GLuint unit);
 
-private:
+protected:
+	Texture() { data = NULL; };
 	GLuint texture_id;
 	SDL_Surface *data;
 };
