@@ -12,7 +12,7 @@ class SceneManager
 {
 public:
 	SceneManager();
-	~SceneManager();
+	virtual ~SceneManager();
 	virtual void update(float timestep);
 	virtual void render();
 	virtual void onViewportReshape(int width, int height);

@@ -28,6 +28,26 @@ const GLushort Tile::s_index_data[] = {
 	0, 3, 2
 };
 
+/// Construct a tile with Texture t.
+//  t will be deleted on destruction.
+Tile::Tile(Texture *t)
+{
+	this->tex = t;
+	tex->use(0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	vertex_count = 4;
+	triangle_count = 2;
+	vertex_data = (GLfloat*)s_vertex_data;
+	normal_data = (GLfloat*)s_normal_data;
+	uv_data = (GLfloat*)s_uv_data;
+	index_data = (GLushort*)s_index_data;
+	syncBuffers();
+}
+
+/// Construct a Tile using a bitmap at texture_path.
+//  Use NULL as texture_path for non-textured Tile.
 Tile::Tile(const char *texture_path)
 {
 	if (texture_path) {

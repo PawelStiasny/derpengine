@@ -20,7 +20,7 @@ else:
 		env.Append( CPPFLAGS = ['-Ofast', '-march=native'] )
 
 # Construct an object list
-sources = ['main.cc', 'RenderingContext.cc', 'SceneManager.cc', 'DemoSceneManager.cc', 'InputState.cc']
+sources = ['main.cc', 'RenderingContext.cc', 'ShadowmapRenderingContext.cc', 'SceneManager.cc', 'DemoSceneManager.cc', 'InputState.cc']
 sources.extend(glob.glob('scene/*.cc'))
 sources.extend(glob.glob('animations/*.cc'))
 sources.extend(glob.glob('shaders/*.cc'))

@@ -7,10 +7,14 @@
 
 Camera::Camera()
 {
-	fov = 60.0f;
 	clip_near = 0.5f;
 	clip_far = 200.0f;
 	target = glm::vec3(0.0f, 0.0f, 1.0f);
+}
+
+PerspectiveCamera::PerspectiveCamera()
+{
+	fov = 60.0f;
 }
 
 void Camera::setTarget(const glm::vec3& coords)
@@ -20,25 +24,33 @@ void Camera::setTarget(const glm::vec3& coords)
 
 void Camera::setTarget(GraphNode* reference)
 {
-	glm::vec3 target = reference->getWorldCoordinates().xyz();
-	setTarget(target);
+	glm::vec4 target = reference->getWorldCoordinates();
+	target /= target.w;
+	setTarget(target.xyz());
 }
 
-void Camera::setFrustrum(float fov, float clip_near, float clip_far)
+void PerspectiveCamera::setFrustrum(float fov, float clip_near, float clip_far)
 {
 	this->fov = fov;
 	this->clip_near = clip_near;
 	this->clip_far = clip_far;
 }
 
-const glm::mat4 Camera::getProjectionMatrix(float aspect_ratio)
+const glm::mat4 PerspectiveCamera::getProjectionMatrix(float aspect_ratio)
 {
 	return glm::perspective(fov, aspect_ratio, clip_near, clip_far);
 }
 
+const glm::mat4 OrthogonalCamera::getProjectionMatrix(float aspect_ratio)
+{
+	return glm::mat4(1.0f);
+}
+
 const glm::mat4 Camera::getViewMatrix()
 {
-	glm::vec3 pos = getWorldCoordinates().xyz();
+	glm::vec4 wc = getWorldCoordinates();
+	glm::vec3 pos = wc.xyz();
+	pos /= wc.w;
 	return glm::lookAt(pos, target, glm::vec3(0.0f,1.0f,0.0f));
 }
 

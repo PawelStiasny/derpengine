@@ -11,14 +11,31 @@ public:
 	Camera();
 	void setTarget(const glm::vec3& coords);
 	void setTarget(GraphNode* reference);
-	void setFrustrum(float fov, float clip_near, float clip_far);
 
-	const glm::mat4 getProjectionMatrix(float aspect_ratio = 4.0/3.0);
+	virtual const glm::mat4 getProjectionMatrix(float aspect_ratio = 4.0/3.0) = 0;
 	const glm::mat4 getViewMatrix();
 
-private:
+protected:
 	glm::vec3 target;
-	float fov, clip_near, clip_far;
+	float clip_near, clip_far;
+};
+
+class PerspectiveCamera : public Camera
+{
+public:
+	PerspectiveCamera();
+	void setFrustrum(float fov, float clip_near, float clip_far);
+
+	virtual const glm::mat4 getProjectionMatrix(float aspect_ratio = 4.0/3.0);
+
+private:
+	float fov;
+};
+
+class OrthogonalCamera : public Camera
+{
+public:
+	virtual const glm::mat4 getProjectionMatrix(float aspect_ratio = 4.0/3.0);
 };
 
 #endif

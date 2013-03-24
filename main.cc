@@ -18,7 +18,6 @@ SceneManager *active_scene_manager = NULL;
 
 void reshape(int width, int height)
 {
-	glViewport(0, 0, (GLint) width, (GLint) height);
 	active_scene_manager->onViewportReshape(width, height);
 }
 
@@ -97,6 +96,7 @@ int main(int argc, char const *argv[])
 
 	gl_context = SDL_GL_CreateContext(win);
 
+	glewExperimental= GL_TRUE;
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
 	{

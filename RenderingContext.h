@@ -6,6 +6,7 @@
 #include "scene/GraphNode.h"
 #include "shaders/GLSLProgram.h"
 #include "scene/Camera.h"
+#include "scene/Light.h"
 
 class RenderingContext
 {
@@ -24,17 +25,19 @@ public:
 	const glm::mat4& getModelMatrix();
 	void setModelMatrix(const glm::mat4 &m);
 
-	void setMaterial(Material *m);
+	virtual void setMaterial(Material *m);
 
-	void setLight(const glm::vec4 &new_pos);
+	void setLight(Light *l);
 
 private:
 	glm::mat4 mvp, m_model, m_view, m_projection;
 	std::list<glm::mat4> matrix_stack;
 	GLSLProgram *active_glsl_program;
 	float aspect_ratio;
-	Camera default_cam, *active_camera;
-	glm::vec4 light_pos;
+	int width, height;
+	PerspectiveCamera default_cam;
+	Camera *active_camera;
+	Light *active_light;
 
 	void onProgramChange(GLSLProgram* new_program);
 	void updateMatrix();

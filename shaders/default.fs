@@ -1,7 +1,7 @@
 #version 130
 
 uniform mat3x3 NormalMx;
-uniform sampler2D tex_sampler;
+uniform sampler2D tex_sampler, shadow_sampler;
 uniform vec4 mat_ambient, mat_diffuse, mat_specular;
 uniform float mat_shininess;
 uniform vec4 light_pos;
@@ -27,6 +27,9 @@ void main() {
 			mat_specular;
 
 	vec4 texel = texture2D(tex_sampler, tex_coord);
+	/*vec4 texel = texture2D(shadow_sampler, tex_coord);*/
+	/*gl_FragColor = texel;*/
+	//float v = texture(shadow_sampler, tex_coord).z;
 	gl_FragColor = (diffuse + ambient + specular) * texel;
 }
 

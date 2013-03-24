@@ -45,6 +45,7 @@ GLSLProgram::GLSLProgram(
 	uni_normal = getUniformLocation("NormalMx");
 	uni_cam_pos = getUniformLocation("cam_pos");
 	uni_tex_sampler = getUniformLocation("tex_sampler");
+	uni_shadow_sampler = getUniformLocation("shadow_sampler");
 	uni_mat_ambient = getUniformLocation("mat_ambient");
 	uni_mat_diffuse = getUniformLocation("mat_diffuse");
 	uni_mat_specular = getUniformLocation("mat_specular");
@@ -54,6 +55,10 @@ GLSLProgram::GLSLProgram(
 	printf("v = #%d\n", glGetAttribLocation(program_id, "v"));
 	printf("n = #%d\n", glGetAttribLocation(program_id, "n"));
 	printf("uv = #%d\n", glGetAttribLocation(program_id, "uv"));
+
+	glUseProgram(program_id);
+	if (uni_shadow_sampler != -1)
+		glUniform1i(uni_shadow_sampler, shadowmap_tex_sampler);
 }
 
 GLint GLSLProgram::getUniformLocation(const char *name)

@@ -6,6 +6,7 @@ class Tile : public Geometry
 {
 public:
 	Tile(const char *texture_path = NULL);
+	Tile(Texture *t);
 	~Tile();
 	virtual void doRender(RenderingContext *rc);
 

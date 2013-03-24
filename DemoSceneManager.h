@@ -12,9 +12,11 @@ class DemoSceneManager : public SceneManager
 public:
 	DemoSceneManager();
 	virtual void handleInput(InputState *st);
+	virtual void render();
 
 private:
 	Camera *mechcam;
+	Light *sun;
 	Terrain *terrain;
 	Mech *mech;
 	CameraTracking *scene_rot;
