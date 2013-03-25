@@ -6,39 +6,21 @@ DemoSceneManager::DemoSceneManager()
 
 	sun = new DirectionalLight();
 	sun->setPosition(30.0f, 10.0f, -30.0f);
-	//sun->setPosition(5.0f, 8.0f, 5.0f);
 	scene->addMember(sun);
 
 	mech = new Mech();
 	scene->addMember(mech);
 
-	//mechcam = new PerspectiveCamera();
-	//mechcam->setPosition(0.0f, 1.0f, -2.0f);
-	//mech->addMember(mechcam);
-	//mechcam->setTarget(mech);
+	mechcam = new PerspectiveCamera();
+	mechcam->setPosition(0.0f, 1.0f, -2.0f);
+	mech->addMember(mechcam);
+	mechcam->setTarget(mech);
 
 	terrain = new Terrain("textures/heightmap.bmp", 20.0f);
 	scene->addMember(terrain);
 
-	//rendering_context->setCamera(mechcam);
-	rendering_context->setLight(sun);
-
-	/*Tile *t = new Tile();
-	Material *m = new Material();
-	m->ambient = glm::vec4(1.0f);
-	m->diffuse = glm::vec4(0.0f,0.0f,0.0f,1.0f);
-	m->specular = glm::vec4(0.0f,0.0f,0.0f,1.0f);
-	m->shininess = 1.0f;
-	m->texture = sun->getShadowmap();
-	t->setMaterial(m);
-
-	t->setPosition(3, 20, 3);
-	scene->addMember(t);*/
-
-	mechcam = new PerspectiveCamera;
-	mechcam->setPosition(0.0f, 1.0f, -2.0f);
-	mech->addMember(mechcam);
 	rendering_context->setCamera(mechcam);
+	rendering_context->setLight(sun);
 
 	scene_rot = new CameraTracking(mech, mechcam);
 	animations.push_back(scene_rot);
@@ -56,8 +38,15 @@ void DemoSceneManager::handleInput(InputState *st)
 	else
 		walk_animation->move_forward = 0;
 
-	scene_rot->y = 4.0f * st->getMouseY() - 2.0f;
-	scene_rot->rotation = -360.0f * st->getMouseX();
+	if (st->getKeyState(InputState::KF_ROTATE_SUN)) {
+		sun->setPosition(
+				20.0f * glm::sin(2.0f * 3.14f * st->getMouseX()),
+				100.0f * st->getMouseY(),
+				20.0f * glm::cos(2.0f * 3.14f * st->getMouseX()));
+	} else {
+		scene_rot->y = 4.0f * st->getMouseY() - 2.0f;
+		scene_rot->rotation = -360.0f * st->getMouseX();
+	}
 }
 
 void DemoSceneManager::render()

@@ -8,7 +8,7 @@
 class InputState
 {
 public:
-	enum KeyFunction { KF_EXIT, KF_FORWARDS, KF_BACKWARDS };
+	enum KeyFunction { KF_EXIT, KF_FORWARDS, KF_BACKWARDS, KF_ROTATE_SUN };
 
 	InputState();
 	void readInputState();

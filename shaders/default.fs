@@ -30,17 +30,13 @@ void main() {
 	vec4 texel = texture2D(tex_sampler, tex_coord);
 
 	float visibility = 
-		//0.5 + 0.5 *
 		shadow2DProj(
 			shadow_sampler,
 			shadowspace_pos - vec4(0,0,0.05,0)).r;
 
 	if ((shadowspace_pos.x < 0) || shadowspace_pos.y < 0 || shadowspace_pos.x > 1 || shadowspace_pos.y > 1) {
-		texel *= vec4(0.0, 1.0, 0.0, 1.0); // shadowmap range visualisation
 		visibility = 1;
 	}
-	//visibility = 1;
-	//gl_FragColor = (diffuse + ambient + specular) * visibility * texel;
 	diffuse *= visibility;
 	specular *= visibility;
 
