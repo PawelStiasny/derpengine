@@ -11,6 +11,8 @@ public:
 	Camera();
 	void setTarget(const glm::vec3& coords);
 	void setTarget(GraphNode* reference);
+	void setClippingDistance(float clip_near, float clip_far) {
+		this->clip_near = clip_near; this->clip_far = clip_far; }
 
 	virtual const glm::mat4 getProjectionMatrix(float aspect_ratio = 4.0/3.0) = 0;
 	const glm::mat4 getViewMatrix();
@@ -35,7 +37,13 @@ private:
 class OrthogonalCamera : public Camera
 {
 public:
+	OrthogonalCamera();
+	void setFrustrum(float height);
+
 	virtual const glm::mat4 getProjectionMatrix(float aspect_ratio = 4.0/3.0);
+
+private:
+	float half_frustrum_height;
 };
 
 #endif

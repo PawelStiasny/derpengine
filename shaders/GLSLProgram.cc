@@ -51,6 +51,7 @@ GLSLProgram::GLSLProgram(
 	uni_mat_specular = getUniformLocation("mat_specular");
 	uni_mat_shininess = getUniformLocation("mat_shininess");
 	uni_light_pos = getUniformLocation("light_pos");
+	uni_shadow_vp = getUniformLocation("shadow_VP");
 
 	printf("v = #%d\n", glGetAttribLocation(program_id, "v"));
 	printf("n = #%d\n", glGetAttribLocation(program_id, "n"));
@@ -154,6 +155,14 @@ void GLSLProgram::setUniformMVP(
 
 	if (uni_cam_pos != -1)
 		glUniform3fv(uni_cam_pos, 1, glm::value_ptr(cam_pos));
+}
+
+void GLSLProgram::setUniformShadowVP(const glm::mat4& vp)
+{
+	if (!canSetUniform()) return;
+
+	if (uni_shadow_vp != -1)
+		glUniformMatrix4fv(uni_shadow_vp, 1, GL_FALSE, glm::value_ptr(vp));
 }
 
 void GLSLProgram::setUniformMaterial(

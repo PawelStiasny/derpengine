@@ -17,6 +17,11 @@ PerspectiveCamera::PerspectiveCamera()
 	fov = 60.0f;
 }
 
+OrthogonalCamera::OrthogonalCamera()
+{
+	half_frustrum_height = 10.0f;
+}
+
 void Camera::setTarget(const glm::vec3& coords)
 {
 	this->target = coords;
@@ -36,6 +41,11 @@ void PerspectiveCamera::setFrustrum(float fov, float clip_near, float clip_far)
 	this->clip_far = clip_far;
 }
 
+void OrthogonalCamera::setFrustrum(float height)
+{
+	half_frustrum_height = height / 2;
+}
+
 const glm::mat4 PerspectiveCamera::getProjectionMatrix(float aspect_ratio)
 {
 	return glm::perspective(fov, aspect_ratio, clip_near, clip_far);
@@ -43,7 +53,10 @@ const glm::mat4 PerspectiveCamera::getProjectionMatrix(float aspect_ratio)
 
 const glm::mat4 OrthogonalCamera::getProjectionMatrix(float aspect_ratio)
 {
-	return glm::mat4(1.0f);
+	return glm::ortho(
+			-half_frustrum_height * aspect_ratio, half_frustrum_height * aspect_ratio,
+			-half_frustrum_height , half_frustrum_height,
+			clip_near, clip_far);
 }
 
 const glm::mat4 Camera::getViewMatrix()

@@ -20,7 +20,9 @@ void DirectionalLight::buildShadowMap(GraphNode *scene, GraphNode *reference)
 	camera.setTarget(reference);
 	// camera position = light position + reference position
 	camera.setPosition(reference->getWorldCoordinates().xyz());
-	camera.setFrustrum(45.0f, 5.0f, 30.0f);
+	float cam_distance = glm::length(getWorldCoordinates());
+	camera.setClippingDistance(cam_distance - 1.5f, cam_distance + 4.0f);
+	camera.setFrustrum(10.0f);
 	shadowmap_rc.setCamera(&camera);
 	shadowmap_rc.reshape(1024, 1024);
 
@@ -36,20 +38,32 @@ void DirectionalLight::use(GLSLProgram *shaders)
 	light_vec.w = 0;
 	shaders->setUniformLight(light_vec);
 	shadowmap.use(shaders->shadowmap_tex_sampler);
+
+	glm::mat4 viewport_to_tex(
+		0.5, 0.0, 0.0, 0.0,
+		0.0, 0.5, 0.0, 0.0,
+		0.0, 0.0, 0.5, 0.0,
+		0.5, 0.5, 0.5, 1.0
+	);
+
+	shaders->setUniformShadowVP(
+			viewport_to_tex *
+			camera.getProjectionMatrix(1.0f) * 
+			camera.getViewMatrix());
 }
 
 DirectionalLight::DirectionalLight()
 {
 	addMember(&camera);
-	MechBody *mb = new MechBody;
-	Material *m = new Material;
-	m->ambient = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
-	m->diffuse = glm::vec4(1.0f);
-	m->specular = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
-	m->shininess = 10.0f;
-	m->texture = new Texture("textures/metal.bmp");
-	mb->setMaterial(m);
-	camera.addMember(mb);
+	//MechBody *mb = new MechBody;
+	//Material *m = new Material;
+	//m->ambient = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+	//m->diffuse = glm::vec4(1.0f);
+	//m->specular = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+	//m->shininess = 10.0f;
+	//m->texture = new Texture("textures/metal.bmp");
+	//mb->setMaterial(m);
+	//camera.addMember(mb);
 }
 
 DirectionalLight::~DirectionalLight()

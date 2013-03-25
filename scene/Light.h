@@ -24,8 +24,8 @@ public:
 	virtual Texture * getShadowmap() { return &shadowmap; };
 
 private:
-	//OrthogonalCamera camera;
-	PerspectiveCamera camera;
+	OrthogonalCamera camera;
+	//PerspectiveCamera camera;
 	DepthFramebufferTexture shadowmap;
 };
 

@@ -1,7 +1,7 @@
 #version 130
 
-uniform mat3x3 NormalMx;
-uniform sampler2D tex_sampler, shadow_sampler;
+uniform sampler2D tex_sampler;
+uniform sampler2DShadow shadow_sampler;
 uniform vec4 mat_ambient, mat_diffuse, mat_specular;
 uniform float mat_shininess;
 uniform vec4 light_pos;
@@ -10,6 +10,7 @@ uniform vec3 cam_pos;
 smooth in vec4 pos;
 smooth in vec3 normal;
 smooth in vec2 tex_coord;
+smooth in vec4 shadowspace_pos;
 
 void main() {
 	vec4 lp = light_pos;
@@ -27,9 +28,16 @@ void main() {
 			mat_specular;
 
 	vec4 texel = texture2D(tex_sampler, tex_coord);
-	/*vec4 texel = texture2D(shadow_sampler, tex_coord);*/
-	/*gl_FragColor = texel;*/
-	//float v = texture(shadow_sampler, tex_coord).z;
+
+	float visibility = 
+		//0.5 + 0.5 *
+		shadow2DProj(
+			shadow_sampler,
+			shadowspace_pos - vec4(0,0,0.05,0)).r;
+	//visibility = 1;
+	//gl_FragColor = (diffuse + ambient + specular) * visibility * texel;
+	diffuse *= visibility;
+	specular *= visibility;
 	gl_FragColor = (diffuse + ambient + specular) * texel;
 }
 

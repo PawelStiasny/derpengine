@@ -21,6 +21,8 @@ public:
 			const glm::vec4& mat_diffuse,
 			const glm::vec4& mat_specular,
 			float mat_shininess);
+	void setUniformShadowVP(
+			const glm::mat4& vp);
 	void setUniformLight(const glm::vec4& light_pos);
 
 	static const GLuint default_tex_sampler = 0;
@@ -35,7 +37,7 @@ private:
 	GLuint program_id;
 	GLint uni_mvp, uni_m, uni_normal, uni_cam_pos, uni_tex_sampler,
 		  uni_shadow_sampler, uni_mat_ambient, uni_mat_diffuse,
-		  uni_mat_specular, uni_mat_shininess, uni_light_pos;
+		  uni_mat_specular, uni_mat_shininess, uni_light_pos, uni_shadow_vp;
 
 	GLuint compileShader(GLenum type, const char* src);
 	GLuint compileFromFile(GLenum type, const char* path);

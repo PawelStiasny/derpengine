@@ -5,8 +5,8 @@ DemoSceneManager::DemoSceneManager()
 	scene->addMember(new Skybox);
 
 	sun = new DirectionalLight();
-	//sun->setPosition(30.0f, 10.0f, -30.0f);
-	sun->setPosition(5.0f, 8.0f, 5.0f);
+	sun->setPosition(30.0f, 10.0f, -30.0f);
+	//sun->setPosition(5.0f, 8.0f, 5.0f);
 	scene->addMember(sun);
 
 	mech = new Mech();
@@ -23,7 +23,7 @@ DemoSceneManager::DemoSceneManager()
 	//rendering_context->setCamera(mechcam);
 	rendering_context->setLight(sun);
 
-	Tile *t = new Tile();
+	/*Tile *t = new Tile();
 	Material *m = new Material();
 	m->ambient = glm::vec4(1.0f);
 	m->diffuse = glm::vec4(0.0f,0.0f,0.0f,1.0f);
@@ -33,14 +33,14 @@ DemoSceneManager::DemoSceneManager()
 	t->setMaterial(m);
 
 	t->setPosition(3, 20, 3);
-	scene->addMember(t);
+	scene->addMember(t);*/
 
-	mechcam = new PerspectiveCamera();
+	mechcam = new PerspectiveCamera;
 	mechcam->setPosition(0.0f, 1.0f, -2.0f);
-	t->addMember(mechcam);
+	mech->addMember(mechcam);
 	rendering_context->setCamera(mechcam);
 
-	scene_rot = new CameraTracking(t, mechcam);
+	scene_rot = new CameraTracking(mech, mechcam);
 	animations.push_back(scene_rot);
 
 	walk_animation = new MechWalk(mech, terrain);
