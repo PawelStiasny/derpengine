@@ -3,7 +3,6 @@
 
 #include <glm/glm.hpp>
 
-#include "scene/GraphNode.h"
 #include "shaders/GLSLProgram.h"
 #include "scene/Camera.h"
 #include "scene/Light.h"

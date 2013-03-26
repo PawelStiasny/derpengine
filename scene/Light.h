@@ -25,8 +25,8 @@ public:
 
 private:
 	OrthogonalCamera camera;
-	//PerspectiveCamera camera;
 	DepthFramebufferTexture shadowmap;
+	RenderingContext *shadowmap_rc;
 };
 
 #endif
