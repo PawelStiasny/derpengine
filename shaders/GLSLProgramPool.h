@@ -2,6 +2,7 @@
 #define GLSLPROGRAMPOOL_H
 
 #include "GLSLProgram.h"
+#include "../resource.h"
 
 #include <map>
 #include <string>
@@ -10,8 +11,8 @@
 class GLSLProgramPool
 {
 public:
-	GLSLProgram * getDefaultShaders();
-	GLSLProgram * getShaders(const std::string vertex, const std::string fragment);
+	ResourceHandle<GLSLProgram> getDefaultShaders();
+	ResourceHandle<GLSLProgram> getShaders(const std::string vertex, const std::string fragment);
 
 	static GLSLProgramPool * getInstance();
 

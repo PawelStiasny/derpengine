@@ -1,10 +1,12 @@
 #ifndef GLSLPROGRAM_H
 #define GLSLPROGRAM_H
 
+#include "../resource.h"
+
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
-class GLSLProgram {
+class GLSLProgram : public SharedResource {
 public:
 	GLSLProgram(
 		const char *vertex_shader_path = "shaders/default.vs",

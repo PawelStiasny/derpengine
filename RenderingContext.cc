@@ -44,7 +44,7 @@ void RenderingContext::clear()
 	m_model = glm::mat4(1.0f);
 	m_projection = active_camera->getProjectionMatrix(aspect_ratio);
 	m_view = active_camera->getViewMatrix();
-	onProgramChange(active_glsl_program);
+	onProgramChange(active_glsl_program.getRawPointer());
 	//updateMatrix();
 	//if (active_light) active_light->use(active_glsl_program);
 }
@@ -82,7 +82,7 @@ void RenderingContext::setMaterial(Material *m)
 {
 	m->use();
 	active_glsl_program = m->getShaders();
-	onProgramChange(active_glsl_program);
+	onProgramChange(active_glsl_program.getRawPointer());
 }
 
 const glm::mat4 & RenderingContext::getModelMatrix()

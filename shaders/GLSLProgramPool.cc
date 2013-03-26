@@ -9,12 +9,12 @@ GLSLProgramPool * GLSLProgramPool::getInstance()
 	return instance;
 }
 
-GLSLProgram * GLSLProgramPool::getDefaultShaders()
+ResourceHandle<GLSLProgram> GLSLProgramPool::getDefaultShaders()
 {
 	return getShaders("shaders/default.vs", "shaders/default.fs");
 }
 
-GLSLProgram * GLSLProgramPool::getShaders(const std::string vertex, const std::string fragment)
+ResourceHandle<GLSLProgram> GLSLProgramPool::getShaders(const std::string vertex, const std::string fragment)
 {
 	std::map< std::pair<std::string, std::string>, GLSLProgram* >::iterator it = pool.find(std::make_pair(vertex, fragment));
 	if (it == pool.end()) {

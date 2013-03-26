@@ -32,7 +32,7 @@ public:
 private:
 	glm::mat4 mvp, m_model, m_view, m_projection;
 	std::list<glm::mat4> matrix_stack;
-	GLSLProgram *active_glsl_program;
+	ResourceHandle<GLSLProgram> active_glsl_program;
 	float aspect_ratio;
 	int width, height;
 	PerspectiveCamera default_cam;

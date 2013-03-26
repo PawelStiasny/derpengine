@@ -14,11 +14,11 @@ public:
 	Material();
 	virtual ~Material();
 	virtual void use();
-	GLSLProgram * getShaders() { return shaders; };
+	ResourceHandle<GLSLProgram> & getShaders() { return shaders; };
 
 	glm::vec4 ambient, diffuse, specular;
 	GLfloat shininess;
-	GLSLProgram *shaders;
+	ResourceHandle<GLSLProgram> shaders;
 	Texture *texture;
 };
 
