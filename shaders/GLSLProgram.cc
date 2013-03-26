@@ -12,7 +12,7 @@ GLSLProgram::GLSLProgram(
 {
 	program_id = 0;
 
-	printf("Compiling shaders: %s, %s\n",
+	printf("Compiling shaders: %s, %s. ",
 			vertex_shader_path, fragment_shader_path);
 
 	GLuint vertex_shader_id = compileFromFile(
@@ -40,6 +40,7 @@ GLSLProgram::GLSLProgram(
 	glDeleteShader(vertex_shader_id);
 	glDeleteShader(fragment_shader_id);
 
+	uniform_warning_displayed = false;
 	uni_mvp = getUniformLocation("MVP");
 	uni_m = getUniformLocation("M");
 	uni_normal = getUniformLocation("NormalMx");
@@ -53,9 +54,7 @@ GLSLProgram::GLSLProgram(
 	uni_light_pos = getUniformLocation("light_pos");
 	uni_shadow_vp = getUniformLocation("shadow_VP");
 
-	printf("v = #%d\n", glGetAttribLocation(program_id, "v"));
-	printf("n = #%d\n", glGetAttribLocation(program_id, "n"));
-	printf("uv = #%d\n", glGetAttribLocation(program_id, "uv"));
+	printf("\n");
 
 	glUseProgram(program_id);
 	if (uni_shadow_sampler != -1)
@@ -67,8 +66,14 @@ GLint GLSLProgram::getUniformLocation(const char *name)
 	GLuint r = -1;
 
 	r = glGetUniformLocation(program_id, name);
-	if (r == -1)
-		printf("Failed to get location of the %s uniform.\n", name);
+	if (r == -1) {
+		if (!uniform_warning_displayed) {
+			uniform_warning_displayed = true;
+			printf("Failed to get location of uniforms: %s", name);
+		} else {
+			printf(", %s", name);
+		}
+	}
 
 	return r;
 }

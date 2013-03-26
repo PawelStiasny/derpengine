@@ -38,6 +38,7 @@ private:
 	GLint uni_mvp, uni_m, uni_normal, uni_cam_pos, uni_tex_sampler,
 		  uni_shadow_sampler, uni_mat_ambient, uni_mat_diffuse,
 		  uni_mat_specular, uni_mat_shininess, uni_light_pos, uni_shadow_vp;
+	bool uniform_warning_displayed;
 
 	GLuint compileShader(GLenum type, const char* src);
 	GLuint compileFromFile(GLenum type, const char* path);
