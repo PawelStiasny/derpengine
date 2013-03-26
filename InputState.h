@@ -23,7 +23,7 @@ public:
 
 private:
 	Uint8 *keys;
-	Uint8 key_function_to_keycode[3];
+	Uint8 key_function_to_keycode[4];
 };
 
 #endif
