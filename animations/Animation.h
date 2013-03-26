@@ -6,6 +6,7 @@ class Animation
 {
 public:
 	virtual void update(float timestep) = 0;
+	virtual ~Animation() {};
 };
 
 #endif
