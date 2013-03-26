@@ -52,9 +52,6 @@ void RenderingContext::clear()
 void RenderingContext::setCamera(Camera *c)
 {
 	active_camera = c;
-	m_projection = c->getProjectionMatrix(aspect_ratio);
-	m_view = c->getViewMatrix();
-	updateMatrix();
 }
 
 glm::vec3 RenderingContext::getCameraPos()
@@ -67,9 +64,6 @@ void RenderingContext::reshape(int w, int h)
 	aspect_ratio = (float)w/(float)h;
 	width = w;
 	height = h;
-	glViewport(0, 0, (GLint) width, (GLint) height);
-	m_projection = active_camera->getProjectionMatrix(aspect_ratio);
-	updateMatrix();
 }
 
 void RenderingContext::pushMatrix()
@@ -104,8 +98,6 @@ void RenderingContext::setModelMatrix(const glm::mat4 &m)
 
 void RenderingContext::setLight(Light *l)
 {
-	//light_pos = l->getWorldCoordinates();
-	l->use(active_glsl_program);
 	active_light = l;
 }
 

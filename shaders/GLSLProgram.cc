@@ -55,10 +55,6 @@ GLSLProgram::GLSLProgram(
 	uni_shadow_vp = getUniformLocation("shadow_VP");
 
 	printf("\n");
-
-	glUseProgram(program_id);
-	if (uni_shadow_sampler != -1)
-		glUniform1i(uni_shadow_sampler, shadowmap_tex_sampler);
 }
 
 GLint GLSLProgram::getUniformLocation(const char *name)
@@ -124,6 +120,8 @@ GLSLProgram::~GLSLProgram()
 void GLSLProgram::use()
 {
 	glUseProgram(program_id);
+	if (uni_shadow_sampler != -1)
+		glUniform1i(uni_shadow_sampler, shadowmap_tex_sampler);
 }
 
 bool GLSLProgram::canSetUniform()

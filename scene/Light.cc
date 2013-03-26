@@ -18,7 +18,6 @@ void DirectionalLight::buildShadowMap(GraphNode *scene, GraphNode *reference)
 	// back face shadows
 	//glCullFace(GL_FRONT);
 
-	shadowmap_rc.clear();
 	camera.setTarget(reference);
 	// camera position = light position + reference position
 	camera.setPosition(reference->getWorldCoordinates().xyz());
@@ -28,6 +27,7 @@ void DirectionalLight::buildShadowMap(GraphNode *scene, GraphNode *reference)
 	shadowmap_rc.setCamera(&camera);
 	shadowmap_rc.reshape(1024, 1024);
 
+	shadowmap_rc.clear();
 	scene->render(&shadowmap_rc);
 
 	shadowmap.unbindFramebuffer();
