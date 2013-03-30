@@ -1,6 +1,7 @@
 #include "DemoSceneManager.h"
 
-DemoSceneManager::DemoSceneManager()
+DemoSceneManager::DemoSceneManager(Settings *settings)
+	: SceneManager(settings)
 {
 	scene->addMember(new Skybox);
 
@@ -49,8 +50,3 @@ void DemoSceneManager::handleInput(InputState *st)
 	}
 }
 
-void DemoSceneManager::render()
-{
-	sun->buildShadowMap(scene, mech);
-	SceneManager::render();
-}

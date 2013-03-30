@@ -1,13 +1,19 @@
 #include "SceneManager.h"
 
+#include "shaders/GLSLProgram.h"
 #include <list>
 #include <algorithm>
 #include <functional>
 
-SceneManager::SceneManager()
+SceneManager::SceneManager(Settings *settings)
 {
+	this->settings = settings;
+
 	scene = new GraphNode;
 	rendering_context = new RenderingContext;
+
+	//if (!settings->enable_shadows)
+	//	null_shadow_buffer = new Texture("textures/white.bmp");
 }
 
 SceneManager::~SceneManager()
@@ -23,6 +29,11 @@ SceneManager::~SceneManager()
 
 void SceneManager::render()
 {
+	Light *l = rendering_context->getLight();
+	if (settings->enable_shadows && l)
+		l->buildShadowMap(scene, rendering_context->getCamera());
+	//else if (!settings->enable_shadows)
+	//	null_shadow_buffer->use(GLSLProgram::shadowmap_tex_sampler);
 	rendering_context->clear();
 	scene->render(rendering_context);
 }

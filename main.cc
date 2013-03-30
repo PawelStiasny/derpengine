@@ -9,10 +9,10 @@
 #include "SceneManager.h"
 #include "DemoSceneManager.h"
 #include "InputState.h"
+#include "Settings.h"
 
 static SDL_Window *win;
 static SDL_GLContext gl_context;
-bool conf_enable_msaa;
 
 SceneManager *active_scene_manager = NULL;
 
@@ -41,24 +41,7 @@ void update_scene(float timestep)
 
 int main(int argc, char const *argv[])
 {
-#ifdef WIN32
-	conf_enable_msaa = true;
-#else
-	conf_enable_msaa = false;
-#endif
-	int opengl_version_major = 3, opengl_version_minor = 0;
-
-	while(*++argv) {
-		if (!strcmp(*argv, "--enable-msaa"))
-			conf_enable_msaa = true;
-		else if (!strcmp(*argv, "--disable-msaa"))
-			conf_enable_msaa = false;
-		else if (!strcmp(*argv, "-g")) {
-			opengl_version_major = atoi(*++argv);
-			opengl_version_minor = atoi(*++argv);
-		}
-	}
-
+	Settings settings(argv);
 	int w = 800, h = 600;
 
 	printf("derpengine development build\n");
@@ -74,21 +57,26 @@ int main(int argc, char const *argv[])
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, opengl_version_major);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, opengl_version_minor);
+	SDL_GL_SetAttribute(
+			SDL_GL_CONTEXT_MAJOR_VERSION,
+			settings.opengl_version_major);
+	SDL_GL_SetAttribute(
+			SDL_GL_CONTEXT_MINOR_VERSION,
+			settings.opengl_version_minor);
 
-	if (conf_enable_msaa) {
+	if (settings.enable_msaa) {
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 	}
 
-	win = SDL_CreateWindow("Mech",
+	win = SDL_CreateWindow(
+			"Mech",
 			SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED,
 			w, h,
 			SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
-	if ( ! win ) {
+	if (!win) {
 		puts(SDL_GetError());
 		SDL_Quit();
 		exit(2);
@@ -108,12 +96,12 @@ int main(int argc, char const *argv[])
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
-	if (conf_enable_msaa)
+	if (settings.enable_msaa)
 		glEnable(GL_MULTISAMPLE);
 	else
 		glDisable(GL_MULTISAMPLE);
 
-	active_scene_manager = new DemoSceneManager;
+	active_scene_manager = new DemoSceneManager(&settings);
 
 	reshape(w, h);
 	input_state.w = w;

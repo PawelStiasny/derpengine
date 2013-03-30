@@ -21,11 +21,11 @@ public:
 	virtual ~DirectionalLight();
 	virtual void buildShadowMap(GraphNode *scene, GraphNode *reference);
 	virtual void use(GLSLProgram *shaders);
-	virtual Texture * getShadowmap() { return &shadowmap; };
+	virtual Texture * getShadowmap() { return shadowmap; };
 
 private:
 	OrthogonalCamera camera;
-	DepthFramebufferTexture shadowmap;
+	DepthFramebufferTexture *shadowmap;
 	RenderingContext *shadowmap_rc;
 };
 

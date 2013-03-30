@@ -5,19 +5,37 @@
 #include "Light.h"
 #include "../ShadowmapRenderingContext.h"
 
+DirectionalLight::DirectionalLight()
+{
+	addMember(&camera);
+	shadowmap_rc = NULL;
+	shadowmap = NULL;
+}
+
+DirectionalLight::~DirectionalLight()
+{
+	if (shadowmap) {
+		delete shadowmap_rc;
+		delete shadowmap;
+	}
+}
+
 void DirectionalLight::buildShadowMap(GraphNode *scene, GraphNode *reference)
 {
 	GLint prev_draw_buffer;
 	glGetIntegerv(GL_DRAW_BUFFER, &prev_draw_buffer);
 
-	shadowmap.bindFramebuffer();
+	// create the rendering context and framebuffer first time a shadowmap is
+	// built
+	if (!shadowmap) {
+		shadowmap_rc = new ShadowmapRenderingContext;
+		shadowmap = new DepthFramebufferTexture;
+	}
+
+	shadowmap->bindFramebuffer();
 	glDrawBuffer(GL_NONE);
 	// back face shadows
 	//glCullFace(GL_FRONT);
-
-	// create the rendering context first time a shadowmap is built
-	if (!shadowmap_rc)
-		shadowmap_rc = new ShadowmapRenderingContext;
 
 	camera.setTarget(reference);
 	// camera position = light position + reference position
@@ -31,7 +49,7 @@ void DirectionalLight::buildShadowMap(GraphNode *scene, GraphNode *reference)
 	shadowmap_rc->clear();
 	scene->render(shadowmap_rc);
 
-	shadowmap.unbindFramebuffer();
+	shadowmap->unbindFramebuffer();
 	glDrawBuffer(prev_draw_buffer);
 	//glCullFace(GL_BACK);
 }
@@ -41,29 +59,22 @@ void DirectionalLight::use(GLSLProgram *shaders)
 	glm::vec4 light_vec = getWorldCoordinates();
 	light_vec.w = 0;
 	shaders->setUniformLight(light_vec);
-	shadowmap.use(shaders->shadowmap_tex_sampler);
 
-	glm::mat4 viewport_to_tex(
-		0.5, 0.0, 0.0, 0.0,
-		0.0, 0.5, 0.0, 0.0,
-		0.0, 0.0, 0.5, 0.0,
-		0.5, 0.5, 0.5, 1.0
-	);
+	// If a shadowmap has been built, use it
+	if (shadowmap) {
+		shadowmap->use(shaders->shadowmap_tex_sampler);
 
-	shaders->setUniformShadowVP(
-			viewport_to_tex *
-			camera.getProjectionMatrix(1.0f) * 
-			camera.getViewMatrix());
+		glm::mat4 viewport_to_tex(
+			0.5, 0.0, 0.0, 0.0,
+			0.0, 0.5, 0.0, 0.0,
+			0.0, 0.0, 0.5, 0.0,
+			0.5, 0.5, 0.5, 1.0
+		);
+
+		shaders->setUniformShadowVP(
+				viewport_to_tex *
+				camera.getProjectionMatrix(1.0f) * 
+				camera.getViewMatrix());
+	}
 }
 
-DirectionalLight::DirectionalLight()
-{
-	addMember(&camera);
-	shadowmap_rc = NULL;
-}
-
-DirectionalLight::~DirectionalLight()
-{
-	if (shadowmap_rc)
-		delete shadowmap_rc;
-}

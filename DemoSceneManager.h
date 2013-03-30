@@ -1,5 +1,6 @@
 #include "SceneManager.h"
 
+#include "Settings.h"
 #include "scene/Camera.h"
 #include "scene/Skybox.h"
 #include "scene/Terrain.h"
@@ -10,9 +11,8 @@
 class DemoSceneManager : public SceneManager
 {
 public:
-	DemoSceneManager();
+	DemoSceneManager(Settings *settings);
 	virtual void handleInput(InputState *st);
-	virtual void render();
 
 private:
 	Camera *mechcam;

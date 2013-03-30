@@ -17,6 +17,7 @@ public:
 	void reshape(int w, int h);
 
 	void setCamera(Camera *c);
+	Camera * getCamera() { return active_camera; };
 	glm::vec3 getCameraPos();
 
 	void pushMatrix();
@@ -27,6 +28,7 @@ public:
 	virtual void setMaterial(Material *m);
 
 	void setLight(Light *l);
+	Light * getLight() { return active_light; };
 
 private:
 	glm::mat4 mvp, m_model, m_view, m_projection;
