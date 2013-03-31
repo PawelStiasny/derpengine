@@ -24,6 +24,7 @@ sources = ['main.cc', 'RenderingContext.cc', 'ShadowmapRenderingContext.cc', 'Sc
 sources.extend(glob.glob('scene/*.cc'))
 sources.extend(glob.glob('animations/*.cc'))
 sources.extend(glob.glob('shaders/*.cc'))
+sources.extend(glob.glob('resources/*.cc'))
 object_list = env.Object(source = sources)
 
 main = env.Program( target = 'mech', source = object_list )

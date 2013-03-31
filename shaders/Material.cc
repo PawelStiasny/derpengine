@@ -6,7 +6,7 @@
 
 Material::Material()
 {
-	shaders = GLSLProgramPool::getInstance()->getDefaultShaders();
+	shaders = ResourceManager::getInstance()->getDefaultShaders();
 	texture = NULL;
 	ambient = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
 	diffuse = glm::vec4(1.0f);

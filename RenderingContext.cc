@@ -12,7 +12,7 @@ RenderingContext::RenderingContext()
 	active_camera = &default_cam;
 	active_light = NULL;
 
-	active_glsl_program = GLSLProgramPool::getInstance()->getDefaultShaders();
+	active_glsl_program = ResourceManager::getInstance()->getDefaultShaders();
 
 	width = 1024;
 	height = 768;

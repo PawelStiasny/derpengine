@@ -3,7 +3,7 @@
 
 #include <glm/glm.hpp>
 
-#include "GLSLProgramPool.h"
+#include "../resources/ResourceManager.h"
 #include "Texture.h"
 
 /// A Material represents a set of parameters for the shader program.

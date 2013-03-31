@@ -1,7 +1,7 @@
 #ifndef GLSLPROGRAM_H
 #define GLSLPROGRAM_H
 
-#include "../resource.h"
+#include "../resources/resource.h"
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
