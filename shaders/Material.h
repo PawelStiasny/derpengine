@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 
 #include "../resources/ResourceManager.h"
+#include "../resources/resource.h"
 #include "Texture.h"
 
 /// A Material represents a set of parameters for the shader program.
@@ -19,7 +20,7 @@ public:
 	glm::vec4 ambient, diffuse, specular;
 	GLfloat shininess;
 	ResourceHandle<GLSLProgram> shaders;
-	Texture *texture;
+	ResourceHandle<Texture> texture;
 };
 
 #endif

@@ -2,8 +2,9 @@
 #define TEXTURE_H
 
 #include <SDL2/SDL.h>
+#include "../resources/resource.h"
 
-class Texture
+class Texture : public SharedResource
 {
 public:
 	Texture(const char* path, bool mipmapped = true);

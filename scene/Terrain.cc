@@ -1,8 +1,9 @@
+#include "Terrain.h"
+
+#include "../resources/ResourceManager.h"
 #include <SDL2/SDL.h>
 #include <glm/gtx/fast_square_root.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
-#include "Terrain.h"
 
 #define vindex(x, z) (3 * ((z) * x_res + x))
 #define vecx(x, z) vertex_data[vindex(x,z)]
@@ -85,7 +86,8 @@ Terrain::Terrain(const char *hmap_path, GLfloat vertical_scaling)
 	m->ambient = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
 	//m->ambient = glm::vec4(0,0,0,1);
 	m->diffuse = glm::vec4(1.0f);
-	m->texture = new Texture("textures/ground.bmp");
+	m->texture =
+		ResourceManager::getInstance()->getTexture("textures/ground.bmp");
 	setMaterial(m);
 }
 

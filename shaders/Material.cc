@@ -6,8 +6,9 @@
 
 Material::Material()
 {
-	shaders = ResourceManager::getInstance()->getDefaultShaders();
-	texture = NULL;
+	ResourceManager *rm = ResourceManager::getInstance();
+	shaders = rm->getDefaultShaders();
+	texture = rm->getTexture("textures/white.bmp");
 	ambient = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
 	diffuse = glm::vec4(1.0f);
 	specular = glm::vec4(0.0f);
@@ -22,6 +23,6 @@ void Material::use()
 {
 	shaders->use();
 	shaders->setUniformMaterial(ambient, diffuse, specular, shininess);
-	if (texture) texture->use(GLSLProgram::default_tex_sampler);
+	texture->use(GLSLProgram::default_tex_sampler);
 }
 
