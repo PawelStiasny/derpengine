@@ -45,6 +45,40 @@ ResourceHandle<Texture> ResourceManager::getTexture(const std::string path)
 		return it->second;
 }
 
+void ResourceManager::clearUnused()
+{
+	int remaining = 0, deleted = 0;
+
+	std::map< std::pair<std::string, std::string>, GLSLProgram* >::iterator
+		shader_it = shader_pool.begin();
+	while (shader_it != shader_pool.end()) {
+		if ((shader_it->second)->hasHandles()) {
+			remaining++;
+		} else {
+			delete shader_it->second;
+			deleted++;
+		}
+		shader_it++;
+	}
+
+	printf("clearUnused shaders: %d deleted, %d remaining\n", deleted, remaining);
+
+	remaining = 0; deleted = 0;
+	std::map< std::string, Texture* >::iterator
+		texture_it = texture_pool.begin();
+	while (texture_it != texture_pool.end()) {
+		if ((texture_it->second)->hasHandles()) {
+			remaining++;
+		} else {
+			delete texture_it->second;
+			deleted++;
+		}
+		texture_it++;
+	}
+
+	printf("clearUnused textures: %d deleted, %d remaining\n", deleted, remaining);
+}
+
 ResourceManager::ResourceManager()
 {
 }

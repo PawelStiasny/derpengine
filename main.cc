@@ -10,6 +10,7 @@
 #include "DemoSceneManager.h"
 #include "InputState.h"
 #include "Settings.h"
+#include "resources/ResourceManager.h"
 
 static SDL_Window *win;
 static SDL_GLContext gl_context;
@@ -162,5 +163,6 @@ int main(int argc, char const *argv[])
 	}
 	SDL_Quit();
 	delete active_scene_manager;
+	ResourceManager::getInstance()->clearUnused();
 	return 0;
 }

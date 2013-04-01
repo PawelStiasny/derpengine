@@ -26,6 +26,8 @@ public:
 
 	//ResourceHandle<Geometry> getModel(const std::string name);
 
+	void clearUnused();
+
 private:
 	ResourceManager();
 	~ResourceManager();
