@@ -53,6 +53,9 @@ void ResourceManager::clearUnused()
 		shader_it = shader_pool.begin();
 	while (shader_it != shader_pool.end()) {
 		if ((shader_it->second)->hasHandles()) {
+			printf("Shaders %s, %s in use\n",
+					shader_it->first.first.c_str(),
+					shader_it->first.second.c_str());
 			remaining++;
 		} else {
 			delete shader_it->second;
@@ -68,6 +71,7 @@ void ResourceManager::clearUnused()
 		texture_it = texture_pool.begin();
 	while (texture_it != texture_pool.end()) {
 		if ((texture_it->second)->hasHandles()) {
+			printf("Texture %s in use\n", texture_it->first.c_str());
 			remaining++;
 		} else {
 			delete texture_it->second;
@@ -86,9 +90,7 @@ ResourceManager::ResourceManager()
 ResourceManager::~ResourceManager()
 {
 	// Currently not called
-	std::map< std::pair<std::string, std::string>, GLSLProgram* >::iterator it = shader_pool.begin();
-	while (it++ != shader_pool.end())
-		delete it->second;
+	clearUnused();
 	printf("ResourceManager destroyed \n");
 }
 

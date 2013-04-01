@@ -82,7 +82,7 @@ Terrain::Terrain(const char *hmap_path, GLfloat vertical_scaling)
 	syncBuffers();
 	SDL_FreeSurface(heightmap);
 
-	Material *m = new Material();
+	m = new Material();
 	m->ambient = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
 	//m->ambient = glm::vec4(0,0,0,1);
 	m->diffuse = glm::vec4(1.0f);
@@ -97,6 +97,7 @@ Terrain::~Terrain()
 	delete uv_data;
 	delete normal_data;
 	delete index_data;
+	delete m;
 }
 
 /// Returns interpolated height for the given (x,z) coordinates.

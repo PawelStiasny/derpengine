@@ -11,7 +11,7 @@ class RenderingContext
 {
 public:
 	RenderingContext();
-	~RenderingContext();
+	virtual ~RenderingContext();
 
 	void clear();
 	void reshape(int w, int h);

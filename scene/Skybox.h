@@ -11,5 +11,6 @@ public:
 
 private:
 	Tile *t[6];
+	Material *m;
 };
 

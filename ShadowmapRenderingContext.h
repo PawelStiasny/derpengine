@@ -6,6 +6,7 @@ class ShadowmapRenderingContext : public RenderingContext
 {
 public:
 	ShadowmapRenderingContext();
+	virtual ~ShadowmapRenderingContext() {};
 	virtual void setMaterial(Material *m);
 
 private:

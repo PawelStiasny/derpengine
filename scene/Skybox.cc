@@ -37,7 +37,7 @@ Skybox::Skybox()
 	for (int i = 0; i < 6; i++)
 		addMember(t[i]);
 
-	Material *m = new Material();
+	m = new Material();
 	m->ambient = glm::vec4(1.0f);
 	m->diffuse = glm::vec4(0.0f);
 	setMaterial(m);
@@ -46,6 +46,7 @@ Skybox::Skybox()
 Skybox::~Skybox()
 {
 	for (int i = 0; i < 6; i++) delete t[i];
+	delete m;
 }
 
 void Skybox::beforeRender(RenderingContext *rc)

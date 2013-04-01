@@ -13,6 +13,7 @@ public:
 private:
 	GLint x_res, z_res;
 	GLfloat vertical_scaling;
+	Material *m;
 };
 
 #endif
