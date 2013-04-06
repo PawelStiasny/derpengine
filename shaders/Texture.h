@@ -7,7 +7,10 @@
 class Texture : public SharedResource
 {
 public:
-	Texture(const char* path, bool mipmapped = true);
+	Texture(
+			const char* path,
+			bool mipmapped = true,
+			GLenum repeat_mode = GL_REPEAT);
 	virtual ~Texture();
 	void use(GLuint unit);
 

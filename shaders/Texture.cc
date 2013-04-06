@@ -3,8 +3,9 @@
 
 #include "Texture.h"
 
-Texture::Texture(const char *path, bool mipmapped)
+Texture::Texture(const char *path, bool mipmapped, GLenum repeat_mode)
 {
+	printf("Loading texture %s\n", path);
 	this->data = NULL;
 	SDL_Surface *t_data = SDL_LoadBMP(path);
 	if (!t_data) {
@@ -43,6 +44,8 @@ Texture::Texture(const char *path, bool mipmapped)
 	} else {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	}
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, repeat_mode);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, repeat_mode);
 }
 
 Texture::~Texture()

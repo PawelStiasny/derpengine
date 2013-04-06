@@ -2,14 +2,14 @@
 #define GEOMETRY_H
 
 #include "GraphNode.h"
+#include "../resources/resource.h"
 
-/// Handles rendering of models.
-class Geometry : public GraphNode
+/// Abstract class handling rendering of meshes.
+class Geometry : public SharedResource
 {
 public:
-	Geometry();
-	~Geometry();
-	virtual void doRender(RenderingContext *rc);
+	virtual ~Geometry();
+	void render(RenderingContext *rc);
 
 protected:
 	// Data used for rendering
@@ -21,6 +21,7 @@ protected:
 	glm::mat4 construction_mx;
 	unsigned int vertex_cursor, index_cursor;
 
+	Geometry();
 	void allocCount(GLuint vertex_count, GLuint triangle_count);
 	void syncBuffers();
 

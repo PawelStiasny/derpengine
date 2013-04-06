@@ -20,14 +20,15 @@ Geometry::Geometry()
 
 Geometry::~Geometry()
 {
-	// Do not free by default - our pointers may point to static or shared data.
-	// If you allocate buffers in a subclass, you need to free them yourself.
-	
+	delete vertex_data;
+	delete uv_data;
+	delete normal_data;
+	delete index_data;
 	glDeleteBuffers(3, buffer_objects);
 }
 
 
-void Geometry::doRender(RenderingContext *rc)
+void Geometry::render(RenderingContext *rc)
 {
 	// Drop out early if there is nothing to render
 	if (triangle_count == 0)

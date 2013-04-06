@@ -5,12 +5,47 @@
 #include <glm/gtx/fast_square_root.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+Terrain::Terrain(GLfloat vertical_scaling)
+	: t("textures/heightmap.bmp", vertical_scaling)
+{
+	//m = new Material();
+	m.ambient = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+	//m->ambient = glm::vec4(0,0,0,1);
+	m.diffuse = glm::vec4(1.0f);
+	m.texture =
+		ResourceManager::getInstance()->getTexture("textures/ground.bmp");
+	setMaterial(&m);
+}
+
+Terrain::~Terrain()
+{
+	//delete m;
+}
+
+/// Returns interpolated height for the given (x,z) coordinates.
+//  The coordinates are in object space, (0,0) beeing the center.
+GLfloat Terrain::getHeight(GLfloat x, GLfloat z)
+{
+	t.getHeight(x, z);
+}
+
+/// Syncs TerrainPieces to proper LOD based on observers position.
+void Terrain::updatePieces(GLfloat ref_x, GLfloat ref_z)
+{
+	// TODO
+}
+
+void Terrain::doRender(RenderingContext *rc)
+{
+	t.render(rc);
+}
+
 #define vindex(x, z) (3 * ((z) * x_res + x))
 #define vecx(x, z) vertex_data[vindex(x,z)]
 #define vecy(x, z) vertex_data[vindex(x,z)+1]
 #define vecz(x, z) vertex_data[vindex(x,z)+2]
 
-Terrain::Terrain(const char *hmap_path, GLfloat vertical_scaling)
+TerrainPiece::TerrainPiece(const char *hmap_path, GLfloat vertical_scaling)
 {
 	SDL_Surface *heightmap = SDL_LoadBMP(hmap_path);
 	if (!heightmap) {
@@ -62,7 +97,8 @@ Terrain::Terrain(const char *hmap_path, GLfloat vertical_scaling)
 	for (int z = 1; z < (z_res - 1); z++)
 		for (int x = 1; x < (x_res - 1); x++) {
 			// coordinates of neighbour vertices
-			glm::vec3 mid(vecx(x,z), vecy(x,z), vecz(x,z)),
+			glm::vec3
+				mid(vecx(x,z), vecy(x,z), vecz(x,z)),
 				west(vecx(x-1,z), vecy(x-1,z), vecz(x-1,z)),
 				north(vecx(x,z+1), vecy(x,z+1), vecz(x,z+1)),
 				east(vecx(x+1,z), vecy(x+1,z), vecz(x+1,z)),
@@ -82,27 +118,15 @@ Terrain::Terrain(const char *hmap_path, GLfloat vertical_scaling)
 	syncBuffers();
 	SDL_FreeSurface(heightmap);
 
-	m = new Material();
-	m->ambient = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
-	//m->ambient = glm::vec4(0,0,0,1);
-	m->diffuse = glm::vec4(1.0f);
-	m->texture =
-		ResourceManager::getInstance()->getTexture("textures/ground.bmp");
-	setMaterial(m);
 }
 
-Terrain::~Terrain()
+TerrainPiece::~TerrainPiece()
 {
-	delete vertex_data;
-	delete uv_data;
-	delete normal_data;
-	delete index_data;
-	delete m;
 }
 
 /// Returns interpolated height for the given (x,z) coordinates.
-// The coordinates are in object space, (0,0) beeing the center.
-GLfloat Terrain::getHeight(GLfloat x, GLfloat z)
+//  The coordinates are in patch space, (0,0) beeing the center.
+GLfloat TerrainPiece::getHeight(GLfloat x, GLfloat z)
 {
 	int ix = (int)floor(x) + x_res / 2;
 	int iz = (int)floor(z) + z_res / 2;
@@ -122,5 +146,10 @@ GLfloat Terrain::getHeight(GLfloat x, GLfloat z)
 	float h0 = (1.0f - dx) * vecy(ix,iz) + dx * vecy(ix+1, iz);
 	float h1 = (1.0f - dx) * vecy(ix,iz+1) + dx * vecy(ix+1, iz+1);
 	return (1.0f - dz) * h0 + dz * h1;
+}
+
+void TerrainPiece::syncLOD(int level)
+{
+	// TODO
 }
 

@@ -14,39 +14,48 @@ enum SIDES {
 	BOTTOM
 };
 
+// temporary cruft
+static GeometryNode* make_textured_tile(Tile *t, const char *path)
+{
+	Material *m = new Material;
+	m->ambient = glm::vec4(1.0f);
+	m->diffuse = glm::vec4(0.0f);
+	m->texture = new Texture(path, false, GL_CLAMP_TO_EDGE);
+	GeometryNode *n = new GeometryNode(t);
+	n->setMaterial(m);
+	return n;
+}
+
 Skybox::Skybox()
 {
+	Tile *tile = new Tile;
+
 	// Load sides
-	t[FRONT] = new Tile("textures/skybox_f.bmp");
+	t[FRONT] = make_textured_tile(tile, "textures/skybox_f.bmp");
 	t[FRONT]->setPosition(0.0f, 0.0f, 1.0f);
-	t[BACK] = new Tile("textures/skybox_b.bmp");
+	t[BACK] = make_textured_tile(tile, "textures/skybox_b.bmp");
 	t[BACK]->setPosition(0.0f, 0.0f, -1.0f);
 	t[BACK]->setRotation(0.0f, 180.0f, 0.0f);
-	t[LEFT] = new Tile("textures/skybox_l.bmp");
+	t[LEFT] = make_textured_tile(tile, "textures/skybox_l.bmp");
 	t[LEFT]->setPosition(-1.0f, 0.0f, 0.0f);
 	t[LEFT]->setRotation(0.0f, -90.0f, 0.0f);
-	t[RIGHT] = new Tile("textures/skybox_r.bmp");
+	t[RIGHT] = make_textured_tile(tile, "textures/skybox_r.bmp");
 	t[RIGHT]->setPosition(1.0f, 0.0f, 0.0f);
 	t[RIGHT]->setRotation(0.0f, 90.0f, 0.0f);
-	t[TOP] = new Tile("textures/skybox_t.bmp");
+	t[TOP] = make_textured_tile(tile, "textures/skybox_t.bmp");
 	t[TOP]->setPosition(0.0f, 1.0f, 0.0f);
 	t[TOP]->setRotation(-90.0f, 0.0f, 0.0f);
-	t[BOTTOM] = new Tile("textures/skybox_g.bmp");
+	t[BOTTOM] = make_textured_tile(tile, "textures/skybox_g.bmp");
 	t[BOTTOM]->setPosition(0.0f, -1.0f, 0.0f);
 	t[BOTTOM]->setRotation(90.0f, 0.0f, 0.0f);
 	for (int i = 0; i < 6; i++)
 		addMember(t[i]);
-
-	m = new Material();
-	m->ambient = glm::vec4(1.0f);
-	m->diffuse = glm::vec4(0.0f);
-	setMaterial(m);
 }
 
 Skybox::~Skybox()
 {
-	for (int i = 0; i < 6; i++) delete t[i];
-	delete m;
+	//for (int i = 0; i < 6; i++) delete t[i];
+	//delete m;
 }
 
 void Skybox::beforeRender(RenderingContext *rc)

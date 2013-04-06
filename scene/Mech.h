@@ -5,6 +5,7 @@
 #include "MechBody.h"
 #include "MechLeg.h"
 #include "MechLauncher.h"
+#include "GeometryNode.h"
 #include "../shaders/Material.h"
 
 class Mech : public GraphNode
@@ -12,7 +13,7 @@ class Mech : public GraphNode
 private:
 	MechBody *body;
 	MechLauncher *launcher[2];
-	MechLeg *leg[4];
+	GeometryNode *leg[4];
 	Material *m;
 
 public:

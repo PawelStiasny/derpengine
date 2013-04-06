@@ -2,18 +2,36 @@
 #define TERRAIN_H
 
 #include "Geometry.h"
-
-class Terrain : public Geometry
+//
+/// A single patch of terrain 
+class TerrainPiece : public Geometry
 {
 public:
-	Terrain(const char *hmap_path, GLfloat vertical_scaling);
-	~Terrain();
+	TerrainPiece(const char *hmap_path, GLfloat vertical_scaling);
+	~TerrainPiece();
 	GLfloat getHeight(GLfloat x, GLfloat z);
+	void syncLOD(int level);
+private:
+	GLfloat vertical_scaling;
+	GLint x_res, z_res;
+};
+
+/// A terrain map
+//  Actual geometry loading and rendering of terrain patches is delegated to
+//  a collection of TerrainPiece instances.
+class Terrain : public GraphNode
+{
+public:
+	Terrain(GLfloat vertical_scaling);
+	virtual ~Terrain();
+	GLfloat getHeight(GLfloat x, GLfloat z);
+	void updatePieces(GLfloat ref_x, GLfloat ref_z);
+	virtual void doRender(RenderingContext *rc);
 
 private:
-	GLint x_res, z_res;
 	GLfloat vertical_scaling;
-	Material *m;
+	Material m;
+	TerrainPiece t;
 };
 
 #endif

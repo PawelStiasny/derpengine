@@ -17,7 +17,7 @@ DemoSceneManager::DemoSceneManager(Settings *settings)
 	mech->addMember(mechcam);
 	mechcam->setTarget(mech);
 
-	terrain = new Terrain("textures/heightmap.bmp", 20.0f);
+	terrain = new Terrain(20.0f);
 	scene->addMember(terrain);
 
 	rendering_context->setCamera(mechcam);

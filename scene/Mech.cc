@@ -8,7 +8,7 @@ Mech::Mech()
 {
 	// Body
 	body = new MechBody();
-	addMember(body);
+	addMember(new GeometryNode(body));
 
 	float upper_bone_radius = 0.1, lower_bone_radius = 0.1,
 		  upper_bone_length = 1.2, lower_bone_length = 1.2,
@@ -24,18 +24,20 @@ Mech::Mech()
 	addMember(launcher[1]);
 
 	// Upper bones
-	leg[0] = new MechLeg(upper_bone_length, upper_bone_radius);
+	MechLeg *upper_bone = new MechLeg(upper_bone_length, upper_bone_radius);
+	leg[0] = new GeometryNode(upper_bone);
 	leg[0]->setPosition(-leg_spread, 0.0f, 0.0f);
 	leg[0]->setRotation(45.0f, 0.0f, 0.0f);
 	addMember(leg[0]);
 
-	leg[1] = new MechLeg(upper_bone_length, upper_bone_radius);
+	leg[1] = new GeometryNode(upper_bone);
 	leg[1]->setPosition(leg_spread, 0.0f, 0.0f);
 	leg[1]->setRotation(45.0f, 0.0f, 0.0f);
 	addMember(leg[1]);
 
 	// Lower bones
-	leg[2] = new MechLeg(lower_bone_length, lower_bone_radius);
+	MechLeg *lower_bone = new MechLeg(lower_bone_length, lower_bone_radius);
+	leg[2] = new GeometryNode(lower_bone);
 	leg[2]->setPosition(
 			(upper_bone_radius+lower_bone_radius)/2.0f+0.1f,
 			0.0f,
@@ -43,7 +45,7 @@ Mech::Mech()
 	leg[2]->setRotation(90.0f, 0.0f, 0.0f);
 	leg[0]->addMember(leg[2]);
 
-	leg[3] = new MechLeg(lower_bone_length, lower_bone_radius);
+	leg[3] = new GeometryNode(lower_bone);
 	leg[3]->setPosition(
 			-(upper_bone_radius+lower_bone_radius)/2.0f-0.1f,
 			0.0f,
