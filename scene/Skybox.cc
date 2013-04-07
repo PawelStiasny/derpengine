@@ -14,16 +14,14 @@ enum SIDES {
 	BOTTOM
 };
 
-// temporary cruft
-static GeometryNode* make_textured_tile(Tile *t, const char *path)
+void Skybox::makeTexturedTile(int index, Tile *shared_tile, const char *path)
 {
-	Material *m = new Material;
-	m->ambient = glm::vec4(1.0f);
-	m->diffuse = glm::vec4(0.0f);
-	m->texture = new Texture(path, false, GL_CLAMP_TO_EDGE);
-	GeometryNode *n = new GeometryNode(t);
-	n->setMaterial(m);
-	return n;
+	m[index].ambient = glm::vec4(1.0f);
+	m[index].diffuse = glm::vec4(0.0f);
+	m[index].texture = new Texture(path, false, GL_CLAMP_TO_EDGE);
+	GeometryNode *n = new GeometryNode(shared_tile);
+	n->setMaterial(&m[index]);
+	t[index] = n;
 }
 
 Skybox::Skybox()
@@ -31,31 +29,30 @@ Skybox::Skybox()
 	Tile *tile = new Tile;
 
 	// Load sides
-	t[FRONT] = make_textured_tile(tile, "textures/skybox_f.bmp");
+	makeTexturedTile(FRONT, tile, "textures/skybox_f.bmp");
 	t[FRONT]->setPosition(0.0f, 0.0f, 1.0f);
-	t[BACK] = make_textured_tile(tile, "textures/skybox_b.bmp");
+	makeTexturedTile(BACK, tile, "textures/skybox_b.bmp");
 	t[BACK]->setPosition(0.0f, 0.0f, -1.0f);
 	t[BACK]->setRotation(0.0f, 180.0f, 0.0f);
-	t[LEFT] = make_textured_tile(tile, "textures/skybox_l.bmp");
+	makeTexturedTile(LEFT, tile, "textures/skybox_l.bmp");
 	t[LEFT]->setPosition(-1.0f, 0.0f, 0.0f);
 	t[LEFT]->setRotation(0.0f, -90.0f, 0.0f);
-	t[RIGHT] = make_textured_tile(tile, "textures/skybox_r.bmp");
+	makeTexturedTile(RIGHT, tile, "textures/skybox_r.bmp");
 	t[RIGHT]->setPosition(1.0f, 0.0f, 0.0f);
 	t[RIGHT]->setRotation(0.0f, 90.0f, 0.0f);
-	t[TOP] = make_textured_tile(tile, "textures/skybox_t.bmp");
+	makeTexturedTile(TOP, tile, "textures/skybox_t.bmp");
 	t[TOP]->setPosition(0.0f, 1.0f, 0.0f);
 	t[TOP]->setRotation(-90.0f, 0.0f, 0.0f);
-	t[BOTTOM] = make_textured_tile(tile, "textures/skybox_g.bmp");
+	makeTexturedTile(BOTTOM, tile, "textures/skybox_g.bmp");
 	t[BOTTOM]->setPosition(0.0f, -1.0f, 0.0f);
 	t[BOTTOM]->setRotation(90.0f, 0.0f, 0.0f);
+
 	for (int i = 0; i < 6; i++)
 		addMember(t[i]);
 }
 
 Skybox::~Skybox()
 {
-	//for (int i = 0; i < 6; i++) delete t[i];
-	//delete m;
 }
 
 void Skybox::beforeRender(RenderingContext *rc)

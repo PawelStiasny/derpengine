@@ -11,7 +11,9 @@ public:
 	virtual void afterRender(RenderingContext *rc);
 
 private:
+	void makeTexturedTile(int index, Tile *t, const char *path);
+
 	GeometryNode *t[6];
-	Material *m;
+	Material m[6];
 };
 
