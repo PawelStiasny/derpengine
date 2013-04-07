@@ -3,13 +3,13 @@
 
 #include <glm/glm.hpp>
 
-#include "../resources/ResourceManager.h"
 #include "../resources/resource.h"
+#include "GLSLProgram.h"
 #include "Texture.h"
 
 /// A Material represents a set of parameters for the shader program.
-// This can be extended for specific shaders.
-class Material
+//  This can be extended for specific shaders.
+class Material : public SharedResource
 {
 public:
 	Material();
@@ -21,6 +21,12 @@ public:
 	GLfloat shininess;
 	ResourceHandle<GLSLProgram> shaders;
 	ResourceHandle<Texture> texture;
+};
+
+class ConfigurableMaterial : public Material
+{
+public:
+	bool loadDescriptionFile(const char *path);
 };
 
 #endif

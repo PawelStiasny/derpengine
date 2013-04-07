@@ -54,19 +54,11 @@ Mech::Mech()
 	leg[1]->addMember(leg[3]);
 
 	// Material for the whole thing
-	m = new Material();
-	m->ambient = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
-	m->diffuse = glm::vec4(1.0f);
-	m->specular = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
-	m->shininess = 10.0f;
-	m->texture =
-		ResourceManager::getInstance()->getTexture("textures/metal.bmp");
-	setMaterial(m);
+	setMaterial(ResourceManager::getInstance()->getMaterial("shaders/mat_mech"));
 }
 
 Mech::~Mech()
 {
-	delete m;
 }
 
 void Mech::doRender(RenderingContext *rc) 

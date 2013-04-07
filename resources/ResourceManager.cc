@@ -1,4 +1,7 @@
 #include "ResourceManager.h"
+#include "../shaders/Texture.h"
+#include "../shaders/Material.h"
+#include "../shaders/GLSLProgram.h"
 
 ResourceManager * ResourceManager::instance = NULL;
 
@@ -45,10 +48,40 @@ ResourceHandle<Texture> ResourceManager::getTexture(const std::string path)
 		return it->second;
 }
 
+ResourceHandle<Material> ResourceManager::getMaterial(const std::string path)
+{
+	std::map< std::string, Material* >::iterator
+		it = material_pool.find(path);
+
+	if (it == material_pool.end()) {
+		ConfigurableMaterial *new_mat = new ConfigurableMaterial;
+		new_mat->loadDescriptionFile(path.c_str());
+		material_pool.insert(std::make_pair(path, new_mat));
+		return new_mat;
+	} else
+		return it->second;
+}
+
 void ResourceManager::clearUnused()
 {
 	int remaining = 0, deleted = 0;
 
+	std::map< std::string, Material* >::iterator
+		material_it = material_pool.begin();
+	while (material_it != material_pool.end()) {
+		if ((material_it->second)->hasHandles()) {
+			printf("material %s in use\n", material_it->first.c_str());
+			remaining++;
+		} else {
+			delete material_it->second;
+			deleted++;
+		}
+		material_it++;
+	}
+
+	printf("clearUnused materials: %d deleted, %d remaining\n", deleted, remaining);
+
+	remaining = 0; deleted = 0;
 	std::map< std::pair<std::string, std::string>, GLSLProgram* >::iterator
 		shader_it = shader_pool.begin();
 	while (shader_it != shader_pool.end()) {

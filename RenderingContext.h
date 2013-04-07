@@ -1,11 +1,11 @@
 #ifndef RENDERINGCONTEXT_H
 #define RENDERINGCONTEXT_H
 
-#include <glm/glm.hpp>
-
 #include "shaders/GLSLProgram.h"
 #include "scene/Camera.h"
 #include "scene/Light.h"
+
+#include <glm/glm.hpp>
 
 class RenderingContext
 {

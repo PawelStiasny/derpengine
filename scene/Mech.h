@@ -14,7 +14,6 @@ private:
 	MechBody *body;
 	MechLauncher *launcher[2];
 	GeometryNode *leg[4];
-	Material *m;
 
 public:
 	Mech();

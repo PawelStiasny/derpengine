@@ -8,13 +8,14 @@
 Terrain::Terrain(GLfloat vertical_scaling)
 	: t("textures/heightmap.bmp", vertical_scaling)
 {
-	//m = new Material();
-	m.ambient = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
-	//m->ambient = glm::vec4(0,0,0,1);
-	m.diffuse = glm::vec4(1.0f);
-	m.texture =
-		ResourceManager::getInstance()->getTexture("textures/ground.bmp");
-	setMaterial(&m);
+	////m = new Material();
+	//m.ambient = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+	////m->ambient = glm::vec4(0,0,0,1);
+	//m.diffuse = glm::vec4(1.0f);
+	//m.texture =
+		//ResourceManager::getInstance()->getTexture("textures/ground.bmp");
+	//setMaterial(&m);
+	setMaterial(ResourceManager::getInstance()->getMaterial("shaders/mat_terrain"));
 }
 
 Terrain::~Terrain()

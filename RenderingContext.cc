@@ -7,6 +7,8 @@
 
 #include "RenderingContext.h"
 
+#include "resources/ResourceManager.h"
+
 RenderingContext::RenderingContext()
 {
 	active_camera = &default_cam;

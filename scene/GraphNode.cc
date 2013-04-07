@@ -35,8 +35,9 @@ void GraphNode::render(RenderingContext *rc)
 
 	beforeRender(rc);
 
-	if (material)
-		rc->setMaterial(material);
+	Material *m = material.getRawPointer();
+	if (m)
+		rc->setMaterial(m);
 
 	// Apply transformations
 	if (pos.isSet() || rot.isSet() || !scale.isOnes()) {
@@ -162,7 +163,7 @@ void GraphNode::setVisibility(bool v)
 	visible = v;
 }
 
-void GraphNode::setMaterial(Material *m)
+void GraphNode::setMaterial(const ResourceHandle<Material> &m)
 {
 	material = m;
 }
