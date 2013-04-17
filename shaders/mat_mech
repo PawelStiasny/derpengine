@@ -1,5 +1,5 @@
+shaders vertex shaders/default.vs fragment shaders/reflective.fs
 ambient 0.5 0.5 0.5 1.0
-diffuse 1.0 1.0 1.0 1.0
+diffuse 0.7 0.7 0.7 1
 specular 0.5 0.5 0.5 1.0
-shininess 10
 texture textures/metal.bmp
