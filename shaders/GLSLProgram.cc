@@ -47,6 +47,7 @@ GLSLProgram::GLSLProgram(
 	uni_cam_pos = getUniformLocation("cam_pos");
 	uni_tex_sampler = getUniformLocation("tex_sampler");
 	uni_shadow_sampler = getUniformLocation("shadow_sampler");
+	uni_specular_sampler = getUniformLocation("specular_sampler");
 	uni_mat_ambient = getUniformLocation("mat_ambient");
 	uni_mat_diffuse = getUniformLocation("mat_diffuse");
 	uni_mat_specular = getUniformLocation("mat_specular");
@@ -122,6 +123,8 @@ void GLSLProgram::use()
 	glUseProgram(program_id);
 	if (uni_shadow_sampler != -1)
 		glUniform1i(uni_shadow_sampler, shadowmap_tex_sampler);
+	if (uni_specular_sampler != -1)
+		glUniform1i(uni_specular_sampler, specular_cubemap_sampler);
 }
 
 bool GLSLProgram::canSetUniform()

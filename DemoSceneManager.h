@@ -7,6 +7,7 @@
 #include "scene/Mech.h"
 #include "animations/CameraTracking.h"
 #include "animations/MechWalk.h"
+#include "shaders/CubeTexture.h"
 
 class DemoSceneManager : public SceneManager
 {
@@ -21,4 +22,6 @@ private:
 	Mech *mech;
 	CameraTracking *scene_rot;
 	MechWalk *walk_animation;
+
+	CubeTexture specular_environment_map;
 };

@@ -4,6 +4,7 @@
 #include "shaders/GLSLProgram.h"
 #include "scene/Camera.h"
 #include "scene/Light.h"
+#include "shaders/CubeTexture.h"
 
 #include <glm/glm.hpp>
 
@@ -29,6 +30,7 @@ public:
 
 	void setLight(Light *l);
 	Light * getLight() { return active_light; };
+	void setEnvironmentMap(CubeTexture *specular);
 
 private:
 	glm::mat4 mvp, m_model, m_view, m_projection;
@@ -39,6 +41,7 @@ private:
 	PerspectiveCamera default_cam;
 	Camera *active_camera;
 	Light *active_light;
+	CubeTexture *env_map_specular;
 
 	void onProgramChange(GLSLProgram* new_program);
 	void updateMatrix();

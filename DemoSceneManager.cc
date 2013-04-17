@@ -1,7 +1,16 @@
 #include "DemoSceneManager.h"
 
+static const char *skybox_paths[] = {
+			"textures/skybox_f.bmp",
+			"textures/skybox_b.bmp",
+			"textures/skybox_t.bmp",
+			"textures/skybox_g.bmp",
+			"textures/skybox_l.bmp",
+			"textures/skybox_r.bmp"
+};
+
 DemoSceneManager::DemoSceneManager(Settings *settings)
-	: SceneManager(settings)
+	: SceneManager(settings), specular_environment_map(skybox_paths)
 {
 	scene->addMember(new Skybox);
 
@@ -22,6 +31,7 @@ DemoSceneManager::DemoSceneManager(Settings *settings)
 
 	rendering_context->setCamera(mechcam);
 	rendering_context->setLight(sun);
+	rendering_context->setEnvironmentMap(&specular_environment_map);
 
 	scene_rot = new CameraTracking(mech, mechcam);
 	animations.push_back(scene_rot);

@@ -6,31 +6,11 @@
 Texture::Texture(const char *path, bool mipmapped, GLenum repeat_mode)
 {
 	printf("Loading texture %s\n", path);
-	this->data = NULL;
-	SDL_Surface *t_data = SDL_LoadBMP(path);
-	if (!t_data) {
-		printf("Could not read texture %s\n", path);
-		texture_id = 0;
-		return;
-	}
-
-	SDL_PixelFormat fmt;
-	fmt.format = SDL_PIXELFORMAT_ARGB8888;
-	fmt.Bmask = 0x000000ff;
-	fmt.Gmask = 0x0000ff00;
-	fmt.Rmask = 0x00ff0000;
-	fmt.Amask = 0xff000000;
-	fmt.BitsPerPixel = 32;
-	fmt.BytesPerPixel = 4;
-	fmt.palette = NULL;
-	this->data = SDL_ConvertSurface(t_data, &fmt, 0);
+	this->data = loadImage(path);
 	if (!data) {
-		printf("Could not convert texture %s\n", path);
 		texture_id = 0;
-		SDL_FreeSurface(t_data);
 		return;
 	}
-	SDL_FreeSurface(t_data);
 
 	glGenTextures(1, &texture_id);
 	glBindTexture(GL_TEXTURE_2D, texture_id);
@@ -50,8 +30,37 @@ Texture::Texture(const char *path, bool mipmapped, GLenum repeat_mode)
 
 Texture::~Texture()
 {
-	glDeleteTextures(1, &texture_id);
 	if (data) SDL_FreeSurface(data);
+	glDeleteTextures(1, &texture_id);
+}
+
+SDL_Surface * Texture::loadImage(const char *path)
+{
+	SDL_Surface *image_data = NULL;
+
+	SDL_Surface *t_data = SDL_LoadBMP(path);
+	if (!t_data) {
+		printf("Could not read texture %s\n", path);
+		return NULL;
+	}
+
+	SDL_PixelFormat fmt;
+	fmt.format = SDL_PIXELFORMAT_ARGB8888;
+	fmt.Bmask = 0x000000ff;
+	fmt.Gmask = 0x0000ff00;
+	fmt.Rmask = 0x00ff0000;
+	fmt.Amask = 0xff000000;
+	fmt.BitsPerPixel = 32;
+	fmt.BytesPerPixel = 4;
+	fmt.palette = NULL;
+	image_data = SDL_ConvertSurface(t_data, &fmt, 0);
+	if (!image_data) {
+		printf("Could not convert texture %s\n", path);
+		SDL_FreeSurface(t_data);
+		return NULL;
+	}
+	SDL_FreeSurface(t_data);
+	return image_data;
 }
 
 void Texture::use(GLuint unit)

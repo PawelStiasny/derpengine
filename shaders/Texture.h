@@ -9,14 +9,16 @@ class Texture : public SharedResource
 {
 public:
 	Texture(
-			const char* path,
+			const char *path,
 			bool mipmapped = true,
 			GLenum repeat_mode = GL_REPEAT);
 	virtual ~Texture();
-	void use(GLuint unit);
+	virtual void use(GLuint unit);
 
 protected:
-	Texture() { data = NULL; };
+	static SDL_Surface * loadImage(const char *path);
+
+	Texture() { data = NULL; texture_id = 0; };
 	GLuint texture_id;
 	SDL_Surface *data;
 };
