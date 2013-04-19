@@ -11,10 +11,10 @@ const GLfloat Tile::s_vertex_data[] = {
 };
 
 const GLfloat Tile::s_normal_data[] = {
-	0.0f, 0.0f, 1.0f,
-	0.0f, 0.0f, 1.0f,
-	0.0f, 0.0f, 1.0f,
-	0.0f, 0.0f, 1.0f
+	0.0f, 0.0f, -1.0f,
+	0.0f, 0.0f, -1.0f,
+	0.0f, 0.0f, -1.0f,
+	0.0f, 0.0f, -1.0f
 };
 const GLfloat Tile::s_uv_data[] = {
 	0.0f, 1.0f, 
@@ -29,6 +29,7 @@ const GLushort Tile::s_index_data[] = {
 };
 
 Tile::Tile()
+	: Geometry(false)
 {
 	vertex_count = 4;
 	triangle_count = 2;

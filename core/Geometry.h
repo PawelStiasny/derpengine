@@ -21,7 +21,7 @@ protected:
 	glm::mat4 construction_mx;
 	unsigned int vertex_cursor, index_cursor;
 
-	Geometry();
+	Geometry(bool own_memory = true);
 	void allocCount(GLuint vertex_count, GLuint triangle_count);
 	void syncBuffers();
 
@@ -38,6 +38,8 @@ protected:
 private:
 	enum buffer_object_type { BUF_VERTEX, BUF_NORMAL, BUF_UV };
 	GLuint buffer_objects[3];
+	bool own_memory;
 };
+
 
 #endif

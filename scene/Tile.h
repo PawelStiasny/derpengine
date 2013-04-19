@@ -1,3 +1,6 @@
+#ifndef TILE_H
+#define TILE_H
+
 #include "../core/Geometry.h"
 #include "../core/Material.h"
 
@@ -14,3 +17,4 @@ private:
 	static const GLushort s_index_data[6];
 };
 
+#endif

@@ -6,7 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Geometry.h"
 
-Geometry::Geometry()
+Geometry::Geometry(bool own_memory)
 {
 	vertex_count = triangle_count = 0;
 	vertex_data = normal_data = uv_data = NULL;
@@ -15,15 +15,18 @@ Geometry::Geometry()
 
 	construction_mx = glm::mat4(1.0f);
 	vertex_cursor = index_cursor = 0;
+	this->own_memory = own_memory;
 }
 
 
 Geometry::~Geometry()
 {
-	delete vertex_data;
-	delete uv_data;
-	delete normal_data;
-	delete index_data;
+	if (own_memory) {
+		delete vertex_data;
+		delete uv_data;
+		delete normal_data;
+		delete index_data;
+	}
 	glDeleteBuffers(3, buffer_objects);
 }
 
