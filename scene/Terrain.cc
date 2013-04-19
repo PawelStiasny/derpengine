@@ -27,7 +27,7 @@ Terrain::~Terrain()
 //  The coordinates are in object space, (0,0) beeing the center.
 GLfloat Terrain::getHeight(GLfloat x, GLfloat z)
 {
-	t.getHeight(x, z);
+	return t.getHeight(x, z);
 }
 
 /// Syncs TerrainPieces to proper LOD based on observers position.
