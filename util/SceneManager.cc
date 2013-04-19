@@ -1,6 +1,6 @@
 #include "SceneManager.h"
 
-#include "shaders/GLSLProgram.h"
+#include "../core/GLSLProgram.h"
 #include <list>
 #include <algorithm>
 #include <functional>
@@ -13,7 +13,7 @@ SceneManager::SceneManager(Settings *settings)
 	rendering_context = new RenderingContext;
 
 	//if (!settings->enable_shadows)
-	//	null_shadow_buffer = new Texture("textures/white.bmp");
+	//	null_shadow_buffer = new Texture("data/white.bmp");
 }
 
 SceneManager::~SceneManager()

@@ -1,4 +1,4 @@
-#include "Geometry.h"
+#include "../core/Geometry.h"
 #include <GL/glu.h>
 
 class MechBody : public Geometry

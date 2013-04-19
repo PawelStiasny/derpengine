@@ -3,7 +3,7 @@
 #include <GL/glew.h>
 
 #include "Light.h"
-#include "../ShadowmapRenderingContext.h"
+#include "ShadowmapRenderingContext.h"
 
 DirectionalLight::DirectionalLight()
 {

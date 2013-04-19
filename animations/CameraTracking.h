@@ -4,8 +4,8 @@
  */
 
 #include "Animation.h"
-#include "../scene/GraphNode.h"
-#include "../scene/Camera.h"
+#include "../core/GraphNode.h"
+#include "../core/Camera.h"
 
 class CameraTracking : public Animation
 {

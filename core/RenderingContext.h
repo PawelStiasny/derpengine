@@ -1,9 +1,9 @@
 #ifndef RENDERINGCONTEXT_H
 #define RENDERINGCONTEXT_H
 
-#include "shaders/GLSLProgram.h"
-#include "scene/Camera.h"
-#include "scene/Light.h"
+#include "GLSLProgram.h"
+#include "Camera.h"
+#include "Light.h"
 
 #include <glm/glm.hpp>
 

@@ -1,4 +1,4 @@
-#include "GraphNode.h"
+#include "../core/GraphNode.h"
 #include "Tile.h"
 #include "GeometryNode.h"
 

@@ -1,12 +1,12 @@
 #ifndef MECH_H
 #define MECH_H
 
-#include "GraphNode.h"
+#include "../core/GraphNode.h"
 #include "MechBody.h"
 #include "MechLeg.h"
 #include "MechLauncher.h"
 #include "GeometryNode.h"
-#include "../shaders/Material.h"
+#include "../core/Material.h"
 
 class Mech : public GraphNode
 {

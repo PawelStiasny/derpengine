@@ -4,7 +4,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "GLSLProgram.h"
-#include "../resources/ResourceManager.h"
+#include "../util/ResourceManager.h"
 
 GLSLProgram::GLSLProgram(
 		const char *vertex_shader_path, 

@@ -1,8 +1,8 @@
 #ifndef GEOMETRYNODE_H
 #define GEOMETRYNODE_H
 
-#include "GraphNode.h"
-#include "Geometry.h"
+#include "../core/GraphNode.h"
+#include "../core/Geometry.h"
 
 /// Renders a shared Geomtery
 class GeometryNode : public GraphNode

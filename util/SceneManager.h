@@ -2,9 +2,9 @@
 #define SCENEMANAGER_H 
 
 #include "InputState.h"
-#include "scene/GraphNode.h"
-#include "RenderingContext.h"
-#include "animations/Animation.h"
+#include "../core/GraphNode.h"
+#include "../core/RenderingContext.h"
+#include "../animations/Animation.h"
 #include "Settings.h"
 
 /// SceneManager holds current game state and takes care of populating and

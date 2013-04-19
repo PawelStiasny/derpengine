@@ -20,11 +20,11 @@ else:
 		env.Append( CPPFLAGS = ['-Ofast', '-march=native'] )
 
 # Construct an object list
-sources = ['main.cc', 'RenderingContext.cc', 'ShadowmapRenderingContext.cc', 'SceneManager.cc', 'DemoSceneManager.cc', 'InputState.cc', 'Settings.cc']
+sources = ['main.cc']
 sources.extend(glob.glob('scene/*.cc'))
 sources.extend(glob.glob('animations/*.cc'))
-sources.extend(glob.glob('shaders/*.cc'))
-sources.extend(glob.glob('resources/*.cc'))
+sources.extend(glob.glob('core/*.cc'))
+sources.extend(glob.glob('util/*.cc'))
 object_list = env.Object(source = sources)
 
 main = env.Program( target = 'mech', source = object_list )

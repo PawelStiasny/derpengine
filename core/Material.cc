@@ -1,7 +1,7 @@
 #include "Material.h"
 #include "GLSLProgram.h"
 
-#include "../resources/ResourceManager.h"
+#include "../util/ResourceManager.h"
 #include <fstream>
 #include <string>
 #include <GL/glew.h>
@@ -11,7 +11,7 @@ Material::Material()
 {
 	ResourceManager *rm = ResourceManager::getInstance();
 	shaders = rm->getDefaultShaders();
-	texture = rm->getTexture("textures/white.bmp");
+	texture = rm->getTexture("data/white.bmp");
 	ambient = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
 	diffuse = glm::vec4(1.0f);
 	specular = glm::vec4(0.0f);

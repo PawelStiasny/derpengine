@@ -3,7 +3,7 @@
 
 #include "GraphNode.h"
 #include "Camera.h"
-#include "../shaders/DepthFramebufferTexture.h"
+#include "DepthFramebufferTexture.h"
 
 class Light : public GraphNode
 {

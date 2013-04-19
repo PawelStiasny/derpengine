@@ -1,6 +1,6 @@
 #include "RenderingContext.h"
-#include "shaders/Material.h"
-#include "resources/ResourceManager.h"
+#include "Material.h"
+#include "../util/ResourceManager.h"
 
 class ShadowmapRenderingContext : public RenderingContext
 {

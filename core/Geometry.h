@@ -2,7 +2,7 @@
 #define GEOMETRY_H
 
 #include "GraphNode.h"
-#include "../resources/resource.h"
+#include "../util/resource.h"
 
 /// Abstract class handling rendering of meshes.
 class Geometry : public SharedResource

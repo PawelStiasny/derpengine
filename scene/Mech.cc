@@ -1,6 +1,6 @@
 #include "Mech.h"
 
-#include "../resources/ResourceManager.h"
+#include "../util/ResourceManager.h"
 #include <algorithm>
 
 /// Constructs the mech body and its members
@@ -54,7 +54,7 @@ Mech::Mech()
 	leg[1]->addMember(leg[3]);
 
 	// Material for the whole thing
-	setMaterial(ResourceManager::getInstance()->getMaterial("shaders/mat_mech"));
+	setMaterial(ResourceManager::getInstance()->getMaterial("data/mat_mech"));
 }
 
 Mech::~Mech()
