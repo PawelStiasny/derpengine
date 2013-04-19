@@ -11,6 +11,7 @@ smooth in vec4 pos;
 smooth in vec3 normal;
 smooth in vec2 tex_coord;
 smooth in vec4 shadowspace_pos;
+smooth in float cam_distance;
 
 void main() {
 	vec4 lp = light_pos;
@@ -40,6 +41,7 @@ void main() {
 	diffuse *= visibility;
 	specular *= visibility;
 
-	gl_FragColor = (diffuse + ambient + specular) * texel;
+	float fog = clamp((cam_distance - 110.0) * 0.12, 0.0, 1.0);
+	gl_FragColor = mix( (diffuse + ambient + specular) * texel, vec4(0.67, 0.81, 0.65, 0.0), fog );
 }
 

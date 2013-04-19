@@ -8,7 +8,7 @@
 Camera::Camera()
 {
 	clip_near = 0.5f;
-	clip_far = 200.0f;
+	clip_far = 150.0f;
 	target = glm::vec3(0.0f, 0.0f, 1.0f);
 }
 

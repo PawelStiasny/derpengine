@@ -94,6 +94,8 @@ int main(int argc, char const *argv[])
 	printf("Using GLEW %s\n", glewGetString(GLEW_VERSION));
 	printf("OpenGL version: %s\n", glGetString(GL_VERSION));
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);

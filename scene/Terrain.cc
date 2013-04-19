@@ -76,8 +76,8 @@ TerrainPiece::TerrainPiece(const char *hmap_path, GLfloat vertical_scaling)
 
 			// Vertex UV
 			unsigned int uv_index_low = 2 * (z * x_res + x);
-			uv_data[uv_index_low] = z % 2 ? 0.0f : 1.0f;
-			uv_data[uv_index_low+1] = x % 2 ? 0.0f : 1.0f;
+			uv_data[uv_index_low] = (float)z * 0.1;
+			uv_data[uv_index_low+1] = (float)x * 0.1;
 		}
 
 	// Generate triangle indices
