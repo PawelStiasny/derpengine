@@ -32,7 +32,7 @@ void main() {
 	float visibility = 
 		shadow2DProj(
 			shadow_sampler,
-			shadowspace_pos - vec4(0,0,0.05,0)).r;
+			shadowspace_pos - vec4(0,0,0.02,0)).r;
 
 	if ((shadowspace_pos.x < 0) || shadowspace_pos.y < 0 || shadowspace_pos.x > 1 || shadowspace_pos.y > 1) {
 		visibility = 1;

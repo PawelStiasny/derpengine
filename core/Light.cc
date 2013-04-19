@@ -41,8 +41,8 @@ void DirectionalLight::buildShadowMap(GraphNode *scene, GraphNode *reference)
 	// camera position = light position + reference position
 	camera.setPosition(reference->getWorldCoordinates().xyz());
 	float cam_distance = glm::length(getWorldCoordinates());
-	camera.setClippingDistance(cam_distance - 1.5f, cam_distance + 3.0f);
-	camera.setFrustrum(10.0f);
+	camera.setClippingDistance(cam_distance - 3.0f, cam_distance + 5.0f);
+	camera.setFrustrum(15.0f);
 	shadowmap_rc->setCamera(&camera);
 	shadowmap_rc->reshape(1024, 1024);
 
