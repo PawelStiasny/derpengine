@@ -12,6 +12,8 @@ SceneManager::SceneManager(Settings *settings)
 	scene = new GraphNode;
 	rendering_context = new RenderingContext;
 
+	shadowmap_ref = NULL;
+
 	//if (!settings->enable_shadows)
 	//	null_shadow_buffer = new Texture("data/white.bmp");
 }
@@ -31,7 +33,10 @@ void SceneManager::render()
 {
 	Light *l = rendering_context->getLight();
 	if (settings->enable_shadows && l)
-		l->buildShadowMap(scene, rendering_context->getCamera());
+		if (shadowmap_ref)
+			l->buildShadowMap(scene, shadowmap_ref);
+		else
+			l->buildShadowMap(scene, rendering_context->getCamera());
 	//else if (!settings->enable_shadows)
 	//	null_shadow_buffer->use(GLSLProgram::shadowmap_tex_sampler);
 	rendering_context->clear();

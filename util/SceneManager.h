@@ -18,6 +18,7 @@ public:
 	virtual void render();
 	virtual void onViewportReshape(int width, int height);
 	virtual void handleInput(InputState *st) {};
+	void setShadowmapReference(GraphNode *r) { shadowmap_ref = r; };
 
 protected:
 	Settings *settings;
@@ -27,6 +28,7 @@ protected:
 
 private:
 	Texture *null_shadow_buffer;
+	GraphNode *shadowmap_ref;
 };
 
 #endif
