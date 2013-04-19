@@ -1,12 +1,12 @@
 #include "DemoSceneManager.h"
 
 static const char *skybox_paths[] = {
-			"data/skybox_f.bmp",
-			"data/skybox_b.bmp",
+			"data/skybox_r.bmp",
+			"data/skybox_l.bmp",
 			"data/skybox_t.bmp",
 			"data/skybox_g.bmp",
-			"data/skybox_l.bmp",
-			"data/skybox_r.bmp"
+			"data/skybox_b.bmp",
+			"data/skybox_f.bmp"
 };
 
 DemoSceneManager::DemoSceneManager(Settings *settings)
@@ -15,7 +15,7 @@ DemoSceneManager::DemoSceneManager(Settings *settings)
 	scene->addMember(new Skybox);
 
 	sun = new DirectionalLight();
-	sun->setPosition(30.0f, 10.0f, -30.0f);
+	sun->setPosition(18.1f, 14.5f, -8.5f);
 	scene->addMember(sun);
 
 	mech = new Mech();
@@ -56,6 +56,8 @@ void DemoSceneManager::handleInput(InputState *st)
 				20.0f * glm::sin(2.0f * 3.14f * st->getMouseX()),
 				100.0f * st->getMouseY(),
 				20.0f * glm::cos(2.0f * 3.14f * st->getMouseX()));
+		glm::vec4 p = sun->getWorldCoordinates();
+		printf("sun position: %f %f %f\n", p.x/p.w, p.y/p.w, p.z/p.w);
 	} else {
 		scene_rot->y = 4.0f * st->getMouseY() - 2.0f;
 		scene_rot->rotation = -360.0f * st->getMouseX();

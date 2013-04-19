@@ -41,8 +41,8 @@ CubeTexture::CubeTexture(const char *side_path[6])
 			side_data[CUBE_NEGZ]->h, 0, GL_BGRA, GL_UNSIGNED_BYTE,
 			side_data[CUBE_NEGZ]->pixels);
 
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 }
 
 CubeTexture::~CubeTexture()
