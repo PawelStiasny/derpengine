@@ -4,7 +4,7 @@ ShadowmapRenderingContext::ShadowmapRenderingContext()
 {
 	shadowmap_material.shaders = 
 		ResourceManager::getInstance()->getShaders(
-				"shaders/default.vs","shaders/shadowmap.fs");
+				"data/default.vs","data/shadowmap.fs");
 	RenderingContext::setMaterial(&shadowmap_material);
 }
 

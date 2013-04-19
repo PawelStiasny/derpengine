@@ -1,7 +1,7 @@
 #include "ResourceManager.h"
-#include "../shaders/Texture.h"
-#include "../shaders/Material.h"
-#include "../shaders/GLSLProgram.h"
+#include "../core/Texture.h"
+#include "../core/Material.h"
+#include "../core/GLSLProgram.h"
 
 ResourceManager * ResourceManager::instance = NULL;
 
@@ -14,7 +14,7 @@ ResourceManager * ResourceManager::getInstance()
 
 ResourceHandle<GLSLProgram> ResourceManager::getDefaultShaders()
 {
-	return getShaders("shaders/default.vs", "shaders/default.fs");
+	return getShaders("data/default.vs", "data/default.fs");
 }
 
 ResourceHandle<GLSLProgram> ResourceManager::getShaders(

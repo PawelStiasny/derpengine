@@ -1,6 +1,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
-#include "../RenderingContext.h"
+#include "../core/RenderingContext.h"
 #include "MechLeg.h"
 
 MechLeg::MechLeg(GLfloat length, GLfloat radius)

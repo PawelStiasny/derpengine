@@ -1,10 +1,10 @@
 #ifndef RENDERINGCONTEXT_H
 #define RENDERINGCONTEXT_H
 
-#include "shaders/GLSLProgram.h"
-#include "scene/Camera.h"
-#include "scene/Light.h"
-#include "shaders/CubeTexture.h"
+#include "GLSLProgram.h"
+#include "Camera.h"
+#include "Light.h"
+#include "CubeTexture.h"
 
 #include <glm/glm.hpp>
 

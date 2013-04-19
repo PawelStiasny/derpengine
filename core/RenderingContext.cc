@@ -7,7 +7,7 @@
 
 #include "RenderingContext.h"
 
-#include "resources/ResourceManager.h"
+#include "../util/ResourceManager.h"
 
 RenderingContext::RenderingContext()
 {

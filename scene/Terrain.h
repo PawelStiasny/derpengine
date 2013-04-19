@@ -1,7 +1,7 @@
 #ifndef TERRAIN_H
 #define TERRAIN_H
 
-#include "Geometry.h"
+#include "../core/Geometry.h"
 //
 /// A single patch of terrain 
 class TerrainPiece : public Geometry

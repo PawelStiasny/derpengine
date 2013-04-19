@@ -2,7 +2,7 @@
 #define TEXTURE_H
 
 #include <SDL2/SDL.h>
-#include "../resources/resource.h"
+#include "../util/resource.h"
 #include <GL/glew.h>
 
 class Texture : public SharedResource

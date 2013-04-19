@@ -1,12 +1,12 @@
 #include "DemoSceneManager.h"
 
 static const char *skybox_paths[] = {
-			"textures/skybox_f.bmp",
-			"textures/skybox_b.bmp",
-			"textures/skybox_t.bmp",
-			"textures/skybox_g.bmp",
-			"textures/skybox_l.bmp",
-			"textures/skybox_r.bmp"
+			"data/skybox_f.bmp",
+			"data/skybox_b.bmp",
+			"data/skybox_t.bmp",
+			"data/skybox_g.bmp",
+			"data/skybox_l.bmp",
+			"data/skybox_r.bmp"
 };
 
 DemoSceneManager::DemoSceneManager(Settings *settings)
@@ -20,6 +20,8 @@ DemoSceneManager::DemoSceneManager(Settings *settings)
 
 	mech = new Mech();
 	scene->addMember(mech);
+
+	setShadowmapReference(mech);
 
 	mechcam = new PerspectiveCamera();
 	mechcam->setPosition(0.0f, 1.0f, -2.0f);

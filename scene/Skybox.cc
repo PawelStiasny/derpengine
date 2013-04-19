@@ -1,6 +1,6 @@
 #include "Skybox.h"
-#include "../RenderingContext.h"
-#include "../shaders/Material.h"
+#include "../core/RenderingContext.h"
+#include "../core/Material.h"
 
 #include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -29,21 +29,21 @@ Skybox::Skybox()
 	Tile *tile = new Tile;
 
 	// Load sides
-	makeTexturedTile(FRONT, tile, "textures/skybox_f.bmp");
+	makeTexturedTile(FRONT, tile, "data/skybox_f.bmp");
 	t[FRONT]->setPosition(0.0f, 0.0f, 1.0f);
-	makeTexturedTile(BACK, tile, "textures/skybox_b.bmp");
+	makeTexturedTile(BACK, tile, "data/skybox_b.bmp");
 	t[BACK]->setPosition(0.0f, 0.0f, -1.0f);
 	t[BACK]->setRotation(0.0f, 180.0f, 0.0f);
-	makeTexturedTile(LEFT, tile, "textures/skybox_l.bmp");
+	makeTexturedTile(LEFT, tile, "data/skybox_l.bmp");
 	t[LEFT]->setPosition(-1.0f, 0.0f, 0.0f);
 	t[LEFT]->setRotation(0.0f, -90.0f, 0.0f);
-	makeTexturedTile(RIGHT, tile, "textures/skybox_r.bmp");
+	makeTexturedTile(RIGHT, tile, "data/skybox_r.bmp");
 	t[RIGHT]->setPosition(1.0f, 0.0f, 0.0f);
 	t[RIGHT]->setRotation(0.0f, 90.0f, 0.0f);
-	makeTexturedTile(TOP, tile, "textures/skybox_t.bmp");
+	makeTexturedTile(TOP, tile, "data/skybox_t.bmp");
 	t[TOP]->setPosition(0.0f, 1.0f, 0.0f);
 	t[TOP]->setRotation(-90.0f, 0.0f, 0.0f);
-	makeTexturedTile(BOTTOM, tile, "textures/skybox_g.bmp");
+	makeTexturedTile(BOTTOM, tile, "data/skybox_g.bmp");
 	t[BOTTOM]->setPosition(0.0f, -1.0f, 0.0f);
 	t[BOTTOM]->setRotation(90.0f, 0.0f, 0.0f);
 

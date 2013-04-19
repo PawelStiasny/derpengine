@@ -6,11 +6,11 @@
 #include <SDL2/SDL.h>
 #undef main
 
-#include "SceneManager.h"
-#include "DemoSceneManager.h"
-#include "InputState.h"
-#include "Settings.h"
-#include "resources/ResourceManager.h"
+#include "scene/DemoSceneManager.h"
+#include "util/SceneManager.h"
+#include "util/InputState.h"
+#include "util/Settings.h"
+#include "util/ResourceManager.h"
 
 static SDL_Window *win;
 static SDL_GLContext gl_context;

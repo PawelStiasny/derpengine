@@ -1,7 +1,7 @@
 #ifndef GLSLPROGRAM_H
 #define GLSLPROGRAM_H
 
-#include "../resources/resource.h"
+#include "../util/resource.h"
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
@@ -9,8 +9,8 @@
 class GLSLProgram : public SharedResource {
 public:
 	GLSLProgram(
-		const char *vertex_shader_path = "shaders/default.vs",
-		const char *fragment_shader_path = "shaders/default.fs");
+		const char *vertex_shader_path = "data/default.vs",
+		const char *fragment_shader_path = "data/default.fs");
 	~GLSLProgram();
 	void use();
 	void setUniformMVP(

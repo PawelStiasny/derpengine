@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 #include <list>
 
-#include "../shaders/Material.h"
+#include "../core/Material.h"
 
 //#include "../RenderingContext.h"
 class RenderingContext;

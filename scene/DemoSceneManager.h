@@ -1,13 +1,13 @@
-#include "SceneManager.h"
+#include "../util/SceneManager.h"
 
-#include "Settings.h"
-#include "scene/Camera.h"
-#include "scene/Skybox.h"
-#include "scene/Terrain.h"
-#include "scene/Mech.h"
-#include "animations/CameraTracking.h"
-#include "animations/MechWalk.h"
-#include "shaders/CubeTexture.h"
+#include "../util/Settings.h"
+#include "../core/Camera.h"
+#include "../core/CubeTexture.h"
+#include "../scene/Skybox.h"
+#include "../scene/Terrain.h"
+#include "../scene/Mech.h"
+#include "../animations/CameraTracking.h"
+#include "../animations/MechWalk.h"
 
 class DemoSceneManager : public SceneManager
 {

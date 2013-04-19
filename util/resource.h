@@ -14,11 +14,9 @@ public:
 
 	void handleCreated() {
 		handle_count++;
-		//printf("handle created (%lx)\n", (unsigned long)this);
 	};
 
 	void handleRemoved() {
-		//printf("handle removed (%lx)\n", (unsigned long)this);
 		assert(handle_count > 0);
 		handle_count--;
 		if (!handle_count)

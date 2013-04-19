@@ -3,7 +3,7 @@
 
 #include <glm/glm.hpp>
 
-#include "../resources/resource.h"
+#include "../util/resource.h"
 #include "GLSLProgram.h"
 #include "Texture.h"
 

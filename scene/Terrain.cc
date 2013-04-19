@@ -1,21 +1,21 @@
 #include "Terrain.h"
 
-#include "../resources/ResourceManager.h"
+#include "../util/ResourceManager.h"
 #include <SDL2/SDL.h>
 #include <glm/gtx/fast_square_root.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 Terrain::Terrain(GLfloat vertical_scaling)
-	: t("textures/heightmap.bmp", vertical_scaling)
+	: t("data/heightmap.bmp", vertical_scaling)
 {
 	////m = new Material();
 	//m.ambient = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
 	////m->ambient = glm::vec4(0,0,0,1);
 	//m.diffuse = glm::vec4(1.0f);
 	//m.texture =
-		//ResourceManager::getInstance()->getTexture("textures/ground.bmp");
+		//ResourceManager::getInstance()->getTexture("data/ground.bmp");
 	//setMaterial(&m);
-	setMaterial(ResourceManager::getInstance()->getMaterial("shaders/mat_terrain"));
+	setMaterial(ResourceManager::getInstance()->getMaterial("data/mat_terrain"));
 }
 
 Terrain::~Terrain()

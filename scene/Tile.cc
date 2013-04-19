@@ -1,7 +1,7 @@
 #include <GL/glew.h>
 
 #include "Tile.h"
-#include "../shaders/GLSLProgram.h"
+#include "../core/GLSLProgram.h"
 
 const GLfloat Tile::s_vertex_data[] = {
 	-1.0f, -1.0f, 0.0f,

@@ -4,7 +4,7 @@
 #include <glm/gtx/transform.hpp>
 
 #include "GraphNode.h"
-#include "../RenderingContext.h"
+#include "RenderingContext.h"
 
 GraphNode::GraphNode()
 {

@@ -1,5 +1,5 @@
-#include "Geometry.h"
-#include "../shaders/Material.h"
+#include "../core/Geometry.h"
+#include "../core/Material.h"
 
 /// Represents a flat tile
 //  TODO: move to Geometry::constructTile
