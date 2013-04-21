@@ -2,15 +2,16 @@
 #define GLSLPROGRAM_H
 
 #include "../util/resource.h"
+#include "GLSLObject.h"
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
+#include <list>
 
-class GLSLProgram : public SharedResource {
+class GLSLProgram : public SharedResource
+{
 public:
-	GLSLProgram(
-		const char *vertex_shader_path = "data/default.vs",
-		const char *fragment_shader_path = "data/default.fs");
+	GLSLProgram(std::list< ResourceHandle<GLSLObject> > shaders);
 	~GLSLProgram();
 	void use();
 	void setUniformMVP(
@@ -43,9 +44,8 @@ private:
 		  uni_mat_diffuse, uni_mat_specular, uni_mat_shininess, uni_light_pos,
 		  uni_shadow_vp;
 	bool uniform_warning_displayed;
+	std::list< ResourceHandle<GLSLObject> > shaders;
 
-	GLuint compileShader(GLenum type, const char* src);
-	GLuint compileFromFile(GLenum type, const char* path);
 	GLint getUniformLocation(const char *name);
 	bool canSetUniform();
 };
