@@ -36,6 +36,26 @@ DepthFramebufferTexture::DepthFramebufferTexture()
 	//glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture_id, 0);
 	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		puts("Framebuffer creation error");
+
+	switch(glCheckFramebufferStatus(GL_FRAMEBUFFER)) {
+		case GL_FRAMEBUFFER_COMPLETE:
+			break;
+		case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+			puts("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT");
+			break;
+		case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
+			puts("GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS");
+			break;
+		case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+			puts("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT");
+			break;
+		case GL_FRAMEBUFFER_UNSUPPORTED:
+			puts("GL_FRAMEBUFFER_UNSUPPORTED");
+			break;
+		default:
+			puts("Unknown framebuffer status");
+	}
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
