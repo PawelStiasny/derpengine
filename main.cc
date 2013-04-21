@@ -27,8 +27,13 @@ void draw_scene()
 {
 	active_scene_manager->render();
 	GLenum error = glGetError();
-	if (error != GL_NO_ERROR)
-		puts((const char*)gluErrorString(error));
+	if (error != GL_NO_ERROR) {
+		const char *error_string = (const char*)gluErrorString(error);
+		if (error_string)
+			puts(error_string);
+		else
+			puts("Uknown GL error");
+	}
 
 	glFlush();
 	SDL_GL_SwapWindow(win);
@@ -78,7 +83,9 @@ int main(int argc, char const *argv[])
 			SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
 	if (!win) {
-		puts(SDL_GetError());
+		const char *sdl_error_string = SDL_GetError();
+		assert(sdl_error_string != NULL);
+		puts(sdl_error_string);
 		SDL_Quit();
 		exit(2);
 	}
