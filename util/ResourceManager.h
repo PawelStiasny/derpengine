@@ -9,6 +9,7 @@
 
 // Forward declaration of returned types
 class GLSLProgram;
+class GLSLObject;
 class Material;
 class Texture;
 
@@ -22,6 +23,8 @@ public:
 			const std::string vertex,
 			const std::string fragment);
 	ResourceHandle<GLSLProgram> getDefaultShaders();
+
+	ResourceHandle<GLSLObject> getGLSLProgram(int type, const std::string name);
 
 	ResourceHandle<Texture> getTexture(const std::string path);
 
@@ -37,7 +40,8 @@ private:
 
 	static ResourceManager *instance;
 
-	std::map< std::pair<std::string, std::string>, GLSLProgram* > shader_pool;
+	std::map< std::pair<std::string, std::string>, GLSLProgram* > glsl_program_pool;
+	std::map< std::pair<int, std::string>, GLSLObject* > glsl_object_pool;
 	std::map< std::string, Texture* > texture_pool;
 	std::map< std::string, Material* > material_pool;
 };
