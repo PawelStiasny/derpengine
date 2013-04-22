@@ -13,6 +13,8 @@ if sys.platform == 'win32':
 	env.Append( LIBS = ['SDL', 'OpenGL32', 'GLU32', 'GLEW32'] )
 else:
 	env = Environment()
+	if sys.platform.startswith('linux'):
+		env.Append( CPPFLAGS = ['-DLINUX'] )
 	env.Append( LIBS = ['SDL2', 'GL', 'GLU', 'GLEW'] )
 	if ARGUMENTS.get('debug', 0):
 		env.Append( CPPFLAGS = ['-O0', '-march=native', '-g'] )

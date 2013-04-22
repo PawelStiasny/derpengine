@@ -11,6 +11,7 @@
 #include "util/InputState.h"
 #include "util/Settings.h"
 #include "util/ResourceManager.h"
+#include "util/FileWatcher.h"
 
 static SDL_Window *win;
 static SDL_GLContext gl_context;
@@ -169,6 +170,8 @@ int main(int argc, char const *argv[])
 
 		// render
 		draw_scene();
+
+		FileWatcher::pollChanges();
 	}
 	SDL_Quit();
 	delete active_scene_manager;
