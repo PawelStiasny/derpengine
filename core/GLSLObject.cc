@@ -3,10 +3,10 @@
 #include <stdlib.h>
 
 GLSLObject::GLSLObject(GLenum type, const char *shader_path)
-	: fw(shader_path)
+	//: fw(shader_path)
 {
 	shader_id = compileFromFile(type, shader_path);
-	if (shader_id) fw.registerObserver(this);
+	//if (shader_id) fw.registerObserver(this);
 }
 
 GLSLObject::~GLSLObject()
