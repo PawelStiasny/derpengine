@@ -27,10 +27,15 @@ public:
 	void setUniformShadowVP(
 			const glm::mat4& vp);
 	void setUniformLight(const glm::vec4& light_pos);
+	void setUniformTexSampler(const char *sampler_name, GLuint tex_unit);
 
-	static const GLuint default_tex_sampler = 0;
-	static const GLuint shadowmap_tex_sampler = 2;
-	static const GLuint specular_cubemap_sampler = 4;
+	enum {
+		TEXUNIT_COLOR,
+		TEXUNIT_BUMP,
+		TEXUNIT_SHADOWMAP,
+		TEXUNIT_SPECULAR_CUBEMAP
+	};
+
 	enum {
 		ATTR_POSITION	= 0,
 		ATTR_NORMAL 	= 1,
@@ -39,12 +44,12 @@ public:
 
 private:
 	GLuint program_id;
-	GLint uni_mvp, uni_m, uni_normal, uni_cam_pos, uni_tex_sampler,
-		  uni_shadow_sampler, uni_specular_sampler, uni_mat_ambient,
+	GLint uni_mvp, uni_m, uni_normal, uni_cam_pos, uni_mat_ambient,
 		  uni_mat_diffuse, uni_mat_specular, uni_mat_shininess, uni_light_pos,
 		  uni_shadow_vp;
 	bool uniform_warning_displayed;
 	std::list< ResourceHandle<GLSLObject> > shaders;
+	bool defaults_loaded;
 
 	GLint getUniformLocation(const char *name);
 	bool canSetUniform();

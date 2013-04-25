@@ -36,9 +36,6 @@ GLSLProgram::GLSLProgram(std::list< ResourceHandle<GLSLObject> > shaders)
 	uni_m = getUniformLocation("M");
 	uni_normal = getUniformLocation("NormalMx");
 	uni_cam_pos = getUniformLocation("cam_pos");
-	uni_tex_sampler = getUniformLocation("tex_sampler");
-	uni_shadow_sampler = getUniformLocation("shadow_sampler");
-	uni_specular_sampler = getUniformLocation("specular_sampler");
 	uni_mat_ambient = getUniformLocation("mat_ambient");
 	uni_mat_diffuse = getUniformLocation("mat_diffuse");
 	uni_mat_specular = getUniformLocation("mat_specular");
@@ -47,6 +44,7 @@ GLSLProgram::GLSLProgram(std::list< ResourceHandle<GLSLObject> > shaders)
 	uni_shadow_vp = getUniformLocation("shadow_VP");
 
 	printf("\n");
+	defaults_loaded = false;
 }
 
 GLint GLSLProgram::getUniformLocation(const char *name)
@@ -74,10 +72,15 @@ GLSLProgram::~GLSLProgram()
 void GLSLProgram::use()
 {
 	glUseProgram(program_id);
-	if (uni_shadow_sampler != -1)
-		glUniform1i(uni_shadow_sampler, shadowmap_tex_sampler);
-	if (uni_specular_sampler != -1)
-		glUniform1i(uni_specular_sampler, specular_cubemap_sampler);
+
+	// Load initial values first time program is used
+	if (!defaults_loaded) {
+		defaults_loaded = true;
+		setUniformTexSampler("tex_sampler", TEXUNIT_COLOR);
+		setUniformTexSampler("bump_sampler", TEXUNIT_BUMP);
+		setUniformTexSampler("shadow_sampler", TEXUNIT_SHADOWMAP);
+		setUniformTexSampler("specular_sampler", TEXUNIT_SPECULAR_CUBEMAP);
+	}
 }
 
 bool GLSLProgram::canSetUniform()
@@ -148,5 +151,12 @@ void GLSLProgram::setUniformLight(const glm::vec4& light_pos)
 
 	if (uni_light_pos != -1)
 		glUniform4fv(uni_light_pos, 1, glm::value_ptr(light_pos));
+}
+
+void GLSLProgram::setUniformTexSampler(const char *sampler_name, GLuint tex_unit)
+{
+	GLint uniform_id = getUniformLocation(sampler_name);
+	if (uniform_id != -1)
+		glUniform1i(uniform_id, tex_unit);
 }
 

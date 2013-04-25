@@ -1,6 +1,6 @@
 #version 130
 
-uniform sampler2D tex_sampler;
+uniform sampler2D tex_sampler, bump_sampler;
 uniform sampler2DShadow shadow_sampler;
 uniform samplerCube specular_sampler;
 uniform vec4 mat_ambient, mat_diffuse, mat_specular;
@@ -42,9 +42,9 @@ vec3 pertrurb_normal(vec3 pos, vec3 norm, sampler2D hmap, vec2 st)
 
 void main()
 {
-	//vec4 texel = texture2D(tex_sampler, tex_coord);
+	vec4 texel = texture2D(tex_sampler, tex_coord * 0.43);
 	vec3 pnormal =
-		pertrurb_normal(pos.xyz/pos.w, normalize(normal), tex_sampler, tex_coord);
+		pertrurb_normal(pos.xyz/pos.w, normalize(normal), bump_sampler, tex_coord);
 	vec4 lp = light_pos;
 	vec3 light_dir;
 	light_dir = normalize(lp - lp.w * pos).xyz;
@@ -68,6 +68,6 @@ void main()
 	}
 	diffuse *= visibility;
 
-	gl_FragColor = (diffuse + ambient + specular) * (0.2, 0.2, 0.2, 1.0);
+	gl_FragColor = (diffuse + ambient + specular) * texel;
 }
 

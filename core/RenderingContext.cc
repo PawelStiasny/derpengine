@@ -106,7 +106,7 @@ void RenderingContext::setLight(Light *l)
 void RenderingContext::setEnvironmentMap(CubeTexture *specular)
 {
 	env_map_specular = specular;
-	specular->use(GLSLProgram::specular_cubemap_sampler);
+	specular->use(GLSLProgram::TEXUNIT_SPECULAR_CUBEMAP);
 }
 
 /// Called when a new GLSL shader program is set as active
