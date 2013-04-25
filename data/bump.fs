@@ -34,8 +34,8 @@ vec3 pertrurb_normal(vec3 pos, vec3 norm, sampler2D hmap, vec2 st)
 	float height_ll = texture2D(hmap, st_ll).r;
 	float height_lr = texture2D(hmap, st_lr).r;
 	float height_ul = texture2D(hmap, st_ul).r;
-	float dBs = height_lr - height_ll;
-	float dBt = height_ul - height_ll;
+	float dBs = (height_lr - height_ll) * 0.1;
+	float dBt = (height_ul - height_ll) * 0.1;
 	vec3 surface_gradient = sign(det) * (dBs*R1 + dBt*R2);
 	return normalize(abs(det)*norm - surface_gradient);
 }
