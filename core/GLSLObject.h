@@ -6,7 +6,7 @@
 #include <GL/glew.h>
 
 /// Represents a GLSL Shader than can be linked into a GLSLProgram
-class GLSLObject : public SharedResource //, public FileChangeHandler
+class GLSLObject : public SharedResource
 {
 public:
 	GLSLObject(GLenum type, const char *shader_path);
@@ -19,7 +19,6 @@ public:
 
 private:
 	GLuint shader_id;
-//	FileWatcher fw;
 
 	GLuint compileShader(GLenum type, const char* src);
 	GLuint compileFromFile(GLenum type, const char* path);

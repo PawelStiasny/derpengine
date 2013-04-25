@@ -1,5 +1,6 @@
-shaders vertex data/default.vs fragment data/reflective.fs
+shaders vertex data/default.vs fragment data/bump.fs
 ambient 0.5 0.5 0.5 1.0
-diffuse 0.7 0.7 0.7 1
+diffuse 0.3 0.3 0.3 1
 specular 0.5 0.5 0.5 1.0
 texture data/metal.bmp
+texunit 1 data/bump_large.bmp

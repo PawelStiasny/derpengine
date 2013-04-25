@@ -62,7 +62,7 @@ void DirectionalLight::use(GLSLProgram *shaders)
 
 	// If a shadowmap has been built, use it
 	if (shadowmap) {
-		shadowmap->use(shaders->shadowmap_tex_sampler);
+		shadowmap->use(shaders->TEXUNIT_SHADOWMAP);
 
 		glm::mat4 viewport_to_tex(
 			0.5, 0.0, 0.0, 0.0,

@@ -12,7 +12,7 @@ MechLeg::MechLeg(GLfloat length, GLfloat radius)
 	allocCount(3*21*5 + 4*22, 3*20*4*2 + 4*20);
 
 	// Main bone cylinder
-	constructCylinder(radius, length, 20, 4, 4, 4);
+	constructCylinder(radius, length, 20, 4, 2, 4);
 
 	// Joint cylinders
 	construction_mx = glm::rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f));

@@ -26,7 +26,7 @@ void Material::use()
 {
 	shaders->use();
 	shaders->setUniformMaterial(ambient, diffuse, specular, shininess);
-	texture->use(GLSLProgram::default_tex_sampler);
+	texture->use(GLSLProgram::TEXUNIT_COLOR);
 }
 
 bool ConfigurableMaterial::loadDescriptionFile(const char *path)
@@ -64,6 +64,11 @@ bool ConfigurableMaterial::loadDescriptionFile(const char *path)
 			continue;
 		}
 
+		int unit_id;
+		if (2 == sscanf(cstr, "texunit %d %s", &unit_id, texpath)) {
+			textures.push_back(std::make_pair(unit_id, rm->getTexture(texpath)));
+		}
+
 		char vs[2048], fs[2048];
 		if (2 == sscanf(cstr, "shaders vertex %s fragment %s", vs, fs)) {
 			shaders = rm->getShaders(vs, fs);
@@ -73,3 +78,13 @@ bool ConfigurableMaterial::loadDescriptionFile(const char *path)
 
 	return true;
 }
+
+void ConfigurableMaterial::use()
+{
+	Material::use();
+	for (std::list< std::pair< int, ResourceHandle<Texture> > >::iterator
+			it = textures.begin(), it_end = textures.end();
+			it != it_end; it++)
+		it->second->use(it->first);
+}
+
