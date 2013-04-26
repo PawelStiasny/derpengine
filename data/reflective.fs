@@ -13,6 +13,8 @@ smooth in vec3 normal;
 smooth in vec2 tex_coord;
 smooth in vec4 shadowspace_pos;
 
+out vec4 color;
+
 void main() {
 	vec4 lp = light_pos;
 	vec3 light_dir;
@@ -24,14 +26,12 @@ void main() {
 	vec4 ambient = mat_ambient;
 
 	vec3 reflect_dir = reflect(cam_dir, normal);
-	vec4 specular = mat_specular * textureCube(specular_sampler, reflect_dir);
+	vec4 specular = mat_specular * texture(specular_sampler, reflect_dir);
 
-	vec4 texel = texture2D(tex_sampler, tex_coord);
+	vec4 texel = texture(tex_sampler, tex_coord);
 
 	float visibility = 
-		shadow2DProj(
-			shadow_sampler,
-			shadowspace_pos - vec4(0,0,0.02,0)).r;
+		textureProj(shadow_sampler, shadowspace_pos - vec4(0,0,0.02,0));
 
 	vec2 not_in_shadowspace = 
 		step(shadowspace_pos.xy, vec2(0.0,0.0)) +
@@ -43,6 +43,6 @@ void main() {
 
 	diffuse *= visibility;
 
-	gl_FragColor = (diffuse + ambient + specular) * texel;
+	color = (diffuse + ambient + specular) * texel;
 }
 
