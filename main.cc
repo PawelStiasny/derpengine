@@ -23,16 +23,18 @@ void reshape(int width, int height)
 }
 
 /// Sets up a new frame and renders the scene.
-void draw_scene()
+void draw_scene(bool debugging)
 {
 	active_scene_manager->render();
-	GLenum error = glGetError();
-	if (error != GL_NO_ERROR) {
-		const char *error_string = (const char*)gluErrorString(error);
-		if (error_string)
-			puts(error_string);
-		else
-			puts("Uknown GL error");
+	if (debugging) {
+		GLenum error = glGetError();
+		if (error != GL_NO_ERROR) {
+			const char *error_string = (const char*)gluErrorString(error);
+			if (error_string)
+				puts(error_string);
+			else
+				printf("Uknown GL error, code: %d\n", error);
+		}
 	}
 
 	glFlush();
@@ -43,6 +45,13 @@ void draw_scene()
 void update_scene(float timestep)
 {
 	active_scene_manager->update(timestep);
+}
+
+void gl_debug_callback(
+		GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
+		const char *message, void *userParam)
+{
+	puts(message);
 }
 
 int main(int argc, char const *argv[])
@@ -69,7 +78,14 @@ int main(int argc, char const *argv[])
 	SDL_GL_SetAttribute(
 			SDL_GL_CONTEXT_MINOR_VERSION,
 			settings.opengl_version_minor);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	if (settings.enable_debugging)
+		SDL_GL_SetAttribute(
+				SDL_GL_CONTEXT_PROFILE_MASK,
+				SDL_GL_CONTEXT_PROFILE_CORE | SDL_GL_CONTEXT_DEBUG_FLAG);
+	else
+		SDL_GL_SetAttribute(
+				SDL_GL_CONTEXT_PROFILE_MASK,
+				SDL_GL_CONTEXT_PROFILE_CORE);
 
 	if (settings.enable_msaa) {
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
@@ -101,6 +117,16 @@ int main(int argc, char const *argv[])
 	}
 	printf("Using GLEW %s\n", glewGetString(GLEW_VERSION));
 	printf("OpenGL version: %s\n", glGetString(GL_VERSION));
+
+	if (settings.enable_debugging) {
+		if (glDebugMessageCallbackARB) {
+			glDebugMessageCallbackARB(&gl_debug_callback, NULL);
+			glEnable(GL_DEBUG_OUTPUT);
+			if (settings.enable_synchronous_debugging)
+				glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
+		} else
+			puts("Debug message callback unsupported.");
+	}
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
@@ -169,7 +195,7 @@ int main(int argc, char const *argv[])
 		}
 
 		// render
-		draw_scene();
+		draw_scene(settings.enable_debugging);
 	}
 	SDL_Quit();
 	delete active_scene_manager;

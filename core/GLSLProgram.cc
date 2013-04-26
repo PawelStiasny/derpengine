@@ -43,7 +43,8 @@ GLSLProgram::GLSLProgram(std::list< ResourceHandle<GLSLObject> > shaders)
 	uni_light_pos = getUniformLocation("light_pos");
 	uni_shadow_vp = getUniformLocation("shadow_VP");
 
-	printf("\n");
+	if (uniform_warning_displayed)
+		printf("\n");
 	defaults_loaded = false;
 }
 
@@ -76,10 +77,13 @@ void GLSLProgram::use()
 	// Load initial values first time program is used
 	if (!defaults_loaded) {
 		defaults_loaded = true;
+		uniform_warning_displayed = false;
 		setUniformTexSampler("tex_sampler", TEXUNIT_COLOR);
 		setUniformTexSampler("bump_sampler", TEXUNIT_BUMP);
 		setUniformTexSampler("shadow_sampler", TEXUNIT_SHADOWMAP);
 		setUniformTexSampler("specular_sampler", TEXUNIT_SPECULAR_CUBEMAP);
+		if (uniform_warning_displayed)
+			printf("\n");
 	}
 }
 
