@@ -35,9 +35,14 @@ void main() {
 	float visibility = 
 		textureProj(shadow_sampler, shadowspace_pos - vec4(0,0,0.02,0));
 
-	if ((shadowspace_pos.x < 0) || shadowspace_pos.y < 0 || shadowspace_pos.x > 1 || shadowspace_pos.y > 1) {
-		visibility = 1;
-	}
+	vec2 not_in_shadowspace = 
+		step(shadowspace_pos.xy, vec2(0.0,0.0)) +
+		step(vec2(1.0, 1.0), shadowspace_pos.xy);
+	not_in_shadowspace = min(not_in_shadowspace, vec2(1.0,1.0));
+	visibility = max(
+		visibility,
+		min(not_in_shadowspace.x + not_in_shadowspace.y, 1.0));
+
 	diffuse *= visibility;
 	specular *= visibility;
 
