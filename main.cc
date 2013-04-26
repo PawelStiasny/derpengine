@@ -119,7 +119,7 @@ int main(int argc, char const *argv[])
 	printf("OpenGL version: %s\n", glGetString(GL_VERSION));
 
 	if (settings.enable_debugging) {
-		if (glDebugMessageCallbackARB) {
+		if (GLEW_ARB_debug_output) {
 			glDebugMessageCallbackARB((GLDEBUGPROCARB)gl_debug_callback, NULL);
 			glEnable(GL_DEBUG_OUTPUT);
 			if (settings.enable_synchronous_debugging)
