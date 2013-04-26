@@ -13,6 +13,8 @@ smooth in vec2 tex_coord;
 smooth in vec4 shadowspace_pos;
 smooth in float cam_distance;
 
+out vec4 color;
+
 void main() {
 	vec4 lp = light_pos;
 	vec3 light_dir;
@@ -28,12 +30,10 @@ void main() {
 				mat_shininess) *
 			mat_specular;
 
-	vec4 texel = texture2D(tex_sampler, tex_coord);
+	vec4 texel = texture(tex_sampler, tex_coord);
 
 	float visibility = 
-		shadow2DProj(
-			shadow_sampler,
-			shadowspace_pos - vec4(0,0,0.02,0)).r;
+		textureProj(shadow_sampler, shadowspace_pos - vec4(0,0,0.02,0));
 
 	if ((shadowspace_pos.x < 0) || shadowspace_pos.y < 0 || shadowspace_pos.x > 1 || shadowspace_pos.y > 1) {
 		visibility = 1;
@@ -42,6 +42,6 @@ void main() {
 	specular *= visibility;
 
 	float fog = clamp((cam_distance - 110.0) * 0.12, 0.0, 1.0);
-	gl_FragColor = mix( (diffuse + ambient + specular) * texel, vec4(0.67, 0.81, 0.65, 0.0), fog );
+	color = mix( (diffuse + ambient + specular) * texel, vec4(0.67, 0.81, 0.65, 0.0), fog );
 }
 

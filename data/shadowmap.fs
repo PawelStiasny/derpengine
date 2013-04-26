@@ -1,3 +1,5 @@
+/* Shader ised in light space rendering to the shadowmap */
+
 #version 130
 
 uniform mat3x3 NormalMx;
@@ -11,8 +13,9 @@ smooth in vec4 pos;
 smooth in vec3 normal;
 smooth in vec2 tex_coord;
 
+out vec4 color;
+
 void main() {
-	vec4 texel = texture2D(tex_sampler, tex_coord);
-	gl_FragColor = texel;
+	color = vec4(1.0,1.0,1.0,1.0);
 }
 

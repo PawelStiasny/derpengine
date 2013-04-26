@@ -1,3 +1,5 @@
+/* Unparametrized bump mapping and specular cubemap */
+
 #version 130
 
 uniform sampler2D tex_sampler, bump_sampler;
@@ -12,6 +14,8 @@ smooth in vec4 pos;
 smooth in vec3 normal;
 smooth in vec2 tex_coord;
 smooth in vec4 shadowspace_pos;
+
+out vec4 color;
 
 // Implementation of method described in
 // "Bump Mapping Unparametrized Surfaces on the GPU"
@@ -31,9 +35,9 @@ vec3 pertrurb_normal(vec3 pos, vec3 norm, sampler2D hmap, vec2 st)
 	vec2 st_ll = st;
 	vec2 st_lr = st + tex_dx;
 	vec2 st_ul = st + tex_dy;
-	float height_ll = texture2D(hmap, st_ll).r;
-	float height_lr = texture2D(hmap, st_lr).r;
-	float height_ul = texture2D(hmap, st_ul).r;
+	float height_ll = texture(hmap, st_ll).r;
+	float height_lr = texture(hmap, st_lr).r;
+	float height_ul = texture(hmap, st_ul).r;
 	float dBs = (height_lr - height_ll) * 0.1;
 	float dBt = (height_ul - height_ll) * 0.1;
 	vec3 surface_gradient = sign(det) * (dBs*R1 + dBt*R2);
@@ -42,7 +46,7 @@ vec3 pertrurb_normal(vec3 pos, vec3 norm, sampler2D hmap, vec2 st)
 
 void main()
 {
-	vec4 texel = texture2D(tex_sampler, tex_coord * 0.43);
+	vec4 texel = texture(tex_sampler, tex_coord * 0.43);
 	vec3 pnormal =
 		pertrurb_normal(pos.xyz/pos.w, normalize(normal), bump_sampler, tex_coord);
 	vec4 lp = light_pos;
@@ -55,19 +59,19 @@ void main()
 	vec4 ambient = mat_ambient;
 
 	vec3 reflect_dir = reflect(cam_dir, pnormal);
-	vec4 specular = mat_specular * textureCube(specular_sampler, reflect_dir);
+	vec4 specular = mat_specular * texture(specular_sampler, reflect_dir);
 
 
 	float visibility = 
-		shadow2DProj(
+		textureProj(
 			shadow_sampler,
-			shadowspace_pos - vec4(0,0,0.02,0)).r;
+			shadowspace_pos - vec4(0,0,0.02,0));
 
 	if ((shadowspace_pos.x < 0) || shadowspace_pos.y < 0 || shadowspace_pos.x > 1 || shadowspace_pos.y > 1) {
 		visibility = 1;
 	}
 	diffuse *= visibility;
 
-	gl_FragColor = (diffuse + ambient + specular) * texel;
+	color = (diffuse + ambient + specular) * texel;
 }
 
