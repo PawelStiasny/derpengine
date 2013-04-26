@@ -14,8 +14,8 @@ Texture::Texture(const char *path, bool mipmapped, GLenum repeat_mode)
 
 	glGenTextures(1, &texture_id);
 	glBindTexture(GL_TEXTURE_2D, texture_id);
-	glTexImage2D(GL_TEXTURE_2D, 0, 4, data->w, data->h, 0, 
-			GL_BGRA, GL_UNSIGNED_BYTE, data->pixels);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, data->w, data->h, 0, 
+			GL_RGBA, GL_UNSIGNED_BYTE, data->pixels);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	if (mipmapped) {
@@ -45,10 +45,10 @@ SDL_Surface * Texture::loadImage(const char *path)
 	}
 
 	SDL_PixelFormat fmt;
-	fmt.format = SDL_PIXELFORMAT_ARGB8888;
-	fmt.Bmask = 0x000000ff;
+	fmt.format = SDL_PIXELFORMAT_ABGR8888;
+	fmt.Bmask = 0x00ff0000;
 	fmt.Gmask = 0x0000ff00;
-	fmt.Rmask = 0x00ff0000;
+	fmt.Rmask = 0x000000ff;
 	fmt.Amask = 0xff000000;
 	fmt.BitsPerPixel = 32;
 	fmt.BytesPerPixel = 4;

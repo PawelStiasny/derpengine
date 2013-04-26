@@ -11,7 +11,8 @@ Geometry::Geometry(bool own_memory)
 	vertex_count = triangle_count = 0;
 	vertex_data = normal_data = uv_data = NULL;
 	index_data = NULL;
-	glGenBuffers(3, buffer_objects);
+	glGenBuffers(4, buffer_objects);
+	glGenVertexArrays(1, &vertex_array_object);
 
 	construction_mx = glm::mat4(1.0f);
 	vertex_cursor = index_cursor = 0;
@@ -28,6 +29,7 @@ Geometry::~Geometry()
 		delete index_data;
 	}
 	glDeleteBuffers(3, buffer_objects);
+	glDeleteVertexArrays(1, &vertex_array_object);
 }
 
 
@@ -37,23 +39,8 @@ void Geometry::render(RenderingContext *rc)
 	if (triangle_count == 0)
 		return;
 
-	glEnableVertexAttribArray(1);
-	glBindBuffer(GL_ARRAY_BUFFER, buffer_objects[BUF_NORMAL]);
-	glVertexAttribPointer(GLSLProgram::ATTR_NORMAL, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-
-	glEnableVertexAttribArray(2);
-	glBindBuffer(GL_ARRAY_BUFFER, buffer_objects[BUF_UV]);
-	glVertexAttribPointer(GLSLProgram::ATTR_UV, 2, GL_FLOAT, GL_FALSE, 0, NULL);
-
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, buffer_objects[BUF_VERTEX]);
-	glVertexAttribPointer(GLSLProgram::ATTR_POSITION, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-
-	glDrawElements(GL_TRIANGLES, 3 * triangle_count, GL_UNSIGNED_SHORT, index_data);
-
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(2);
+	glBindVertexArray(vertex_array_object);
+	glDrawElements(GL_TRIANGLES, 3 * triangle_count, GL_UNSIGNED_SHORT, 0);
 }
 
 
@@ -87,6 +74,33 @@ void Geometry::syncBuffers()
 			vertex_count * 2 * sizeof(GLfloat), uv_data,
 			GL_STATIC_DRAW);
 
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_objects[BUF_INDICES]);
+	glBufferData(
+			GL_ELEMENT_ARRAY_BUFFER,
+			3 * triangle_count * sizeof(GLushort),
+			index_data,
+			GL_STATIC_DRAW);
+
+	glBindVertexArray(vertex_array_object);
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
+
+	glBindBuffer(GL_ARRAY_BUFFER, buffer_objects[BUF_NORMAL]);
+	glVertexAttribPointer(
+			GLSLProgram::ATTR_NORMAL, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+	glBindBuffer(GL_ARRAY_BUFFER, buffer_objects[BUF_UV]);
+	glVertexAttribPointer(
+			GLSLProgram::ATTR_UV, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+
+	glBindBuffer(GL_ARRAY_BUFFER, buffer_objects[BUF_VERTEX]);
+	glVertexAttribPointer(
+			GLSLProgram::ATTR_POSITION, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_objects[BUF_INDICES]);
+
+	glBindVertexArray(0);
 }
 
 /// Creates a sphere in Geometry's data arrays.

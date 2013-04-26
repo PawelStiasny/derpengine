@@ -63,13 +63,15 @@ void Skybox::beforeRender(RenderingContext *rc)
 	rc->pushMatrix();
 	rc->setModelMatrix(unit);
 	setPosition(camera_pos.x, camera_pos.y, camera_pos.z);
-	glPushAttrib(GL_ENABLE_BIT);
+	//glPushAttrib(GL_ENABLE_BIT);
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 }
 
 void Skybox::afterRender(RenderingContext *rc)
 {
-	glPopAttrib();
+	//glPopAttrib();
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
 	rc->popMatrix();
 }

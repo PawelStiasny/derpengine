@@ -22,23 +22,23 @@ CubeTexture::CubeTexture(const char *side_path[6])
 		}
 	}
 
-	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, 4, side_data[CUBE_POSX]->w,
-			side_data[CUBE_POSX]->h, 0, GL_BGRA, GL_UNSIGNED_BYTE,
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA8, side_data[CUBE_POSX]->w,
+			side_data[CUBE_POSX]->h, 0, GL_RGBA, GL_UNSIGNED_BYTE,
 			side_data[CUBE_POSX]->pixels);
-	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, 4, side_data[CUBE_NEGX]->w,
-			side_data[CUBE_NEGX]->h, 0, GL_BGRA, GL_UNSIGNED_BYTE,
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA8, side_data[CUBE_NEGX]->w,
+			side_data[CUBE_NEGX]->h, 0, GL_RGBA, GL_UNSIGNED_BYTE,
 			side_data[CUBE_NEGX]->pixels);
-	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, 4, side_data[CUBE_POSY]->w,
-			side_data[CUBE_POSY]->h, 0, GL_BGRA, GL_UNSIGNED_BYTE,
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA8, side_data[CUBE_POSY]->w,
+			side_data[CUBE_POSY]->h, 0, GL_RGBA, GL_UNSIGNED_BYTE,
 			side_data[CUBE_POSY]->pixels);
-	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, 4, side_data[CUBE_NEGY]->w,
-			side_data[CUBE_NEGY]->h, 0, GL_BGRA, GL_UNSIGNED_BYTE,
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA8, side_data[CUBE_NEGY]->w,
+			side_data[CUBE_NEGY]->h, 0, GL_RGBA, GL_UNSIGNED_BYTE,
 			side_data[CUBE_NEGY]->pixels);
-	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, 4, side_data[CUBE_POSZ]->w,
-			side_data[CUBE_POSZ]->h, 0, GL_BGRA, GL_UNSIGNED_BYTE,
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA8, side_data[CUBE_POSZ]->w,
+			side_data[CUBE_POSZ]->h, 0, GL_RGBA, GL_UNSIGNED_BYTE,
 			side_data[CUBE_POSZ]->pixels);
-	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, 4, side_data[CUBE_NEGZ]->w,
-			side_data[CUBE_NEGZ]->h, 0, GL_BGRA, GL_UNSIGNED_BYTE,
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA8, side_data[CUBE_NEGZ]->w,
+			side_data[CUBE_NEGZ]->h, 0, GL_RGBA, GL_UNSIGNED_BYTE,
 			side_data[CUBE_NEGZ]->pixels);
 
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
