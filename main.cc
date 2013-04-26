@@ -69,6 +69,7 @@ int main(int argc, char const *argv[])
 	SDL_GL_SetAttribute(
 			SDL_GL_CONTEXT_MINOR_VERSION,
 			settings.opengl_version_minor);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
 	if (settings.enable_msaa) {
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
