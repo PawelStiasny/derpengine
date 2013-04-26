@@ -58,6 +58,10 @@ int main(int argc, char const *argv[])
 {
 	Settings settings(argv);
 	int w = 800, h = 600;
+	if (settings.fullscreen) {
+		w = settings.resolution_x;
+		h = settings.resolution_y;
+	}
 
 	printf("derpengine development build\n");
 
@@ -92,12 +96,17 @@ int main(int argc, char const *argv[])
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 	}
 
+	int window_flags;
+	if (settings.fullscreen)
+		window_flags = SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN;
+	else
+		window_flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE;
 	win = SDL_CreateWindow(
 			"Mech",
 			SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED,
 			w, h,
-			SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+			window_flags);
 
 	if (!win) {
 		const char *sdl_error_string = SDL_GetError();

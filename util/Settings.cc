@@ -17,6 +17,7 @@ Settings::Settings(const char *argv[])
 	enable_shadows = true;
 	enable_debugging = true;
 	enable_synchronous_debugging = false;
+	fullscreen = false;
 
 	if (!argv)
 		return;
@@ -36,7 +37,11 @@ Settings::Settings(const char *argv[])
 			enable_synchronous_debugging = true;
 		else if (!strcmp(*argv, "--no-debug"))
 			enable_debugging = false;
-		else
+		else if (!strcmp(*argv, "-r")) {
+			fullscreen = true;
+			resolution_x = atoi(*++argv);
+			resolution_y = atoi(*++argv);
+		} else
 			printf("Unrecognized argument: %s\n", *argv);
 	}
 }
