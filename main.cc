@@ -130,7 +130,9 @@ int main(int argc, char const *argv[])
 	if (settings.enable_debugging) {
 		if (GLEW_ARB_debug_output) {
 			glDebugMessageCallbackARB((GLDEBUGPROCARB)gl_debug_callback, NULL);
+#ifdef GL_DEBUG_OUTPUT
 			glEnable(GL_DEBUG_OUTPUT);
+#endif
 			if (settings.enable_synchronous_debugging)
 				glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
 		} else

@@ -9,8 +9,7 @@ public:
 	void unbindFramebuffer();
 
 private:
-	GLuint framebuffer_id;
-	//GLuint depth_tex;
+	GLuint framebuffer_id, renderbuffer_id;
 	int w, h;
 };
 
