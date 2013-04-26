@@ -47,9 +47,9 @@ void update_scene(float timestep)
 	active_scene_manager->update(timestep);
 }
 
-void gl_debug_callback(
+void GLAPIENTRY gl_debug_callback(
 		GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
-		const char *message, void *userParam)
+		const GLchar *message, GLvoid *userParam)
 {
 	puts(message);
 }
@@ -120,7 +120,7 @@ int main(int argc, char const *argv[])
 
 	if (settings.enable_debugging) {
 		if (glDebugMessageCallbackARB) {
-			glDebugMessageCallbackARB(&gl_debug_callback, NULL);
+			glDebugMessageCallbackARB((GLDEBUGPROCARB)gl_debug_callback, NULL);
 			glEnable(GL_DEBUG_OUTPUT);
 			if (settings.enable_synchronous_debugging)
 				glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
