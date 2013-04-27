@@ -22,8 +22,6 @@ public:
 	GLfloat shininess;
 	ResourceHandle<GLSLProgram> shaders;
 	ResourceHandle<Texture> texture;
-
-private:
 };
 
 class ConfigurableMaterial : public Material

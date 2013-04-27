@@ -7,6 +7,8 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <list>
+#include <map>
+#include <string>
 
 class GLSLProgram : public SharedResource
 {
@@ -28,12 +30,13 @@ public:
 			const glm::mat4& vp);
 	void setUniformLight(const glm::vec4& light_pos);
 	void setUniformTexSampler(const char *sampler_name, GLuint tex_unit);
+	GLuint getTextureUnit(std::string sampler_name);
 
 	enum {
 		TEXUNIT_COLOR,
-		TEXUNIT_BUMP,
 		TEXUNIT_SHADOWMAP,
-		TEXUNIT_SPECULAR_CUBEMAP
+		TEXUNIT_SPECULAR_CUBEMAP,
+		TEXUNIT_USER
 	};
 
 	enum {
@@ -50,6 +53,8 @@ private:
 	bool uniform_warning_displayed;
 	std::list< ResourceHandle<GLSLObject> > shaders;
 	bool defaults_loaded;
+	std::map< std::string, int > sampler_to_texunit;
+	int next_free_texunit;
 
 	GLint getUniformLocation(const char *name);
 	bool canSetUniform();

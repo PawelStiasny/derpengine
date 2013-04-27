@@ -65,8 +65,14 @@ bool ConfigurableMaterial::loadDescriptionFile(const char *path)
 		}
 
 		int unit_id;
-		if (2 == sscanf(cstr, "texunit %d %s", &unit_id, texpath)) {
-			textures.push_back(std::make_pair(unit_id, rm->getTexture(texpath)));
+		char sampler_name[2048];
+		if (2 == sscanf(cstr, "texsampler %s %s", sampler_name, texpath)) {
+			unit_id = shaders->getTextureUnit(sampler_name);
+			printf("sampler %s unit %d\n", sampler_name, unit_id);
+			textures.push_back(std::make_pair(
+						unit_id,
+						rm->getTexture(texpath)));
+			continue;
 		}
 
 		char vs[2048], fs[2048];

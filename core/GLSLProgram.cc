@@ -9,6 +9,7 @@ GLSLProgram::GLSLProgram(std::list< ResourceHandle<GLSLObject> > shaders)
 {
 	program_id = 0;
 	this->shaders = shaders;
+	next_free_texunit = TEXUNIT_USER;
 
 	program_id = glCreateProgram();
 	glBindAttribLocation(program_id, ATTR_POSITION, "v");
@@ -79,9 +80,14 @@ void GLSLProgram::use()
 		defaults_loaded = true;
 		uniform_warning_displayed = false;
 		setUniformTexSampler("tex_sampler", TEXUNIT_COLOR);
-		setUniformTexSampler("bump_sampler", TEXUNIT_BUMP);
 		setUniformTexSampler("shadow_sampler", TEXUNIT_SHADOWMAP);
 		setUniformTexSampler("specular_sampler", TEXUNIT_SPECULAR_CUBEMAP);
+		for (std::map< std::string, int >::iterator
+				it = sampler_to_texunit.begin(), it_end = sampler_to_texunit.end();
+				it != it_end; it++)
+		{
+			setUniformTexSampler(it->first.c_str(), it->second);
+		}
 		if (uniform_warning_displayed)
 			printf("\n");
 	}
@@ -162,5 +168,19 @@ void GLSLProgram::setUniformTexSampler(const char *sampler_name, GLuint tex_unit
 	GLint uniform_id = getUniformLocation(sampler_name);
 	if (uniform_id != -1)
 		glUniform1i(uniform_id, tex_unit);
+}
+
+GLuint GLSLProgram::getTextureUnit(std::string sampler_name)
+{
+	std::map< std::string, int >::iterator it =
+		sampler_to_texunit.find(sampler_name);
+
+	if (it == sampler_to_texunit.end()) {
+		sampler_to_texunit.insert( std::make_pair(sampler_name, next_free_texunit) );
+		defaults_loaded = false;
+		return next_free_texunit++;
+	} else {
+		return it->second;
+	}
 }
 
