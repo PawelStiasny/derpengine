@@ -1,2 +1,45 @@
+derpengine
+A small shader-based OpenGL scene graph engine.
+
+Features
+========
+* Extensible scene graph
+* Dynamic shadow maps
+* (Static) environment maps
+* Bumpmapping of unparametrized meshes
+* Heightmap based terrain
+
+Dependencies
+============
+Compile time:
+* SCons
+* gcc or clang on Linux, MSVC compiler on Windows
+* glm
+
+Run time:
+* OpenGL 3.0, forward compatible with current version 4.3
+* glew
+* SDL 2.0 (development version)
+
+Compiling
+=========
+Build process is handled by SCons both on Windows and Linux.
+
+On Linux, just execute `scons` in project's root.  Append `debug=1` to build
+with debug symbols and optimizations disabled.  Dependencies should be installed
+in system-wide default paths.
+
+On Windows, you can drop dependencies in the `external` subdirectory.
+Unless you have Python set in your PATH, the build command will be something
+like
+
+    C:\Python27\scons.bat
+
+Credits
+=======
+Following resources were used in the demo:
 Skybox by Jockum Skoglund aka hipshot, www.zfight.com.
 Surface texture licenced under Creative Commons, copyright Patrick Hoesly.
+
+Unless otherwise stated, all code Copyright 2013 Paweł Stiasny.
+Licensed under the MIT License, see COPYING.
