@@ -1,4 +1,6 @@
 #include "Settings.h"
+#include "SceneManager.h"
+#include "../scene/DemoSceneManager.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -41,8 +43,17 @@ Settings::Settings(const char *argv[])
 			fullscreen = true;
 			resolution_x = atoi(*++argv);
 			resolution_y = atoi(*++argv);
+		} else if (!strcmp(*argv, "-s")) {
+			strncpy(scene_name, *++argv, sizeof(scene_name) - 1);
+			scene_name[sizeof(scene_name) - 1] = '\0';
 		} else
 			printf("Unrecognized argument: %s\n", *argv);
 	}
 }
 
+/// Insantiates a new SceneManager based on the scene_name setting
+SceneManager * Settings::makeSceneManager()
+{
+	// TODO
+	return new DemoSceneManager(this);
+}

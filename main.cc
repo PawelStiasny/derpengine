@@ -149,7 +149,7 @@ int main(int argc, char const *argv[])
 	else
 		glDisable(GL_MULTISAMPLE);
 
-	active_scene_manager = new DemoSceneManager(&settings);
+	active_scene_manager = settings.makeSceneManager();
 
 	reshape(w, h);
 	input_state.w = w;
