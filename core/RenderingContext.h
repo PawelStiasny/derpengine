@@ -14,7 +14,7 @@ public:
 	RenderingContext();
 	virtual ~RenderingContext();
 
-	void clear();
+	void clear(bool clear_z = true);
 	void reshape(int w, int h);
 
 	void setCamera(Camera *c);

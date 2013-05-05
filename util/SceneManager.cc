@@ -13,9 +13,6 @@ SceneManager::SceneManager(Settings *settings)
 	rendering_context = new RenderingContext;
 
 	shadowmap_ref = NULL;
-
-	//if (!settings->enable_shadows)
-	//	null_shadow_buffer = new Texture("data/white.bmp");
 }
 
 SceneManager::~SceneManager()
@@ -31,15 +28,23 @@ SceneManager::~SceneManager()
 
 void SceneManager::render()
 {
+	// Shadowmap pass
 	Light *l = rendering_context->getLight();
 	if (settings->enable_shadows && l)
 		if (shadowmap_ref)
 			l->buildShadowMap(scene, shadowmap_ref);
 		else
 			l->buildShadowMap(scene, rendering_context->getCamera());
-	//else if (!settings->enable_shadows)
-	//	null_shadow_buffer->use(GLSLProgram::shadowmap_tex_sampler);
-	rendering_context->clear();
+
+	// Depth pre-pass
+	depth_context.setCamera(rendering_context->getCamera());
+	depth_context.clear();
+	scene->render(&depth_context);
+
+	depth_tex.use(GLSLProgram::TEXUNIT_PRE_DEPTH);
+
+	// Main rendering pass
+	rendering_context->clear(false);
 	scene->render(rendering_context);
 }
 
@@ -54,5 +59,7 @@ void SceneManager::update(float timestep)
 void SceneManager::onViewportReshape(int width, int height)
 {
 	rendering_context->reshape(width, height);
+	depth_tex.resize(width, height);
+	depth_context.reshape(width, height);
 }
 

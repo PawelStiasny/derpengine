@@ -3,7 +3,7 @@
 #include <GL/glew.h>
 
 #include "Light.h"
-#include "ShadowmapRenderingContext.h"
+#include "DepthPassRenderingContext.h"
 
 DirectionalLight::DirectionalLight()
 {
@@ -28,14 +28,9 @@ void DirectionalLight::buildShadowMap(GraphNode *scene, GraphNode *reference)
 	// create the rendering context and framebuffer first time a shadowmap is
 	// built
 	if (!shadowmap) {
-		shadowmap_rc = new ShadowmapRenderingContext;
+		shadowmap_rc = new DepthPassRenderingContext;
 		shadowmap = new DepthFramebufferTexture;
 	}
-
-	shadowmap->bindFramebuffer();
-	glDrawBuffer(GL_NONE);
-	// back face shadows
-	//glCullFace(GL_FRONT);
 
 	camera.setTarget(reference);
 	// camera position = light position + reference position
@@ -44,14 +39,8 @@ void DirectionalLight::buildShadowMap(GraphNode *scene, GraphNode *reference)
 	camera.setClippingDistance(cam_distance - 3.0f, cam_distance + 5.0f);
 	camera.setFrustrum(15.0f);
 	shadowmap_rc->setCamera(&camera);
-	shadowmap_rc->reshape(1024, 1024);
 
-	shadowmap_rc->clear();
-	scene->render(shadowmap_rc);
-
-	shadowmap->unbindFramebuffer();
-	glDrawBuffer(prev_draw_buffer);
-	//glCullFace(GL_BACK);
+	shadowmap->renderTo(shadowmap_rc, scene);
 }
 
 void DirectionalLight::use(GLSLProgram *shaders)

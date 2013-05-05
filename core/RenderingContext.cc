@@ -32,14 +32,14 @@ RenderingContext::~RenderingContext()
 {
 }
 
-void RenderingContext::clear()
+void RenderingContext::clear(bool clear_z)
 {
 	glViewport(0, 0, (GLint) width, (GLint) height);
 	// No need to clear color buffer if we always draw the skybox - save some
 	// fill time
 	//glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClear(GL_DEPTH_BUFFER_BIT);
+	if (clear_z) glClear(GL_DEPTH_BUFFER_BIT);
 
 	active_glsl_program->use();
 	matrix_stack.clear();

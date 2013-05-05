@@ -3,12 +3,12 @@
 #include <assert.h>
 
 #include "DepthFramebufferTexture.h"
+#include "RenderingContext.h"
+#include "GraphNode.h"
 
-DepthFramebufferTexture::DepthFramebufferTexture()
+DepthFramebufferTexture::DepthFramebufferTexture(int w, int h)
+	: w(w), h(h)
 {
-	w = 1024;
-	h = 1024;
-
 	glGenTextures(1, &texture_id);
 
 	glBindTexture(GL_TEXTURE_2D, texture_id);
@@ -70,9 +70,16 @@ DepthFramebufferTexture::~DepthFramebufferTexture()
 	if (renderbuffer_id) glDeleteRenderbuffers(1, &renderbuffer_id);
 }
 
+void DepthFramebufferTexture::resize(int w, int h)
+{
+	this->w = w;
+	this->h = h;
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, w, h, 0,
+			GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+}
+
 void DepthFramebufferTexture::bindFramebuffer()
 {
-	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer_id);
 }
 
@@ -85,3 +92,17 @@ void DepthFramebufferTexture::unbindFramebuffer()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+void DepthFramebufferTexture::renderTo(RenderingContext *rc, GraphNode *scene)
+{
+	GLint prev_draw_buffer;
+	glGetIntegerv(GL_DRAW_BUFFER, &prev_draw_buffer);
+	glDrawBuffer(GL_NONE);
+
+	bindFramebuffer();
+	rc->reshape(w, h);
+	rc->clear();
+	scene->render(rc);
+	unbindFramebuffer();
+
+	glDrawBuffer(prev_draw_buffer);
+}

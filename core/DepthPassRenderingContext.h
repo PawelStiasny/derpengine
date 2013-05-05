@@ -2,11 +2,11 @@
 #include "Material.h"
 #include "../util/ResourceManager.h"
 
-class ShadowmapRenderingContext : public RenderingContext
+class DepthPassRenderingContext : public RenderingContext
 {
 public:
-	ShadowmapRenderingContext();
-	virtual ~ShadowmapRenderingContext() {};
+	DepthPassRenderingContext();
+	virtual ~DepthPassRenderingContext() {};
 	virtual void setMaterial(Material *m);
 
 private:

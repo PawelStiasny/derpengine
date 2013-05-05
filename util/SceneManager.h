@@ -4,6 +4,8 @@
 #include "InputState.h"
 #include "../core/GraphNode.h"
 #include "../core/RenderingContext.h"
+#include "../core/DepthFramebufferTexture.h"
+#include "../core/DepthPassRenderingContext.h"
 #include "../animations/Animation.h"
 #include "Settings.h"
 
@@ -24,10 +26,12 @@ protected:
 	Settings *settings;
 	GraphNode *scene;
 	RenderingContext *rendering_context;
+	DepthPassRenderingContext depth_context;
 	std::list<Animation*> animations;
 
 private:
 	Texture *null_shadow_buffer;
+	DepthFramebufferTexture depth_tex;
 	GraphNode *shadowmap_ref;
 };
 

@@ -2,7 +2,7 @@
 
 #version 130
 
-uniform sampler2D tex_sampler, bump_sampler;
+uniform sampler2D tex_sampler, bump_sampler, depth_sampler;
 uniform sampler2DShadow shadow_sampler;
 uniform samplerCube specular_sampler;
 uniform vec4 mat_ambient, mat_diffuse, mat_specular;

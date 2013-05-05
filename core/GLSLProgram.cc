@@ -82,6 +82,7 @@ void GLSLProgram::use()
 		setUniformTexSampler("tex_sampler", TEXUNIT_COLOR);
 		setUniformTexSampler("shadow_sampler", TEXUNIT_SHADOWMAP);
 		setUniformTexSampler("specular_sampler", TEXUNIT_SPECULAR_CUBEMAP);
+		setUniformTexSampler("depth_sampler", TEXUNIT_PRE_DEPTH);
 		for (std::map< std::string, int >::iterator
 				it = sampler_to_texunit.begin(), it_end = sampler_to_texunit.end();
 				it != it_end; it++)

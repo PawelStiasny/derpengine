@@ -1,6 +1,6 @@
-#include "ShadowmapRenderingContext.h"
+#include "DepthPassRenderingContext.h"
 
-ShadowmapRenderingContext::ShadowmapRenderingContext()
+DepthPassRenderingContext::DepthPassRenderingContext()
 {
 	shadowmap_material.shaders = 
 		ResourceManager::getInstance()->getShaders(
@@ -8,7 +8,7 @@ ShadowmapRenderingContext::ShadowmapRenderingContext()
 	RenderingContext::setMaterial(&shadowmap_material);
 }
 
-void ShadowmapRenderingContext::setMaterial(Material *m)
+void DepthPassRenderingContext::setMaterial(Material *m)
 {
 	assert(m != &shadowmap_material);
 }
