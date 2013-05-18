@@ -74,8 +74,12 @@ void DepthFramebufferTexture::resize(int w, int h)
 {
 	this->w = w;
 	this->h = h;
+	GLint texture_binding = 0;
+	glGetIntegerv(GL_TEXTURE_BINDING_2D, &texture_binding);
+	glBindTexture(GL_TEXTURE_2D, texture_id);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, w, h, 0,
 			GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	glBindTexture(GL_TEXTURE_2D, texture_binding);
 }
 
 void DepthFramebufferTexture::bindFramebuffer()
