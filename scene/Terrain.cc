@@ -8,19 +8,11 @@
 Terrain::Terrain(GLfloat vertical_scaling)
 	: t("data/heightmap.bmp", vertical_scaling)
 {
-	////m = new Material();
-	//m.ambient = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
-	////m->ambient = glm::vec4(0,0,0,1);
-	//m.diffuse = glm::vec4(1.0f);
-	//m.texture =
-		//ResourceManager::getInstance()->getTexture("data/ground.bmp");
-	//setMaterial(&m);
 	setMaterial(ResourceManager::getInstance()->getMaterial("data/mat_terrain"));
 }
 
 Terrain::~Terrain()
 {
-	//delete m;
 }
 
 /// Returns interpolated height for the given (x,z) coordinates.
@@ -38,7 +30,7 @@ void Terrain::updatePieces(GLfloat ref_x, GLfloat ref_z)
 
 void Terrain::doRender(RenderingContext *rc)
 {
-	t.render(rc);
+	t.render();
 }
 
 #define vindex(x, z) (3 * ((z) * x_res + x))
@@ -47,6 +39,7 @@ void Terrain::doRender(RenderingContext *rc)
 #define vecz(x, z) vertex_data[vindex(x,z)+2]
 
 TerrainPiece::TerrainPiece(const char *hmap_path, GLfloat vertical_scaling)
+	: Geometry(true)
 {
 	SDL_Surface *heightmap = SDL_LoadBMP(hmap_path);
 	if (!heightmap) {
@@ -60,6 +53,7 @@ TerrainPiece::TerrainPiece(const char *hmap_path, GLfloat vertical_scaling)
 	this->vertical_scaling = vertical_scaling;
 	x_res = heightmap->w;
 	z_res = heightmap->h;
+	printf("terrain res: %d %d\n", x_res, z_res);
 	// Assume 8-bit data
 	unsigned char *data = (unsigned char*)heightmap->pixels;
 

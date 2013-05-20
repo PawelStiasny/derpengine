@@ -12,6 +12,8 @@ class GLSLProgram;
 class GLSLObject;
 class Material;
 class Texture;
+class Tile;
+class Geometry;
 
 /// Creates and pools instances of SharedResource
 class ResourceManager
@@ -30,7 +32,7 @@ public:
 
 	ResourceHandle<Material> getMaterial(const std::string name);
 
-	//ResourceHandle<Geometry> getModel(const std::string name);
+	ResourceHandle<Geometry> getModel(const std::string name);
 
 	void clearUnused();
 
@@ -44,6 +46,7 @@ private:
 	std::map< std::pair<int, std::string>, GLSLObject* > glsl_object_pool;
 	std::map< std::string, Texture* > texture_pool;
 	std::map< std::string, Material* > material_pool;
+	Tile *tile;
 };
 
 #endif

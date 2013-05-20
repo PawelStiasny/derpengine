@@ -3,6 +3,7 @@
 #include "../core/Material.h"
 #include "../core/GLSLProgram.h"
 #include "../core/GLSLObject.h"
+#include "../scene/Tile.h"
 #include <list>
 
 ResourceManager * ResourceManager::instance = NULL;
@@ -157,8 +158,19 @@ void ResourceManager::clearUnused()
 	printf("clearUnused textures: %d deleted, %d remaining\n", deleted, remaining);
 }
 
+ResourceHandle<Geometry> ResourceManager::getModel(const std::string name)
+{
+	// TODO
+
+	if (name == "tile") {
+		if (!tile) tile = new Tile();
+		return tile;
+	}
+}
+
 ResourceManager::ResourceManager()
 {
+	tile = NULL;
 }
 
 ResourceManager::~ResourceManager()

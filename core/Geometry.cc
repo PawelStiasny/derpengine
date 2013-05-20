@@ -23,17 +23,17 @@ Geometry::Geometry(bool own_memory)
 Geometry::~Geometry()
 {
 	if (own_memory) {
-		delete vertex_data;
-		delete uv_data;
-		delete normal_data;
-		delete index_data;
+		delete[] vertex_data;
+		delete[] uv_data;
+		delete[] normal_data;
+		delete[] index_data;
 	}
 	glDeleteBuffers(3, buffer_objects);
 	glDeleteVertexArrays(1, &vertex_array_object);
 }
 
 
-void Geometry::render(RenderingContext *rc)
+void Geometry::render()
 {
 	// Drop out early if there is nothing to render
 	if (triangle_count == 0)

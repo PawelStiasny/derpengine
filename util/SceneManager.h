@@ -4,10 +4,14 @@
 #include "InputState.h"
 #include "../core/GraphNode.h"
 #include "../core/RenderingContext.h"
+#include "../core/FramebufferTexture.h"
 #include "../core/DepthFramebufferTexture.h"
 #include "../core/DepthPassRenderingContext.h"
 #include "../animations/Animation.h"
+#include "PostOverlay.h"
 #include "Settings.h"
+#include <list>
+#include <string>
 
 /// SceneManager holds current game state and takes care of populating and
 /// updating the scene.
@@ -21,6 +25,7 @@ public:
 	virtual void onViewportReshape(int width, int height);
 	virtual void handleInput(InputState *st) {};
 	void setShadowmapReference(GraphNode *r) { shadowmap_ref = r; };
+	void appendPostOverlay(std::string fragment_shader);
 
 protected:
 	Settings *settings;
@@ -31,8 +36,10 @@ protected:
 
 private:
 	Texture *null_shadow_buffer;
+	FramebufferTexture main_buffer;
 	DepthFramebufferTexture depth_tex;
 	GraphNode *shadowmap_ref;
+	std::list<PostOverlay> post_overlays;
 };
 
 #endif

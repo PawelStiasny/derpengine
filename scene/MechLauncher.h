@@ -10,5 +10,4 @@ public:
 
 private:
 	void doRender(RenderingContext *rc);
-	Tile t;
 };

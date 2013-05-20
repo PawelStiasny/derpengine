@@ -1,6 +1,7 @@
 #include "Skybox.h"
 #include "../core/RenderingContext.h"
 #include "../core/Material.h"
+#include "../scene/FlippedTile.h"
 
 #include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -14,7 +15,7 @@ enum SIDES {
 	BOTTOM
 };
 
-void Skybox::makeTexturedTile(int index, Tile *shared_tile, const char *path)
+void Skybox::makeTexturedTile(int index, /*ResourceHandle<Geometry>*/ FlippedTile* shared_tile, const char *path)
 {
 	m[index].ambient = glm::vec4(1.0f);
 	m[index].diffuse = glm::vec4(0.0f);
@@ -26,7 +27,7 @@ void Skybox::makeTexturedTile(int index, Tile *shared_tile, const char *path)
 
 Skybox::Skybox()
 {
-	Tile *tile = new Tile;
+	/*ResourceHandle<Geometry>*/ FlippedTile* tile = new FlippedTile();
 
 	// Load sides
 	makeTexturedTile(FRONT, tile, "data/skybox_f.bmp");
@@ -38,6 +39,7 @@ Skybox::Skybox()
 	makeTexturedTile(LEFT, tile, "data/skybox_r.bmp");
 	t[LEFT]->setPosition(1.0f, 0.0f, 0.0f);
 	t[LEFT]->setRotation(0.0f, 90.0f, 0.0f);
+	//t[LEFT]->setRotation(0.0f, 270.0f, 0.0f);
 	makeTexturedTile(RIGHT, tile, "data/skybox_l.bmp");
 	t[RIGHT]->setPosition(-1.0f, 0.0f, 0.0f);
 	t[RIGHT]->setRotation(0.0f, -90.0f, 0.0f);

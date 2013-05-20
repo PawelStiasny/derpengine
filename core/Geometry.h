@@ -9,7 +9,7 @@ class Geometry : public SharedResource
 {
 public:
 	virtual ~Geometry();
-	void render(RenderingContext *rc);
+	void render();
 
 protected:
 	// Data used for rendering

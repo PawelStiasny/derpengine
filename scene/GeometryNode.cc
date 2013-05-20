@@ -7,7 +7,7 @@ GeometryNode::GeometryNode(ResourceHandle<Geometry> geometry)
 
 void GeometryNode::doRender(RenderingContext *rc)
 {
-	geometry->render(rc);
+	geometry->render();
 }
 
 void GeometryNode::setGeometry(ResourceHandle<Geometry> g)

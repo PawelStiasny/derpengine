@@ -1,34 +1,34 @@
 #include <GL/glew.h>
 
-#include "Tile.h"
+#include "FlippedTile.h"
 #include "../core/GLSLProgram.h"
 
-const GLfloat Tile::s_vertex_data[] = {
-	-1.0f, 1.0f, 0.0f,
-	1.0f, 1.0f, 0.0f,
-	1.0f, -1.0f, 0.0f,
+const GLfloat FlippedTile::s_vertex_data[] = {
 	-1.0f, -1.0f, 0.0f,
+	1.0f, -1.0f, 0.0f,
+	1.0f, 1.0f, 0.0f,
+	-1.0f, 1.0f, 0.0f,
 };
 
-const GLfloat Tile::s_normal_data[] = {
-	0.0f, 0.0f, 1.0f,
-	0.0f, 0.0f, 1.0f,
-	0.0f, 0.0f, 1.0f,
-	0.0f, 0.0f, 1.0f
+const GLfloat FlippedTile::s_normal_data[] = {
+	0.0f, 0.0f, -1.0f,
+	0.0f, 0.0f, -1.0f,
+	0.0f, 0.0f, -1.0f,
+	0.0f, 0.0f, -1.0f
 };
-const GLfloat Tile::s_uv_data[] = {
+const GLfloat FlippedTile::s_uv_data[] = {
 	0.0f, 1.0f, 
 	1.0f, 1.0f, 
 	1.0f, 0.0f, 
 	0.0f, 0.0f, 
 };
 
-const GLushort Tile::s_index_data[] = {
+const GLushort FlippedTile::s_index_data[] = {
 	0, 2, 1,
 	0, 3, 2
 };
 
-Tile::Tile()
+FlippedTile::FlippedTile()
 	: Geometry(false)
 {
 	vertex_count = 4;
@@ -40,7 +40,7 @@ Tile::Tile()
 	syncBuffers();
 }
 
-Tile::~Tile()
+FlippedTile::~FlippedTile()
 {
 }
 
