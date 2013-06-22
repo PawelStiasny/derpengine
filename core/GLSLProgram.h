@@ -50,7 +50,7 @@ private:
 	GLuint program_id;
 	GLint uni_mvp, uni_m, uni_normal, uni_cam_pos, uni_mat_ambient,
 		  uni_mat_diffuse, uni_mat_specular, uni_mat_shininess, uni_light_pos,
-		  uni_shadow_vp;
+		  uni_shadow_vp, uni_time;
 	bool uniform_warning_displayed;
 	std::list< ResourceHandle<GLSLObject> > shaders;
 	bool defaults_loaded;

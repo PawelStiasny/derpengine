@@ -1,9 +1,10 @@
+#include "GLSLProgram.h"
+#include "../util/ResourceManager.h"
+
 #include <string>
 #include <iterator>
 #include <glm/gtc/type_ptr.hpp>
-
-#include "GLSLProgram.h"
-#include "../util/ResourceManager.h"
+#include <SDL2/SDL.h>
 
 GLSLProgram::GLSLProgram(std::list< ResourceHandle<GLSLObject> > shaders)
 {
@@ -43,6 +44,7 @@ GLSLProgram::GLSLProgram(std::list< ResourceHandle<GLSLObject> > shaders)
 	uni_mat_shininess = getUniformLocation("mat_shininess");
 	uni_light_pos = getUniformLocation("light_pos");
 	uni_shadow_vp = getUniformLocation("shadow_VP");
+	uni_time = getUniformLocation("time");
 
 	if (uniform_warning_displayed)
 		printf("\n");
@@ -75,6 +77,7 @@ void GLSLProgram::use()
 {
 	glUseProgram(program_id);
 
+	glUniform1f(uni_time, (float)SDL_GetTicks() * 0.001);
 	// Load initial values first time program is used
 	if (!defaults_loaded) {
 		defaults_loaded = true;

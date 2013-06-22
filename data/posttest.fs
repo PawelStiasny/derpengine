@@ -1,6 +1,7 @@
 #version 130
 
 uniform sampler2D tex_sampler;
+uniform float time;
 
 smooth in vec4 pos;
 smooth in vec3 normal;
@@ -10,7 +11,8 @@ out vec4 color;
 
 void main() {
 	vec4 base_col = texture(tex_sampler, tex_coord);
-	vec2 pert_coord = tex_coord + 0.05 * vec2(sin(base_col.r-0.5), cos(base_col.g)-1);
+	vec2 pert_coord = tex_coord + 0.05 * vec2(sin(base_col.r-0.5), cos(base_col.g)-1) * sin(time);
+	//pert_coord += 0.005 * vec2(sin(time), cos(time));
 
 
 	vec4 sum = vec4(0.0);
@@ -29,7 +31,7 @@ void main() {
 	color = sum;
 
 	color.b = base_col.b;
-	color *= vec4(1,tex_coord.x,tex_coord.y,1);
+	color *= vec4(1,tex_coord.x + 0.6 * sin(time * 0.1), tex_coord.y + 0.6 * cos(time * 0.1),1);
 	color *= color;
 
 	color.a = 1.0;
