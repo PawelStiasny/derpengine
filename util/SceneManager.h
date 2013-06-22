@@ -7,6 +7,7 @@
 #include "../core/FramebufferTexture.h"
 #include "../core/DepthFramebufferTexture.h"
 #include "../core/DepthPassRenderingContext.h"
+#include "../core/Framebuffer.h"
 #include "../animations/Animation.h"
 #include "PostOverlay.h"
 #include "Settings.h"
@@ -38,6 +39,7 @@ private:
 	Texture *null_shadow_buffer;
 	FramebufferTexture main_buffer;
 	DepthFramebufferTexture depth_tex;
+	Framebuffer fb;
 	GraphNode *shadowmap_ref;
 	std::list<PostOverlay> post_overlays;
 };

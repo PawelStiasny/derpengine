@@ -14,6 +14,7 @@ public:
 			GLenum repeat_mode = GL_REPEAT);
 	virtual ~Texture();
 	virtual void use(GLuint unit);
+	GLuint getId() { return texture_id; };
 
 protected:
 	static SDL_Surface * loadImage(const char *path);

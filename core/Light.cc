@@ -10,11 +10,13 @@ DirectionalLight::DirectionalLight()
 	addMember(&camera);
 	shadowmap_rc = NULL;
 	shadowmap = NULL;
+	fb = NULL;
 }
 
 DirectionalLight::~DirectionalLight()
 {
 	if (shadowmap) {
+		delete fb;
 		delete shadowmap_rc;
 		delete shadowmap;
 	}
@@ -29,7 +31,10 @@ void DirectionalLight::buildShadowMap(GraphNode *scene, GraphNode *reference)
 	// built
 	if (!shadowmap) {
 		shadowmap_rc = new DepthPassRenderingContext;
-		shadowmap = new DepthFramebufferTexture;
+		shadowmap_rc->reshape(1024, 1024);
+		shadowmap = new DepthFramebufferTexture(1024, 1024);
+		fb = new Framebuffer(1024, 1024);
+		fb->setDepthTexture(shadowmap);
 	}
 
 	camera.setTarget(reference);
@@ -40,7 +45,7 @@ void DirectionalLight::buildShadowMap(GraphNode *scene, GraphNode *reference)
 	camera.setFrustrum(15.0f);
 	shadowmap_rc->setCamera(&camera);
 
-	shadowmap->renderTo(shadowmap_rc, scene);
+	fb->renderTo(shadowmap_rc, scene);
 }
 
 void DirectionalLight::use(GLSLProgram *shaders)

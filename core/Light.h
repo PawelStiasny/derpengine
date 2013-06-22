@@ -4,6 +4,7 @@
 #include "GraphNode.h"
 #include "Camera.h"
 #include "DepthFramebufferTexture.h"
+#include "Framebuffer.h"
 
 class Light : public GraphNode
 {
@@ -26,6 +27,7 @@ public:
 private:
 	OrthogonalCamera camera;
 	DepthFramebufferTexture *shadowmap;
+	Framebuffer *fb;
 	RenderingContext *shadowmap_rc;
 };
 

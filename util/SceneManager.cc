@@ -15,6 +15,9 @@ SceneManager::SceneManager(Settings *settings)
 	rendering_context = new RenderingContext;
 
 	shadowmap_ref = NULL;
+
+	fb.setColorTexture(&main_buffer);
+	fb.setDepthTexture(&depth_tex);
 }
 
 SceneManager::~SceneManager()
@@ -42,7 +45,7 @@ void SceneManager::render()
 	//depth_tex.use(GLSLProgram::TEXUNIT_PRE_DEPTH);
 
 	if (!post_overlays.empty()) {
-		main_buffer.bindFramebuffer();
+		fb.bindFramebuffer();
 	}
 
 	// Depth pre-pass
@@ -57,7 +60,7 @@ void SceneManager::render()
 	ResourceManager::getInstance()->getModel("tile")->render();
 
 	if (!post_overlays.empty()) {
-		main_buffer.unbindFramebuffer();
+		fb.unbindFramebuffer();
 		post_overlays.begin()->render(&main_buffer);
 	}
 }
@@ -73,9 +76,8 @@ void SceneManager::update(float timestep)
 void SceneManager::onViewportReshape(int width, int height)
 {
 	rendering_context->reshape(width, height);
-	depth_tex.resize(width, height);
 	depth_context.reshape(width, height);
-	main_buffer.resize(width, height);
+	fb.resize(width, height);
 	glViewport(0,0,width,height);
 }
 
