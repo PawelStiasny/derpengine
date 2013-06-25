@@ -37,9 +37,9 @@ protected:
 
 private:
 	Texture *null_shadow_buffer;
-	FramebufferTexture main_buffer;
+	FramebufferTexture destination_textures[2];
 	DepthFramebufferTexture depth_tex;
-	Framebuffer fb;
+	Framebuffer framebuffers[2];
 	GraphNode *shadowmap_ref;
 	std::list<PostOverlay> post_overlays;
 };

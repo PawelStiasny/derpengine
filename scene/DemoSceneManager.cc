@@ -42,6 +42,7 @@ DemoSceneManager::DemoSceneManager(Settings *settings)
 	animations.push_back(walk_animation);
 
 	appendPostOverlay("data/posttest.fs");
+	appendPostOverlay("data/posttest.colmx.fs");
 }
 
 void DemoSceneManager::handleInput(InputState *st)

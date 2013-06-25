@@ -16,8 +16,9 @@ SceneManager::SceneManager(Settings *settings)
 
 	shadowmap_ref = NULL;
 
-	fb.setColorTexture(&main_buffer);
-	fb.setDepthTexture(&depth_tex);
+	framebuffers[0].setColorTexture(&destination_textures[0]);
+	framebuffers[1].setColorTexture(&destination_textures[1]);
+	framebuffers[0].setDepthTexture(&depth_tex);
 }
 
 SceneManager::~SceneManager()
@@ -45,7 +46,7 @@ void SceneManager::render()
 	//depth_tex.use(GLSLProgram::TEXUNIT_PRE_DEPTH);
 
 	if (!post_overlays.empty()) {
-		fb.bindFramebuffer();
+		framebuffers[0].bindFramebuffer();
 	}
 
 	// Depth pre-pass
@@ -60,8 +61,24 @@ void SceneManager::render()
 	ResourceManager::getInstance()->getModel("tile")->render();
 
 	if (!post_overlays.empty()) {
-		fb.unbindFramebuffer();
-		post_overlays.begin()->render(&main_buffer);
+		framebuffers[0].unbindFramebuffer();
+		
+		// toggle source and destination textures for each overlay pass
+		int destination_framebuffer = 1;
+		for (
+				std::list<PostOverlay>::iterator
+					it = ++(post_overlays.begin()),
+					it_end = post_overlays.end();
+				it != it_end;
+				it++)
+		{
+			framebuffers[destination_framebuffer].bindFramebuffer();
+			it->render(&destination_textures[1 - destination_framebuffer]);
+			framebuffers[destination_framebuffer].unbindFramebuffer();
+			destination_framebuffer = 1 - destination_framebuffer;
+		}
+
+		post_overlays.begin()->render(&destination_textures[1 - destination_framebuffer]);
 	}
 }
 
@@ -77,7 +94,8 @@ void SceneManager::onViewportReshape(int width, int height)
 {
 	rendering_context->reshape(width, height);
 	depth_context.reshape(width, height);
-	fb.resize(width, height);
+	framebuffers[0].resize(width, height);
+	framebuffers[1].resize(width, height);
 	glViewport(0,0,width,height);
 }
 
@@ -86,6 +104,6 @@ void SceneManager::appendPostOverlay(std::string fragment_shader)
 	PostOverlay ov(
 			ResourceManager::getInstance()->getShaders(
 				"data/postpass.vs", fragment_shader));
-	post_overlays.push_front(ov);
+	post_overlays.push_back(ov);
 }
 
