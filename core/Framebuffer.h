@@ -19,9 +19,25 @@ public:
 	void resize(unsigned int w, unsigned int h);
 	bool isComplete();
 
-	void bindFramebuffer();
-	void unbindFramebuffer();
 	void renderTo(RenderingContext *rc, GraphNode *scene);
+
+	/// Switches active Framebuffer on construction and restores previous
+	/// selection on destruction in a RAII fashion.
+	class FramebufferSelection
+	{
+	public:
+		FramebufferSelection(Framebuffer &fb)
+		{
+			this->fb = &fb;
+			fb.bindFramebuffer();
+		};
+		~FramebufferSelection() {
+			fb->unbindFramebuffer();
+		};
+
+	private:
+		Framebuffer *fb;
+	};
 
 private:
 	GLuint framebuffer_id;
@@ -31,6 +47,8 @@ private:
 	GLuint color_renderbuffer_id, depth_renderbuffer_id;
 	GLint width, height;
 
+	void bindFramebuffer();
+	void unbindFramebuffer();
 	void createColorRenderbuffer();
 	void createDepthRenderbuffer();
 

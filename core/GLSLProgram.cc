@@ -120,7 +120,8 @@ void GLSLProgram::setUniformMVP(
 	//glm::mat4 mv = view * model;
 	//glm::mat4 mvp = projection * mv;
 	glm::mat4 mvp = projection * view * model;
-	glm::mat3 normal = glm::transpose(glm::inverse(glm::mat3(model)));
+	//glm::mat3 normal = glm::transpose(glm::inverse(glm::mat3(model)));
+	glm::mat3 normal = glm::mat3(model);
 
 	if (uni_mvp != -1)
 		glUniformMatrix4fv(uni_mvp, 1, GL_FALSE, glm::value_ptr(mvp));

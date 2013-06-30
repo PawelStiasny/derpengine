@@ -36,50 +36,46 @@ void SceneManager::render()
 {
 	// Shadowmap pass
 	Light *l = rendering_context->getLight();
-	if (settings->enable_shadows && l)
+	if (settings->enable_shadows && l) {
 		if (shadowmap_ref)
 			l->buildShadowMap(scene, shadowmap_ref);
 		else
 			l->buildShadowMap(scene, rendering_context->getCamera());
+	}
 
 
 	//depth_tex.use(GLSLProgram::TEXUNIT_PRE_DEPTH);
 
-	if (!post_overlays.empty()) {
-		framebuffers[0].bindFramebuffer();
+	{
+		Framebuffer::FramebufferSelection fbsel(framebuffers[0]);
+
+		// Depth pre-pass
+		depth_context.setCamera(rendering_context->getCamera());
+		depth_context.clear();
+		scene->render(&depth_context);
+
+		// Main rendering pass
+		rendering_context->clear(/*false*/);
+		scene->render(rendering_context);
+
+		ResourceManager::getInstance()->getModel("tile")->render();
 	}
 
-	// Depth pre-pass
-	depth_context.setCamera(rendering_context->getCamera());
-	depth_context.clear();
-	scene->render(&depth_context);
-
-	// Main rendering pass
-	rendering_context->clear(/*false*/);
-	scene->render(rendering_context);
-
-	ResourceManager::getInstance()->getModel("tile")->render();
-
-	if (!post_overlays.empty()) {
-		framebuffers[0].unbindFramebuffer();
-		
-		// toggle source and destination textures for each overlay pass
-		int destination_framebuffer = 1;
-		for (
-				std::list<PostOverlay>::iterator
-					it = ++(post_overlays.begin()),
-					it_end = post_overlays.end();
-				it != it_end;
-				it++)
-		{
-			framebuffers[destination_framebuffer].bindFramebuffer();
-			it->render(&destination_textures[1 - destination_framebuffer]);
-			framebuffers[destination_framebuffer].unbindFramebuffer();
-			destination_framebuffer = 1 - destination_framebuffer;
-		}
-
-		post_overlays.begin()->render(&destination_textures[1 - destination_framebuffer]);
+	// toggle source and destination textures for each overlay pass
+	int destination_framebuffer = 1;
+	for (
+			std::list<PostOverlay>::iterator
+				it = ++(post_overlays.begin()),
+				it_end = post_overlays.end();
+			it != it_end;
+			it++)
+	{
+		Framebuffer::FramebufferSelection fbsel(framebuffers[destination_framebuffer]);
+		it->render(&destination_textures[1 - destination_framebuffer]);
+		destination_framebuffer = 1 - destination_framebuffer;
 	}
+
+	post_overlays.begin()->render(&destination_textures[1 - destination_framebuffer]);
 }
 
 void SceneManager::update(float timestep)
