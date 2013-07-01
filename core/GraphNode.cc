@@ -5,13 +5,11 @@
 
 #include "GraphNode.h"
 #include "RenderingContext.h"
-#include "../util/ResourceManager.h"
 
 GraphNode::GraphNode()
 {
 	parent = NULL;
 	visible = true;
-	material = ResourceManager::getInstance()->getDefaultMaterial();
 	scale.v[0] = scale.v[1] = scale.v[2] = 1.0f;
 	m_transform = glm::mat4(1.0f);
 }
@@ -36,15 +34,11 @@ void GraphNode::render(RenderingContext *rc)
 
 	beforeRender(rc);
 
-	MaterialSelection ms(*material.getRawPointer());
-
 	// Apply transformations
 	if (pos.isSet() || rot.isSet() || !scale.isOnes()) {
 		rc->pushMatrix();
 		rc->setModelMatrix(rc->getModelMatrix() * m_transform);
 	}
-
-	rc->sync(material->getShaders().getRawPointer());
 
 	// Call concrete rendering implementation
 	doRender(rc);
@@ -163,9 +157,3 @@ void GraphNode::setVisibility(bool v)
 {
 	visible = v;
 }
-
-void GraphNode::setMaterial(const ResourceHandle<Material> &m)
-{
-	material = m;
-}
-

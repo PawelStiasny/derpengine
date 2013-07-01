@@ -3,7 +3,7 @@
 
 #include "../core/Geometry.h"
 //
-/// A single patch of terrain 
+/// A single patch of terrain
 class TerrainPiece : public Geometry
 {
 public:

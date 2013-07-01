@@ -11,9 +11,11 @@ public:
 	GeometryNode(ResourceHandle<Geometry> geometry);
 	virtual void doRender(RenderingContext *rc);
 	void setGeometry(ResourceHandle<Geometry> g);
+	void setMaterial(const ResourceHandle<Material> &m);
 
 private:
 	ResourceHandle<Geometry> geometry;
+	ResourceHandle<Material> material;
 };
 #endif
 

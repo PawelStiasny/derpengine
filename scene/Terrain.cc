@@ -1,6 +1,8 @@
 #include "Terrain.h"
 
 #include "../util/ResourceManager.h"
+#include "GeometryNode.h"
+
 #include <SDL2/SDL.h>
 #include <glm/gtx/fast_square_root.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -8,7 +10,10 @@
 Terrain::Terrain(GLfloat vertical_scaling)
 	: t("data/heightmap.bmp", vertical_scaling)
 {
-	setMaterial(ResourceManager::getInstance()->getMaterial("data/mat_terrain"));
+	GeometryNode *gn = new GeometryNode(&t);
+	gn->setMaterial(
+			ResourceManager::getInstance()->getMaterial("data/mat_terrain"));
+	addMember(gn);
 }
 
 Terrain::~Terrain()
@@ -30,7 +35,6 @@ void Terrain::updatePieces(GLfloat ref_x, GLfloat ref_z)
 
 void Terrain::doRender(RenderingContext *rc)
 {
-	t.render();
 }
 
 #define vindex(x, z) (3 * ((z) * x_res + x))

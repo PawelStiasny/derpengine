@@ -33,7 +33,6 @@ public:
 	void removeMember(GraphNode* member);
 
 	void setVisibility(bool v);
-	void setMaterial(const ResourceHandle<Material> &m);
 
 protected:
 	virtual void doRender(RenderingContext *rc);
@@ -54,7 +53,6 @@ private:
 	glm::mat4 m_transform;
 
 	bool visible;
-	ResourceHandle<Material> material;
 
 	std::list<GraphNode*> members;
 	GraphNode* parent;
