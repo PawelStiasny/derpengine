@@ -13,6 +13,7 @@ RenderingContext::RenderingContext()
 {
 	active_camera = &default_cam;
 	active_light = NULL;
+	env_map_specular = NULL;
 
 	width = 1024;
 	height = 768;
@@ -20,8 +21,6 @@ RenderingContext::RenderingContext()
 	m_projection = glm::perspective(60.0f, 4.0f/3.0f, 0.5f, 100.0f);
 	m_view = glm::mat4(1.0f);
 	m_model = glm::mat4(1.0f);
-
-	//light_pos = glm::vec4(300.0f, 100.0f, -300.0, 0.0);
 }
 
 RenderingContext::~RenderingContext()
@@ -41,8 +40,6 @@ void RenderingContext::clear(bool clear_z)
 	m_model = glm::mat4(1.0f);
 	m_projection = active_camera->getProjectionMatrix(aspect_ratio);
 	m_view = active_camera->getViewMatrix();
-	//updateMatrix();
-	//if (active_light) active_light->use(active_glsl_program);
 }
 
 void RenderingContext::setCamera(Camera *c)
@@ -91,7 +88,6 @@ void RenderingContext::setLight(Light *l)
 void RenderingContext::setEnvironmentMap(CubeTexture *specular)
 {
 	env_map_specular = specular;
-	specular->use(GLSLProgram::TEXUNIT_SPECULAR_CUBEMAP);
 }
 
 /// Call when a new GLSLProgram is selected
@@ -100,6 +96,9 @@ void RenderingContext::sync(GLSLProgram* program)
 	program->setUniformMVP(
 			m_model, m_view, m_projection,
 			getCameraPos());
-	if (active_light) active_light->use(program);
+	if (active_light)
+		active_light->use(program);
+	if (env_map_specular)
+		env_map_specular->use(program->TEXUNIT_SPECULAR_CUBEMAP);
 }
 

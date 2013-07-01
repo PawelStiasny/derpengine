@@ -24,9 +24,6 @@ DirectionalLight::~DirectionalLight()
 
 void DirectionalLight::buildShadowMap(GraphNode *scene, GraphNode *reference)
 {
-	GLint prev_draw_buffer;
-	glGetIntegerv(GL_DRAW_BUFFER, &prev_draw_buffer);
-
 	// create the rendering context and framebuffer first time a shadowmap is
 	// built
 	if (!shadowmap) {

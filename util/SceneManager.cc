@@ -36,12 +36,12 @@ void SceneManager::render()
 {
 	// Shadowmap pass
 	Light *l = rendering_context->getLight();
-	/*if (settings->enable_shadows && l) {
+	if (settings->enable_shadows && l) {
 		if (shadowmap_ref)
 			l->buildShadowMap(scene, shadowmap_ref);
 		else
 			l->buildShadowMap(scene, rendering_context->getCamera());
-	}*/
+	}
 
 
 	//depth_tex.use(GLSLProgram::TEXUNIT_PRE_DEPTH);
