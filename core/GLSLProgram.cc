@@ -48,9 +48,6 @@ GLSLProgram::GLSLProgram(std::list< ResourceHandle<GLSLObject> > shaders)
 	uni_shadow_vp = getUniformLocation("shadow_VP");
 	uni_time = getUniformLocation("time");
 
-	if (uniform_warning_displayed)
-		printf("\n");
-
 	{
 		// Load defaults
 		GLSLProgramSelection ps(*this);
@@ -60,6 +57,10 @@ GLSLProgram::GLSLProgram(std::list< ResourceHandle<GLSLObject> > shaders)
 		setUniformTexSampler("specular_sampler", TEXUNIT_SPECULAR_CUBEMAP);
 		setUniformTexSampler("depth_sampler", TEXUNIT_PRE_DEPTH);
 	}
+
+	if (uniform_warning_displayed)
+		printf("\n");
+
 }
 
 GLint GLSLProgram::getUniformLocation(const char *name)
