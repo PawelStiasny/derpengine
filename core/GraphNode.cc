@@ -11,7 +11,7 @@ GraphNode::GraphNode()
 {
 	parent = NULL;
 	visible = true;
-	material = new Material;
+	material = ResourceManager::getInstance()->getDefaultMaterial();
 	scale.v[0] = scale.v[1] = scale.v[2] = 1.0f;
 	m_transform = glm::mat4(1.0f);
 }

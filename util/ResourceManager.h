@@ -31,6 +31,7 @@ public:
 	ResourceHandle<Texture> getTexture(const std::string path);
 
 	ResourceHandle<Material> getMaterial(const std::string name);
+	ResourceHandle<Material> getDefaultMaterial();
 
 	ResourceHandle<Geometry> getModel(const std::string name);
 
@@ -46,6 +47,7 @@ private:
 	std::map< std::pair<int, std::string>, GLSLObject* > glsl_object_pool;
 	std::map< std::string, Texture* > texture_pool;
 	std::map< std::string, Material* > material_pool;
+	ResourceHandle<Material> default_material;
 	Tile *tile;
 };
 

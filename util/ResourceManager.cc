@@ -87,6 +87,13 @@ ResourceHandle<Material> ResourceManager::getMaterial(const std::string path)
 		return it->second;
 }
 
+ResourceHandle<Material> ResourceManager::getDefaultMaterial()
+{
+	if (!default_material.getRawPointer())
+		default_material = new Material;
+	return default_material;
+}
+
 void ResourceManager::clearUnused()
 {
 	int remaining = 0, deleted = 0;
