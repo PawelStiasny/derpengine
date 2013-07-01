@@ -13,12 +13,14 @@ MechLauncher::MechLauncher()
 		t1->setScale(0.3f, 0.3f, 1.0f);
 		t1->setPosition(0.0f, vpos, 0.0f);
 		t1->setRotation(90.0f, 0.0f, 0.0f);
+		t1->setMaterial(ResourceManager::getInstance()->getMaterial("data/mat_mech"));
 		addMember(t1);
 
 		GeometryNode *t2 = new GeometryNode(t);
 		t2->setScale(0.3f, 0.3f, 1.0f);
 		t2->setPosition(0.0f, vpos, 0.0f);
 		t2->setRotation(270.0f, 0.0f, 0.0f);
+		t2->setMaterial(ResourceManager::getInstance()->getMaterial("data/mat_mech"));
 		addMember(t2);
 
 		vpos += 0.1f;
@@ -31,12 +33,14 @@ MechLauncher::MechLauncher()
 		t1->setScale(0.3f, 0.15f, 1.0f);
 		t1->setPosition(0.1f * (float)i - 0.4f, 0.15f, 0.0f);
 		t1->setRotation(0.0f, 90.0f, 0.0f);
+		t1->setMaterial(ResourceManager::getInstance()->getMaterial("data/mat_mech"));
 		addMember(t1);
 
 		GeometryNode *t2 = new GeometryNode(t);
 		t2->setScale(0.3f, 0.15f, 1.0f);
 		t2->setPosition(0.1f * (float)i - 0.4f, 0.15f, 0.0f);
 		t2->setRotation(0.0f, 270.0f, 0.0f);
+		t2->setMaterial(ResourceManager::getInstance()->getMaterial("data/mat_mech"));
 		addMember(t2);
 	}
 }

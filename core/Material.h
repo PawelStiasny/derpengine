@@ -15,20 +15,40 @@ class Material : public SharedResource
 public:
 	Material();
 	virtual ~Material();
-	virtual void use();
 	ResourceHandle<GLSLProgram> & getShaders() { return shaders; };
 
 	glm::vec4 ambient, diffuse, specular;
 	GLfloat shininess;
 	ResourceHandle<GLSLProgram> shaders;
 	ResourceHandle<Texture> texture;
+
+	class MaterialSelection
+	{
+	public:
+		MaterialSelection(Material &mat);
+		~MaterialSelection();
+
+	private:
+		Material *selected, *previous;
+		GLSLProgramSelection ps;
+	};
+
+protected:
+	virtual void doUse();
+
+private:
+	void use();
+	static /*thread_local*/ Material *active_material;
 };
+
+typedef Material::MaterialSelection MaterialSelection;
 
 class ConfigurableMaterial : public Material
 {
 public:
 	bool loadDescriptionFile(const char *path);
-	virtual void use();
+protected:
+	virtual void doUse();
 private:
 	std::list< std::pair< int, ResourceHandle<Texture> > > textures;
 };

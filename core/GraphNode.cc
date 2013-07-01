@@ -5,12 +5,13 @@
 
 #include "GraphNode.h"
 #include "RenderingContext.h"
+#include "../util/ResourceManager.h"
 
 GraphNode::GraphNode()
 {
 	parent = NULL;
 	visible = true;
-	material = NULL;
+	material = new Material;
 	scale.v[0] = scale.v[1] = scale.v[2] = 1.0f;
 	m_transform = glm::mat4(1.0f);
 }
@@ -27,7 +28,7 @@ GraphNode::~GraphNode()
 	}
 }
 
-/// Template Method that sets up transformations and calls the actual 
+/// Template Method that sets up transformations and calls the actual
 /// object and member rendering.
 void GraphNode::render(RenderingContext *rc)
 {
@@ -35,9 +36,7 @@ void GraphNode::render(RenderingContext *rc)
 
 	beforeRender(rc);
 
-	Material *m = material.getRawPointer();
-	if (m)
-		rc->setMaterial(m);
+	MaterialSelection ms(*material.getRawPointer());
 
 	// Apply transformations
 	if (pos.isSet() || rot.isSet() || !scale.isOnes()) {
@@ -45,11 +44,13 @@ void GraphNode::render(RenderingContext *rc)
 		rc->setModelMatrix(rc->getModelMatrix() * m_transform);
 	}
 
+	rc->sync(material->getShaders().getRawPointer());
+
 	// Call concrete rendering implementation
 	doRender(rc);
 
 	// Render members
-	std::for_each(members.begin(), members.end(), 
+	std::for_each(members.begin(), members.end(),
 			std::bind2nd(std::mem_fun(&GraphNode::render), rc));
 
 	// Revert transformations

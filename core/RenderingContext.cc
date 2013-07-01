@@ -14,8 +14,6 @@ RenderingContext::RenderingContext()
 	active_camera = &default_cam;
 	active_light = NULL;
 
-	active_glsl_program = ResourceManager::getInstance()->getDefaultShaders();
-
 	width = 1024;
 	height = 768;
 	aspect_ratio = 4.0f/3.0f;
@@ -24,8 +22,6 @@ RenderingContext::RenderingContext()
 	m_model = glm::mat4(1.0f);
 
 	//light_pos = glm::vec4(300.0f, 100.0f, -300.0, 0.0);
-
-	//onProgramChange(active_glsl_program);
 }
 
 RenderingContext::~RenderingContext()
@@ -41,12 +37,10 @@ void RenderingContext::clear(bool clear_z)
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	if (clear_z) glClear(GL_DEPTH_BUFFER_BIT);
 
-	active_glsl_program->use();
 	matrix_stack.clear();
 	m_model = glm::mat4(1.0f);
 	m_projection = active_camera->getProjectionMatrix(aspect_ratio);
 	m_view = active_camera->getViewMatrix();
-	onProgramChange(active_glsl_program.getRawPointer());
 	//updateMatrix();
 	//if (active_light) active_light->use(active_glsl_program);
 }
@@ -77,14 +71,6 @@ void RenderingContext::popMatrix()
 {
 	m_model = matrix_stack.back();
 	matrix_stack.pop_back();
-	updateMatrix();
-}
-
-void RenderingContext::setMaterial(Material *m)
-{
-	m->use();
-	active_glsl_program = m->getShaders();
-	onProgramChange(active_glsl_program.getRawPointer());
 }
 
 const glm::mat4 & RenderingContext::getModelMatrix()
@@ -95,7 +81,6 @@ const glm::mat4 & RenderingContext::getModelMatrix()
 void RenderingContext::setModelMatrix(const glm::mat4 &m)
 {
 	m_model = m;
-	updateMatrix();
 }
 
 void RenderingContext::setLight(Light *l)
@@ -109,17 +94,12 @@ void RenderingContext::setEnvironmentMap(CubeTexture *specular)
 	specular->use(GLSLProgram::TEXUNIT_SPECULAR_CUBEMAP);
 }
 
-/// Called when a new GLSL shader program is set as active
-void RenderingContext::onProgramChange(GLSLProgram* new_program)
+/// Call when a new GLSLProgram is selected
+void RenderingContext::sync(GLSLProgram* program)
 {
-	updateMatrix();
-	if (active_light) active_light->use(new_program);
-}
-
-void RenderingContext::updateMatrix()
-{
-	active_glsl_program->setUniformMVP(
+	program->setUniformMVP(
 			m_model, m_view, m_projection,
 			getCameraPos());
+	if (active_light) active_light->use(program);
 }
 

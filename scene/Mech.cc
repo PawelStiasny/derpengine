@@ -6,9 +6,14 @@
 /// Constructs the mech body and its members
 Mech::Mech()
 {
+	ResourceHandle<Material> mech_mat =
+		ResourceManager::getInstance()->getMaterial("data/mat_mech");
+
 	// Body
 	body = new MechBody();
-	addMember(new GeometryNode(body));
+	GeometryNode *body_node = new GeometryNode(body);
+	body_node->setMaterial(mech_mat);
+	addMember(body_node);
 
 	float upper_bone_radius = 0.1, lower_bone_radius = 0.1,
 		  upper_bone_length = 1.2, lower_bone_length = 1.2,
@@ -28,11 +33,13 @@ Mech::Mech()
 	leg[0] = new GeometryNode(upper_bone);
 	leg[0]->setPosition(-leg_spread, 0.0f, 0.0f);
 	leg[0]->setRotation(45.0f, 0.0f, 0.0f);
+	leg[0]->setMaterial(mech_mat);
 	addMember(leg[0]);
 
 	leg[1] = new GeometryNode(upper_bone);
 	leg[1]->setPosition(leg_spread, 0.0f, 0.0f);
 	leg[1]->setRotation(45.0f, 0.0f, 0.0f);
+	leg[1]->setMaterial(mech_mat);
 	addMember(leg[1]);
 
 	// Lower bones
@@ -43,6 +50,7 @@ Mech::Mech()
 			0.0f,
 			upper_bone_length);
 	leg[2]->setRotation(90.0f, 0.0f, 0.0f);
+	leg[2]->setMaterial(mech_mat);
 	leg[0]->addMember(leg[2]);
 
 	leg[3] = new GeometryNode(lower_bone);
@@ -51,17 +59,15 @@ Mech::Mech()
 			0.0f,
 			upper_bone_length);
 	leg[3]->setRotation(90.0f, 0.0f, 0.0f);
+	leg[3]->setMaterial(mech_mat);
 	leg[1]->addMember(leg[3]);
-
-	// Material for the whole thing
-	setMaterial(ResourceManager::getInstance()->getMaterial("data/mat_mech"));
 }
 
 Mech::~Mech()
 {
 }
 
-void Mech::doRender(RenderingContext *rc) 
+void Mech::doRender(RenderingContext *rc)
 {
 }
 

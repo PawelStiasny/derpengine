@@ -7,6 +7,8 @@
 #include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
 
+Material * Material::active_material = NULL;
+
 Material::Material()
 {
 	ResourceManager *rm = ResourceManager::getInstance();
@@ -24,9 +26,31 @@ Material::~Material()
 
 void Material::use()
 {
-	shaders->use();
+	if (active_material == this)
+		return;
+	active_material = this;
+	doUse();
+}
+
+void Material::doUse()
+{
 	shaders->setUniformMaterial(ambient, diffuse, specular, shininess);
 	texture->use(GLSLProgram::TEXUNIT_COLOR);
+}
+
+MaterialSelection::MaterialSelection(Material &mat)
+	: ps(*mat.shaders.getRawPointer())
+{
+	selected = &mat;
+	previous = active_material;
+	mat.use();
+}
+
+MaterialSelection::~MaterialSelection()
+{
+	//assert(selected == active_material);
+	//if (previous)
+		//previous->use();
 }
 
 bool ConfigurableMaterial::loadDescriptionFile(const char *path)
@@ -85,9 +109,9 @@ bool ConfigurableMaterial::loadDescriptionFile(const char *path)
 	return true;
 }
 
-void ConfigurableMaterial::use()
+void ConfigurableMaterial::doUse()
 {
-	Material::use();
+	Material::doUse();
 	for (std::list< std::pair< int, ResourceHandle<Texture> > >::iterator
 			it = textures.begin(), it_end = textures.end();
 			it != it_end; it++)

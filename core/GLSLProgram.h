@@ -15,7 +15,6 @@ class GLSLProgram : public SharedResource
 public:
 	GLSLProgram(std::list< ResourceHandle<GLSLObject> > shaders);
 	~GLSLProgram();
-	void use();
 	void setUniformMVP(
 			const glm::mat4& model,
 			const glm::mat4& view,
@@ -46,6 +45,16 @@ public:
 		ATTR_UV			= 2
 	};
 
+	class GLSLProgramSelection
+	{
+	public:
+		GLSLProgramSelection(GLSLProgram &p);
+		~GLSLProgramSelection();
+
+	private:
+		GLSLProgram *selected, *previous;
+	};
+
 private:
 	GLuint program_id;
 	GLint uni_mvp, uni_m, uni_normal, uni_cam_pos, uni_mat_ambient,
@@ -53,12 +62,15 @@ private:
 		  uni_shadow_vp, uni_time;
 	bool uniform_warning_displayed;
 	std::list< ResourceHandle<GLSLObject> > shaders;
-	bool defaults_loaded;
 	std::map< std::string, int > sampler_to_texunit;
 	int next_free_texunit;
 
 	GLint getUniformLocation(const char *name);
-	bool canSetUniform();
+	void use();
+
+	static /*thread_local*/ GLSLProgram *active_program;
 };
+
+typedef GLSLProgram::GLSLProgramSelection GLSLProgramSelection;
 
 #endif

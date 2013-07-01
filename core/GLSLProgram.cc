@@ -6,6 +6,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <SDL2/SDL.h>
 
+GLSLProgram * GLSLProgram::active_program = NULL;
+
 GLSLProgram::GLSLProgram(std::list< ResourceHandle<GLSLObject> > shaders)
 {
 	program_id = 0;
@@ -16,7 +18,7 @@ GLSLProgram::GLSLProgram(std::list< ResourceHandle<GLSLObject> > shaders)
 	glBindAttribLocation(program_id, ATTR_POSITION, "v");
 	glBindAttribLocation(program_id, ATTR_NORMAL, "n");
 	glBindAttribLocation(program_id, ATTR_UV, "uv");
-	
+
 	for (
 			std::list< ResourceHandle<GLSLObject> >::iterator
 				it = shaders.begin(), it_end = shaders.end();
@@ -48,7 +50,16 @@ GLSLProgram::GLSLProgram(std::list< ResourceHandle<GLSLObject> > shaders)
 
 	if (uniform_warning_displayed)
 		printf("\n");
-	defaults_loaded = false;
+
+	{
+		// Load defaults
+		GLSLProgramSelection ps(*this);
+
+		setUniformTexSampler("tex_sampler", TEXUNIT_COLOR);
+		setUniformTexSampler("shadow_sampler", TEXUNIT_SHADOWMAP);
+		setUniformTexSampler("specular_sampler", TEXUNIT_SPECULAR_CUBEMAP);
+		setUniformTexSampler("depth_sampler", TEXUNIT_PRE_DEPTH);
+	}
 }
 
 GLint GLSLProgram::getUniformLocation(const char *name)
@@ -75,38 +86,13 @@ GLSLProgram::~GLSLProgram()
 
 void GLSLProgram::use()
 {
+	if (active_program == this)
+		return;
+
 	glUseProgram(program_id);
+	active_program = this;
 
 	glUniform1f(uni_time, (float)SDL_GetTicks() * 0.001);
-	// Load initial values first time program is used
-	if (!defaults_loaded) {
-		defaults_loaded = true;
-		uniform_warning_displayed = false;
-		setUniformTexSampler("tex_sampler", TEXUNIT_COLOR);
-		setUniformTexSampler("shadow_sampler", TEXUNIT_SHADOWMAP);
-		setUniformTexSampler("specular_sampler", TEXUNIT_SPECULAR_CUBEMAP);
-		setUniformTexSampler("depth_sampler", TEXUNIT_PRE_DEPTH);
-		for (std::map< std::string, int >::iterator
-				it = sampler_to_texunit.begin(), it_end = sampler_to_texunit.end();
-				it != it_end; it++)
-		{
-			setUniformTexSampler(it->first.c_str(), it->second);
-		}
-		if (uniform_warning_displayed)
-			printf("\n");
-	}
-}
-
-bool GLSLProgram::canSetUniform()
-{
-	if (program_id == 0) return false;
-
-	// use() must be called before setting an uniform
-	GLint current_program;
-	glGetIntegerv(GL_CURRENT_PROGRAM, &current_program);
-	assert(current_program == program_id);
-
-	return true;
 }
 
 void GLSLProgram::setUniformMVP(
@@ -115,7 +101,7 @@ void GLSLProgram::setUniformMVP(
 		const glm::mat4& projection,
 		const glm::vec3& cam_pos)
 {
-	if (!canSetUniform()) return;
+	GLSLProgramSelection ps(*this);
 
 	//glm::mat4 mv = view * model;
 	//glm::mat4 mvp = projection * mv;
@@ -136,7 +122,7 @@ void GLSLProgram::setUniformMVP(
 
 void GLSLProgram::setUniformShadowVP(const glm::mat4& vp)
 {
-	if (!canSetUniform()) return;
+	GLSLProgramSelection ps(*this);
 
 	if (uni_shadow_vp != -1)
 		glUniformMatrix4fv(uni_shadow_vp, 1, GL_FALSE, glm::value_ptr(vp));
@@ -148,7 +134,7 @@ void GLSLProgram::setUniformMaterial(
 		const glm::vec4& mat_specular,
 		float mat_shininess)
 {
-	if (!canSetUniform()) return;
+	GLSLProgramSelection ps(*this);
 
 	if (uni_mat_ambient != -1)
 		glUniform4fv(uni_mat_ambient, 1, glm::value_ptr(mat_ambient));
@@ -162,7 +148,7 @@ void GLSLProgram::setUniformMaterial(
 
 void GLSLProgram::setUniformLight(const glm::vec4& light_pos)
 {
-	if (!canSetUniform()) return;
+	GLSLProgramSelection ps(*this);
 
 	if (uni_light_pos != -1)
 		glUniform4fv(uni_light_pos, 1, glm::value_ptr(light_pos));
@@ -181,11 +167,27 @@ GLuint GLSLProgram::getTextureUnit(std::string sampler_name)
 		sampler_to_texunit.find(sampler_name);
 
 	if (it == sampler_to_texunit.end()) {
+		GLSLProgramSelection ps(*this);
 		sampler_to_texunit.insert( std::make_pair(sampler_name, next_free_texunit) );
-		defaults_loaded = false;
+		setUniformTexSampler(sampler_name.c_str(), next_free_texunit);
 		return next_free_texunit++;
 	} else {
 		return it->second;
 	}
+}
+
+GLSLProgramSelection::GLSLProgramSelection(GLSLProgram &p)
+{
+	selected = &p;
+	previous = active_program;
+	selected->use();
+}
+
+GLSLProgramSelection::~GLSLProgramSelection()
+{
+	assert(active_program == selected);
+
+	if (previous)
+		previous->use();
 }
 
