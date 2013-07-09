@@ -43,36 +43,37 @@ void SceneManager::render()
 	}
 
 
-	//depth_tex.use(GLSLProgram::TEXUNIT_PRE_DEPTH);
-
-	{
-		Framebuffer::FramebufferSelection fbsel(framebuffers[0]);
-
-		// Depth pre-pass
-		/*depth_context.setCamera(rendering_context->getCamera());
-		depth_context.clear();
-		scene->render(&depth_context);*/
-
-		// Main rendering pass
-		rendering_context->clear(/*false*/);
+	if (post_overlays.empty()) {
+		// Render to screen
+		rendering_context->clear();
 		scene->render(rendering_context);
-	}
+	} else {
+		{
+			// Render to a framebuffer
+			Framebuffer::FramebufferSelection fbsel(framebuffers[0]);
 
-	// toggle source and destination textures for each overlay pass
-	int destination_framebuffer = 1;
-	for (
-			std::list<PostOverlay>::iterator
+			rendering_context->clear();
+			scene->render(rendering_context);
+		}
+
+		// toggle source and destination textures for each overlay pass
+		int destination_framebuffer = 1;
+		for (
+				std::list<PostOverlay>::iterator
 				it = ++(post_overlays.begin()),
 				it_end = post_overlays.end();
-			it != it_end;
-			it++)
-	{
-		Framebuffer::FramebufferSelection fbsel(framebuffers[destination_framebuffer]);
-		it->render(&destination_textures[1 - destination_framebuffer]);
-		destination_framebuffer = 1 - destination_framebuffer;
-	}
+				it != it_end;
+				it++)
+		{
+			Framebuffer::FramebufferSelection
+				fbsel(framebuffers[destination_framebuffer]);
+			it->render(&destination_textures[1 - destination_framebuffer]);
+			destination_framebuffer = 1 - destination_framebuffer;
+		}
 
-	post_overlays.begin()->render(&destination_textures[1 - destination_framebuffer]);
+		post_overlays.begin()->render(
+				&destination_textures[1 - destination_framebuffer]);
+	}
 }
 
 void SceneManager::update(float timestep)
