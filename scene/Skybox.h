@@ -9,6 +9,7 @@ public:
 	~Skybox();
 	virtual void beforeRender(RenderingContext *rc);
 	virtual void afterRender(RenderingContext *rc);
+	virtual void depthRender(RenderingContext *rc);
 
 private:
 	void makeTexturedTile(int index, /*ResourceHandle<Geometry>*/ FlippedTile* t, const char *path);

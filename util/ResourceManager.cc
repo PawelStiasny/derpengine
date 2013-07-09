@@ -89,9 +89,19 @@ ResourceHandle<Material> ResourceManager::getMaterial(const std::string path)
 
 ResourceHandle<Material> ResourceManager::getDefaultMaterial()
 {
-	if (!default_material.getRawPointer())
+	if (!default_material)
 		default_material = new Material;
 	return default_material;
+}
+
+ResourceHandle<Material> ResourceManager::getDefaultDepthMapMaterial()
+{
+	if (!default_depth_map_material) {
+		default_depth_map_material = new Material;
+		default_depth_map_material->shaders =
+			getShaders("data/default.vs","data/shadowmap.fs");
+	}
+	return default_depth_map_material;
 }
 
 void ResourceManager::clearUnused()

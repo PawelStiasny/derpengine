@@ -77,3 +77,8 @@ void Skybox::afterRender(RenderingContext *rc)
 	glEnable(GL_BLEND);
 	rc->popMatrix();
 }
+
+void Skybox::depthRender(RenderingContext *rc)
+{
+}
+

@@ -154,6 +154,8 @@ bool Framebuffer::isComplete()
 
 void Framebuffer::bindFramebuffer()
 {
+	assert(active_framebuffer_id == 0);
+
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer_id);
 	active_framebuffer_id = framebuffer_id;
 

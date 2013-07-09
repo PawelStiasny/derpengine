@@ -1,11 +1,10 @@
 #include "SceneManager.h"
 
 #include "../core/GLSLProgram.h"
+#include "ResourceManager.h"
 #include <list>
 #include <algorithm>
 #include <functional>
-//temp
-#include "../scene/Tile.h"
 
 SceneManager::SceneManager(Settings *settings)
 {
@@ -57,8 +56,6 @@ void SceneManager::render()
 		// Main rendering pass
 		rendering_context->clear(/*false*/);
 		scene->render(rendering_context);
-
-		ResourceManager::getInstance()->getModel("tile")->render();
 	}
 
 	// toggle source and destination textures for each overlay pass

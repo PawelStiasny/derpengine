@@ -3,7 +3,7 @@
 #include <GL/glew.h>
 
 #include "Light.h"
-#include "DepthPassRenderingContext.h"
+#include "RenderingContext.h"
 
 DirectionalLight::DirectionalLight()
 {
@@ -27,7 +27,7 @@ void DirectionalLight::buildShadowMap(GraphNode *scene, GraphNode *reference)
 	// create the rendering context and framebuffer first time a shadowmap is
 	// built
 	if (!shadowmap) {
-		shadowmap_rc = new DepthPassRenderingContext;
+		shadowmap_rc = new RenderingContext;
 		shadowmap_rc->reshape(1024, 1024);
 		shadowmap = new DepthFramebufferTexture(1024, 1024);
 		fb = new Framebuffer(1024, 1024);
@@ -42,7 +42,11 @@ void DirectionalLight::buildShadowMap(GraphNode *scene, GraphNode *reference)
 	camera.setFrustrum(15.0f);
 	shadowmap_rc->setCamera(&camera);
 
-	fb->renderTo(shadowmap_rc, scene);
+	{
+		Framebuffer::FramebufferSelection fs(*fb);
+		shadowmap_rc->clear();
+		scene->depthRender(shadowmap_rc);
+	}
 }
 
 void DirectionalLight::use(GLSLProgram *shaders)

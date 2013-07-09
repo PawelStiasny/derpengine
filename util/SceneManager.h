@@ -6,7 +6,6 @@
 #include "../core/RenderingContext.h"
 #include "../core/FramebufferTexture.h"
 #include "../core/DepthFramebufferTexture.h"
-#include "../core/DepthPassRenderingContext.h"
 #include "../core/Framebuffer.h"
 #include "../animations/Animation.h"
 #include "PostOverlay.h"
@@ -32,7 +31,7 @@ protected:
 	Settings *settings;
 	GraphNode *scene;
 	RenderingContext *rendering_context;
-	DepthPassRenderingContext depth_context;
+	RenderingContext depth_context;
 	std::list<Animation*> animations;
 
 private:

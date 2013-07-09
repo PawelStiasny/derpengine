@@ -19,6 +19,7 @@ public:
 	virtual ~GraphNode();
 
 	void render(RenderingContext *rc);
+	virtual void depthRender(RenderingContext *rc);
 
 	void setPosition(GLfloat x, GLfloat y, GLfloat z);
 	void setPosition(const glm::vec3& pos);
@@ -38,6 +39,7 @@ protected:
 	virtual void doRender(RenderingContext *rc);
 	virtual void beforeRender(RenderingContext *rc);
 	virtual void afterRender(RenderingContext *rc);
+	virtual void doDepthRender(RenderingContext *rc);
 
 private:
 	struct Vec3 {

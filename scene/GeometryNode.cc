@@ -15,6 +15,15 @@ void GeometryNode::doRender(RenderingContext *rc)
 	geometry->render();
 }
 
+void GeometryNode::doDepthRender(RenderingContext *rc)
+{
+	ResourceHandle<Material> depth_map_material =
+		ResourceManager::getInstance()->getDefaultDepthMapMaterial();
+	MaterialSelection ms(*depth_map_material);
+	rc->sync(depth_map_material->getShaders().getRawPointer());
+	geometry->render();
+}
+
 void GeometryNode::setGeometry(ResourceHandle<Geometry> g)
 {
 	geometry = g;

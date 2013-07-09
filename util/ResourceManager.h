@@ -2,6 +2,7 @@
 #define RESOURCEMANAGER_H
 
 #include "resource.h"
+#include "../core/Material.h"
 
 #include <map>
 #include <string>
@@ -10,7 +11,7 @@
 // Forward declaration of returned types
 class GLSLProgram;
 class GLSLObject;
-class Material;
+//class Material;
 class Texture;
 class Tile;
 class Geometry;
@@ -32,6 +33,7 @@ public:
 
 	ResourceHandle<Material> getMaterial(const std::string name);
 	ResourceHandle<Material> getDefaultMaterial();
+	ResourceHandle<Material> getDefaultDepthMapMaterial();
 
 	ResourceHandle<Geometry> getModel(const std::string name);
 
@@ -47,7 +49,7 @@ private:
 	std::map< std::pair<int, std::string>, GLSLObject* > glsl_object_pool;
 	std::map< std::string, Texture* > texture_pool;
 	std::map< std::string, Material* > material_pool;
-	ResourceHandle<Material> default_material;
+	Material *default_material, *default_depth_map_material;
 	Tile *tile;
 };
 

@@ -10,6 +10,7 @@ class GeometryNode : public GraphNode
 public:
 	GeometryNode(ResourceHandle<Geometry> geometry);
 	virtual void doRender(RenderingContext *rc);
+	virtual void doDepthRender(RenderingContext *rc);
 	void setGeometry(ResourceHandle<Geometry> g);
 	void setMaterial(const ResourceHandle<Material> &m);
 

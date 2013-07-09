@@ -53,6 +53,25 @@ void GraphNode::render(RenderingContext *rc)
 	afterRender(rc);
 }
 
+/// Same as render, but renders a material-less version for the depth buffer
+/// only
+void GraphNode::depthRender(RenderingContext *rc)
+{
+	if (!visible) return;
+
+	if (pos.isSet() || rot.isSet() || !scale.isOnes()) {
+		rc->pushMatrix();
+		rc->setModelMatrix(rc->getModelMatrix() * m_transform);
+	}
+
+	doDepthRender(rc);
+
+	std::for_each(members.begin(), members.end(),
+			std::bind2nd(std::mem_fun(&GraphNode::depthRender), rc));
+
+	if (pos.isSet() || rot.isSet() || !scale.isOnes()) rc->popMatrix();
+}
+
 /// Concrete implementation of node's rendering.
 ///
 /// Base implementation is a no-op.
@@ -66,6 +85,11 @@ void GraphNode::beforeRender(RenderingContext *rc)
 
 void GraphNode::afterRender(RenderingContext *rc)
 {
+}
+
+void GraphNode::doDepthRender(RenderingContext *rc)
+{
+	doRender(rc);
 }
 
 void GraphNode::setPosition(GLfloat x, GLfloat y, GLfloat z)
