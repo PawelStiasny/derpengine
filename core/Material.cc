@@ -53,6 +53,11 @@ MaterialSelection::~MaterialSelection()
 		//previous->use();
 }
 
+GLSLProgram * MaterialSelection::getSelectedShaders()
+{
+	return selected->shaders.getRawPointer();
+}
+
 bool ConfigurableMaterial::loadDescriptionFile(const char *path)
 {
 	std::ifstream source_stream(path);

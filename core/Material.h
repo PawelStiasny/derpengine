@@ -27,6 +27,7 @@ public:
 	public:
 		MaterialSelection(Material &mat);
 		~MaterialSelection();
+		GLSLProgram * getSelectedShaders();
 
 	private:
 		Material *selected, *previous;

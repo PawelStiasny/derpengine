@@ -11,7 +11,7 @@ GeometryNode::GeometryNode(ResourceHandle<Geometry> geometry)
 void GeometryNode::doRender(RenderingContext *rc)
 {
 	MaterialSelection ms(*material);
-	rc->sync(material->getShaders().getRawPointer());
+	rc->sync(ms.getSelectedShaders());
 	geometry->render();
 }
 
@@ -20,7 +20,7 @@ void GeometryNode::doDepthRender(RenderingContext *rc)
 	ResourceHandle<Material> depth_map_material =
 		ResourceManager::getInstance()->getDefaultDepthMapMaterial();
 	MaterialSelection ms(*depth_map_material);
-	rc->sync(depth_map_material->getShaders().getRawPointer());
+	rc->sync(ms.getSelectedShaders());
 	geometry->render();
 }
 
