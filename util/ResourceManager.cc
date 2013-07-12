@@ -30,6 +30,7 @@ ResourceHandle<GLSLProgram> ResourceManager::getShaders(
 	if (it == glsl_program_pool.end()) {
 		std::list< ResourceHandle<GLSLObject> > shaders;
 		shaders.push_back(getGLSLProgram(GL_VERTEX_SHADER, vertex.c_str()));
+		shaders.push_back(getGLSLProgram(GL_FRAGMENT_SHADER, "data/std.fs"));
 		shaders.push_back(getGLSLProgram(GL_FRAGMENT_SHADER, fragment.c_str()));
 		GLSLProgram *new_prog = new GLSLProgram(shaders);
 

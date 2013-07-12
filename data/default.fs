@@ -15,38 +15,34 @@ smooth in float cam_distance;
 
 out vec4 color;
 
+/* defined in std.fs */
+float diffuse_term(vec3 normal, vec3 light);
+float shadow_term(sampler2DShadow shadow_sampler, vec4 shadowspace_pos);
+float specular_term(vec3 normal, vec3 light, vec3 cam, float shininess);
+vec4 linear_fog(vec4 color, vec4 fog_color, float cam_distance);
+
 void main() {
 	vec4 lp = light_pos;
 	vec3 light_dir;
 	light_dir = normalize(lp - lp.w * pos).xyz;
 	vec3 cam_dir = normalize(pos.xyz - cam_pos);
-	float cos_norm_light = dot(normal, light_dir);
 
-	vec4 diffuse = max(0.0, cos_norm_light) * mat_diffuse;
+	vec4 diffuse =
+		diffuse_term(normal, light_dir) *
+		mat_diffuse;
 	vec4 ambient = mat_ambient;
 	vec4 specular =
-			pow(
-				max(0.0, dot(cam_dir, reflect(light_dir, normal))),
-				mat_shininess) *
-			mat_specular;
+		specular_term(normal, light_dir, cam_dir, mat_shininess) *
+		mat_specular;
 
 	vec4 texel = texture(tex_sampler, tex_coord);
 
-	float visibility = 
-		textureProj(shadow_sampler, shadowspace_pos - vec4(0,0,0.02,0));
-
-	vec2 not_in_shadowspace = 
-		step(shadowspace_pos.xy, vec2(0.0,0.0)) +
-		step(vec2(1.0, 1.0), shadowspace_pos.xy);
-	not_in_shadowspace = min(not_in_shadowspace, vec2(1.0,1.0));
-	visibility = max(
-		visibility,
-		min(not_in_shadowspace.x + not_in_shadowspace.y, 1.0));
+	float visibility = shadow_term(shadow_sampler, shadowspace_pos);
 
 	diffuse *= visibility;
 	specular *= visibility;
 
-	float fog = clamp((cam_distance - 110.0) * 0.12, 0.0, 1.0);
-	color = mix( (diffuse + ambient + specular) * texel, vec4(0.67, 0.81, 0.65, 0.0), fog );
+	color = (diffuse + ambient + specular) * texel;
+	/*color = linear_fog( color, vec4(0.67, 0.81, 0.65, 0.0), cam_distance );*/
 }
 
