@@ -35,12 +35,8 @@ void SceneManager::render()
 {
 	// Shadowmap pass
 	Light *l = rendering_context->getLight();
-	if (settings->enable_shadows && l) {
-		if (shadowmap_ref)
-			l->buildShadowMap(scene, shadowmap_ref);
-		else
-			l->buildShadowMap(scene, rendering_context->getCamera());
-	}
+	if (settings->enable_shadows && l)
+		l->buildShadowMap(scene, getShadowmapReference());
 
 
 	if (post_overlays.empty()) {
@@ -99,5 +95,18 @@ void SceneManager::appendPostOverlay(std::string fragment_shader)
 			ResourceManager::getInstance()->getShaders(
 				"data/postpass.vs", fragment_shader));
 	post_overlays.push_back(ov);
+}
+
+void SceneManager::setShadowmapReference(GraphNode *r)
+{
+	shadowmap_ref = r;
+}
+
+GraphNode * SceneManager::getShadowmapReference()
+{
+	if (shadowmap_ref)
+		return shadowmap_ref;
+	else
+		return rendering_context->getCamera();
 }
 

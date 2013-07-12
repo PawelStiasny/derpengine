@@ -24,7 +24,7 @@ public:
 	virtual void render();
 	virtual void onViewportReshape(int width, int height);
 	virtual void handleInput(InputState *st) {};
-	void setShadowmapReference(GraphNode *r) { shadowmap_ref = r; };
+	void setShadowmapReference(GraphNode *r);
 	void appendPostOverlay(std::string fragment_shader);
 
 protected:
@@ -41,6 +41,8 @@ private:
 	Framebuffer framebuffers[2];
 	GraphNode *shadowmap_ref;
 	std::list<PostOverlay> post_overlays;
+
+	GraphNode * getShadowmapReference();
 };
 
 #endif
