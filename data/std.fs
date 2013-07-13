@@ -2,8 +2,9 @@
 
 float specular_term(vec3 normal, vec3 light, vec3 cam, float shininess)
 {
-	return pow(
-			max(0.0, dot(cam, reflect(light, normal))), shininess);
+	vec3 halfv = normalize(light + cam);
+	float blinn_term = pow( dot(normal, halfv), shininess );
+	return clamp(blinn_term, 0.0, 1.0);
 }
 
 float diffuse_term(vec3 normal, vec3 light)

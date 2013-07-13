@@ -2,5 +2,6 @@ shaders vertex data/default.vs fragment data/bump.fs
 ambient 0.5 0.5 0.5 1.0
 diffuse 0.3 0.3 0.3 1
 specular 0.5 0.5 0.5 1.0
+shininess 15
 texture data/metal.bmp
 texsampler bump_sampler data/bump_large.bmp

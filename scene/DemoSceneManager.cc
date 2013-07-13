@@ -41,8 +41,8 @@ DemoSceneManager::DemoSceneManager(Settings *settings)
 	walk_animation = new MechWalk(mech, terrain);
 	animations.push_back(walk_animation);
 
-	appendPostOverlay("data/posttest.fs");
-	appendPostOverlay("data/posttest.colmx.fs");
+	//appendPostOverlay("data/posttest.fs");
+	//appendPostOverlay("data/posttest.colmx.fs");
 }
 
 void DemoSceneManager::handleInput(InputState *st)

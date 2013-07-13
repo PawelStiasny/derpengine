@@ -23,13 +23,13 @@ void main() {
 	vec4 lp = light_pos;
 	vec3 light_dir;
 	light_dir = normalize(lp - lp.w * pos).xyz;
-	vec3 cam_dir = normalize(pos.xyz - cam_pos);
+	vec3 cam_dir = normalize(cam_pos - pos.xyz);
 
 	vec4 diffuse = diffuse_term(pnormal, light_dir) * mat_diffuse;
 	vec4 ambient = mat_ambient;
 
 	vec3 reflect_dir = reflect(cam_dir, normal);
-	vec4 specular = mat_specular * texture(specular_sampler, reflect_dir);
+	vec4 specular = mat_specular * texture(specular_sampler, -reflect_dir);
 
 	vec4 texel = texture(tex_sampler, tex_coord);
 

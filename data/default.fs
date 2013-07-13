@@ -25,7 +25,7 @@ void main() {
 	vec4 lp = light_pos;
 	vec3 light_dir;
 	light_dir = normalize(lp - lp.w * pos).xyz;
-	vec3 cam_dir = normalize(pos.xyz - cam_pos);
+	vec3 cam_dir = normalize(cam_pos - pos.xyz);
 
 	vec4 diffuse =
 		diffuse_term(normal, light_dir) *
