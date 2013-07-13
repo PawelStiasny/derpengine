@@ -22,7 +22,7 @@ public:
 	int mouse_x, mouse_y;
 
 private:
-	Uint8 *keys;
+	const Uint8 *keys;
 	Uint8 key_function_to_keycode[4];
 };
 
