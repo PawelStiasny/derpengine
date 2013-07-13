@@ -189,6 +189,8 @@ ResourceHandle<Geometry> ResourceManager::getModel(const std::string name)
 ResourceManager::ResourceManager()
 {
 	tile = NULL;
+	default_material = NULL;
+	default_depth_map_material = NULL;
 }
 
 ResourceManager::~ResourceManager()
