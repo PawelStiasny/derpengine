@@ -7,8 +7,8 @@ if sys.platform == 'win32':
 	env = Environment(TARGET_ARCH = 'i386')
 	env['CXX'] = 'cl'
 	env['CPPPATH'] = ['.', '.\external\include']
-	env['CPPFLAGS'] = ['/MTd','/DWIN32']
-	env['LINKFLAGS'] = ['/SUBSYSTEM:WINDOWS','/MACHINE:I386','/SUBSYSTEM:CONSOLE']
+	env['CPPFLAGS'] = ['/MTd','/DWIN32', '/Z7', '/EHsc']
+	env['LINKFLAGS'] = ['/SUBSYSTEM:WINDOWS','/MACHINE:I386','/SUBSYSTEM:CONSOLE','/debug']
 	env['LIBPATH'] = ['.\external\lib']
 	env.Append( LIBS = ['SDL', 'OpenGL32', 'GLU32', 'GLEW32'] )
 else:
