@@ -109,6 +109,23 @@ void ResourceManager::clearUnused()
 {
 	int remaining = 0, deleted = 0;
 
+	if (tile && !tile->hasHandles()) {
+		delete tile;
+		tile = NULL;
+	}
+
+	if (default_material && !default_material->hasHandles())
+	{
+		delete default_material;
+		default_material = NULL;
+	}
+
+	if (default_depth_map_material && !default_depth_map_material->hasHandles())
+	{
+		delete default_depth_map_material;
+		default_depth_map_material = NULL;
+	}
+
 	std::map< std::string, Material* >::iterator
 		material_it = material_pool.begin();
 	while (material_it != material_pool.end()) {
