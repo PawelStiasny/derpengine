@@ -17,23 +17,9 @@ protected:
 	GLushort *index_data;
 	GLuint vertex_count, triangle_count;
 
-	// Data used for geometry construction
-	glm::mat4 construction_mx;
-	unsigned int vertex_cursor, index_cursor;
-
 	Geometry(bool own_memory = true);
 	void allocCount(GLuint vertex_count, GLuint triangle_count);
 	void syncBuffers();
-
-	void constructSphere(float radius, 
-			int slices, int stacks, 
-			float u_repeat, float v_repeat);
-
-	void constructCylinder(float radius, float len,
-			int slices, int stacks, 
-			float u_repeat, float v_repeat);
-
-	void constructCap(float radius, int slices, bool inverted);
 
 private:
 	enum buffer_object_type { BUF_VERTEX, BUF_NORMAL, BUF_UV, BUF_INDICES };

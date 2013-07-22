@@ -1,7 +1,7 @@
-#include "../core/Geometry.h"
+#include "../core/ConstructedGeometry.h"
 #include <GL/glu.h>
 
-class MechLeg : public Geometry
+class MechLeg : public ConstructedGeometry
 {
 private:
 	GLfloat length, radius;

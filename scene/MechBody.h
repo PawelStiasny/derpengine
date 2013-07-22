@@ -1,7 +1,7 @@
-#include "../core/Geometry.h"
+#include "../core/ConstructedGeometry.h"
 #include <GL/glu.h>
 
-class MechBody : public Geometry
+class MechBody : public ConstructedGeometry
 {
 private:
 

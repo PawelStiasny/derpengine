@@ -4,12 +4,11 @@
 #include "MechLeg.h"
 
 MechLeg::MechLeg(GLfloat length, GLfloat radius)
+	: ConstructedGeometry(3*21*5 + 4*22, 3*20*4*2 + 4*20)
 {
 	this->length = length;
 	this->radius = radius;
 	float sideways_cyl_radius = 0.16f, sideways_cyl_length = radius + 0.1f;
-
-	allocCount(3*21*5 + 4*22, 3*20*4*2 + 4*20);
 
 	// Main bone cylinder
 	constructCylinder(radius, length, 20, 4, 2, 4);
@@ -28,6 +27,5 @@ MechLeg::MechLeg(GLfloat length, GLfloat radius)
 	constructCap(sideways_cyl_radius, 20, false);
 	construction_mx = glm::translate(construction_mx, glm::vec3(0.0f, 0.0f, sideways_cyl_length));
 	constructCap(sideways_cyl_radius, 20, true);
-	syncBuffers();
 }
 
