@@ -2,9 +2,9 @@
 #define RESOURCEMANAGER_H
 
 #include "resource.h"
+#include "ResourcePool.h"
 #include "../core/Material.h"
 
-#include <map>
 #include <string>
 #include <utility>
 
@@ -45,10 +45,10 @@ private:
 
 	static ResourceManager *instance;
 
-	std::map< std::pair<std::string, std::string>, GLSLProgram* > glsl_program_pool;
-	std::map< std::pair<int, std::string>, GLSLObject* > glsl_object_pool;
-	std::map< std::string, Texture* > texture_pool;
-	std::map< std::string, Material* > material_pool;
+	ResourcePool< std::pair<std::string, std::string>, GLSLProgram > glsl_program_pool;
+	ResourcePool< std::pair<int, std::string>, GLSLObject > glsl_object_pool;
+	ResourcePool< std::string, Texture > texture_pool;
+	ResourcePool< std::string, Material > material_pool;
 	Material *default_material, *default_depth_map_material;
 	Tile *tile;
 };
