@@ -24,68 +24,42 @@ ResourceHandle<GLSLProgram> ResourceManager::getShaders(
 		const std::string vertex,
 		const std::string fragment)
 {
-	std::map< std::pair<std::string, std::string>, GLSLProgram* >::iterator
-		it = glsl_program_pool.find(std::make_pair(vertex, fragment));
-
-	if (it == glsl_program_pool.end()) {
-		std::list< ResourceHandle<GLSLObject> > shaders;
-		shaders.push_back(getGLSLProgram(GL_VERTEX_SHADER, vertex.c_str()));
-		shaders.push_back(getGLSLProgram(GL_FRAGMENT_SHADER, "data/std.fs"));
-		shaders.push_back(getGLSLProgram(GL_FRAGMENT_SHADER, fragment.c_str()));
-		GLSLProgram *new_prog = new GLSLProgram(shaders);
-
-		glsl_program_pool.insert(std::make_pair(
-					std::make_pair(vertex, fragment),
-					new_prog));
-
-		return new_prog;
-	} else 
-		return it->second;
+	return glsl_program_pool.getObject(
+		std::make_pair(vertex, fragment),
+		[&] () {
+			std::list< ResourceHandle<GLSLObject> > shaders;
+			shaders.push_back(getGLSLProgram(GL_VERTEX_SHADER, vertex.c_str()));
+			shaders.push_back(getGLSLProgram(GL_FRAGMENT_SHADER, "data/std.fs"));
+			shaders.push_back(getGLSLProgram(GL_FRAGMENT_SHADER, fragment.c_str()));
+			return new GLSLProgram(shaders);
+		});
 }
 
 ResourceHandle<GLSLObject> ResourceManager::getGLSLProgram(
 		int type,
 		const std::string name)
 {
-	std::map< std::pair<int, std::string>, GLSLObject* >::iterator
-		it = glsl_object_pool.find(std::make_pair(type, name));
-
-	if (it == glsl_object_pool.end()) {
-		GLSLObject *new_obj = new GLSLObject(type, name.c_str());
-		glsl_object_pool.insert(std::make_pair(
-					std::make_pair(type, name),
-					new_obj));
-
-		return new_obj;
-	} else
-		return it->second;
+	return glsl_object_pool.getObject(
+		std::make_pair(type, name),
+		[&] () {
+			return new GLSLObject(type, name.c_str());
+		});
 }
 
 ResourceHandle<Texture> ResourceManager::getTexture(const std::string path)
 {
-	std::map< std::string, Texture* >::iterator
-		it = texture_pool.find(path);
-
-	if (it == texture_pool.end()) {
-		Texture *new_tex = new Texture(path.c_str());
-		texture_pool.insert(std::make_pair(path, new_tex));
-		return new_tex;
-	} else
-		return it->second;
+	return texture_pool.getObject(path, [&] () {
+			return new Texture(path.c_str());
+		});
 }
 
 ResourceHandle<Material> ResourceManager::getMaterial(const std::string path)
 {
-	std::map< std::string, Material* >::iterator
-		it = material_pool.find(path);
-
-	if (it == material_pool.end()) {
-		ConfigurableMaterial *new_mat = new ConfigurableMaterial;
-		new_mat->loadDescriptionFile(path.c_str());
-		material_pool.insert(std::make_pair(path, new_mat));
-		return new_mat;
-	} else
-		return it->second;
+	return material_pool.getObject(path, [&] () {
+			ConfigurableMaterial *new_mat = new ConfigurableMaterial;
+			new_mat->loadDescriptionFile(path.c_str());
+			return new_mat;
+		});
 }
 
 ResourceHandle<Material> ResourceManager::getDefaultMaterial()
@@ -126,71 +100,39 @@ void ResourceManager::clearUnused()
 		default_depth_map_material = NULL;
 	}
 
-	std::map< std::string, Material* >::iterator
-		material_it = material_pool.begin();
-	while (material_it != material_pool.end()) {
-		if ((material_it->second)->hasHandles()) {
-			printf("material %s in use\n", material_it->first.c_str());
-			remaining++;
-		} else {
-			delete material_it->second;
-			deleted++;
-		}
-		material_it++;
-	}
+	int released_materials = material_pool.releaseAllUnused(
+		[](const std::string &key, const Material* mat) {
+			printf("Material in use: %s\n", key.c_str());
+		});
+	printf(
+		"Released %d materials, %d still in use.\n",
+		released_materials, material_pool.size());
 
-	printf("clearUnused materials: %d deleted, %d remaining\n", deleted, remaining);
+	int released_programs = glsl_program_pool.releaseAllUnused(
+		[](const std::pair<std::string, std::string> &key, const GLSLProgram* prog) {
+			printf("Shader program in use: (%s, %s)\n",
+				key.first.c_str(),
+				key.second.c_str());
+		});
+	printf(
+		"Released %d programs, %d still in use.\n",
+		released_programs, glsl_program_pool.size());
 
-	remaining = 0; deleted = 0;
-	std::map< std::pair<std::string, std::string>, GLSLProgram* >::iterator
-		shader_it = glsl_program_pool.begin();
-	while (shader_it != glsl_program_pool.end()) {
-		if ((shader_it->second)->hasHandles()) {
-			printf("Shaders %s, %s in use\n",
-					shader_it->first.first.c_str(),
-					shader_it->first.second.c_str());
-			remaining++;
-		} else {
-			delete shader_it->second;
-			deleted++;
-		}
-		shader_it++;
-	}
+	int released_shader_objects = glsl_object_pool.releaseAllUnused(
+		[](const std::pair<int, std::string> &key, const GLSLObject* obj) {
+			printf("Shader object in use: %s\n", key.second.c_str());
+		});
+	printf(
+		"Released %d shader objects, %d still in use.\n",
+		released_shader_objects, glsl_object_pool.size());
 
-	printf("clearUnused programs: %d deleted, %d remaining\n", deleted, remaining);
-
-	remaining = 0; deleted = 0;
-	std::map< std::pair<int, std::string>, GLSLObject* >::iterator
-		shader_object_it = glsl_object_pool.begin();
-	while (shader_object_it != glsl_object_pool.end()) {
-		if ((shader_object_it->second)->hasHandles()) {
-			printf("Shader %s in use\n",
-					shader_object_it->first.second.c_str());
-			remaining++;
-		} else {
-			delete shader_object_it->second;
-			deleted++;
-		}
-		shader_object_it++;
-	}
-
-	printf("clearUnused shaders: %d deleted, %d remaining\n", deleted, remaining);
-
-	remaining = 0; deleted = 0;
-	std::map< std::string, Texture* >::iterator
-		texture_it = texture_pool.begin();
-	while (texture_it != texture_pool.end()) {
-		if ((texture_it->second)->hasHandles()) {
-			printf("Texture %s in use\n", texture_it->first.c_str());
-			remaining++;
-		} else {
-			delete texture_it->second;
-			deleted++;
-		}
-		texture_it++;
-	}
-
-	printf("clearUnused textures: %d deleted, %d remaining\n", deleted, remaining);
+	int released_textures = texture_pool.releaseAllUnused(
+		[](const std::string &key, const Texture* tex) {
+			printf("Texture in use: %s\n", key.c_str());
+		});
+	printf(
+		"Released %d textures, %d still in use.\n",
+		released_textures, texture_pool.size());
 }
 
 ResourceHandle<Geometry> ResourceManager::getModel(const std::string name)
