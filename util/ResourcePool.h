@@ -19,20 +19,31 @@ public:
 		}
 	}
 
-	bool releaseAllUnused()
+	int releaseAllUnused(
+			std::function<void (const K&, const T*)> on_used = NULL)
 	{
-		int remaining = 0, deleted = 0;
+		int deleted = 0;
 
-		for (auto &kv : pool) {
-			if ((kv.second)->hasHandles()) {
-				remaining++;
+		auto it = pool.begin();
+		//for (auto &kv : pool) {
+		while (it != pool.end()) {
+			if ((it->second)->hasHandles()) {
+				if (on_used)
+					on_used(it->first, it->second);
+				it++;
 			} else {
-				delete kv.second;
+				delete it->second;
+				it = pool.erase(it);
 				deleted++;
 			}
 		}
 
-		return !remaining;
+		return deleted;
+	}
+
+	int size()
+	{
+		return pool.size();
 	}
 
 private:

@@ -100,10 +100,39 @@ void ResourceManager::clearUnused()
 		default_depth_map_material = NULL;
 	}
 
-	material_pool.releaseAllUnused();
-	glsl_program_pool.releaseAllUnused();
-	glsl_object_pool.releaseAllUnused();
-	texture_pool.releaseAllUnused();
+	int released_materials = material_pool.releaseAllUnused(
+		[](const std::string &key, const Material* mat) {
+			printf("Material in use: %s\n", key.c_str());
+		});
+	printf(
+		"Released %d materials, %d still in use.\n",
+		released_materials, material_pool.size());
+
+	int released_programs = glsl_program_pool.releaseAllUnused(
+		[](const std::pair<std::string, std::string> &key, const GLSLProgram* prog) {
+			printf("Shader program in use: (%s, %s)\n",
+				key.first.c_str(),
+				key.second.c_str());
+		});
+	printf(
+		"Released %d programs, %d still in use.\n",
+		released_programs, glsl_program_pool.size());
+
+	int released_shader_objects = glsl_object_pool.releaseAllUnused(
+		[](const std::pair<int, std::string> &key, const GLSLObject* obj) {
+			printf("Shader object in use: %s\n", key.second.c_str());
+		});
+	printf(
+		"Released %d shader objects, %d still in use.\n",
+		released_shader_objects, glsl_object_pool.size());
+
+	int released_textures = texture_pool.releaseAllUnused(
+		[](const std::string &key, const Texture* tex) {
+			printf("Texture in use: %s\n", key.c_str());
+		});
+	printf(
+		"Released %d textures, %d still in use.\n",
+		released_textures, texture_pool.size());
 }
 
 ResourceHandle<Geometry> ResourceManager::getModel(const std::string name)
