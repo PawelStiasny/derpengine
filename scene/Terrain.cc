@@ -8,11 +8,11 @@
 #include <glm/gtc/type_ptr.hpp>
 
 Terrain::Terrain(GLfloat vertical_scaling)
-	: t("data/heightmap.bmp", vertical_scaling)
+	: t("data/heightmap.bmp", vertical_scaling), hmap("data/heightmap.bmp")
 {
 	GeometryNode *gn = new GeometryNode(&t);
-	gn->setMaterial(
-			ResourceManager::getInstance()->getMaterial("data/mat_terrain"));
+	m = ResourceManager::getInstance()->getMaterial("data/mat_terrain");
+	gn->setMaterial(m);
 	addMember(gn);
 }
 
@@ -35,6 +35,7 @@ void Terrain::updatePieces(GLfloat ref_x, GLfloat ref_z)
 
 void Terrain::doRender(RenderingContext *rc)
 {
+	hmap.use(m->shaders->getTextureUnit("height_sampler"));
 }
 
 #define vindex(x, z) (3 * ((z) * x_res + x))

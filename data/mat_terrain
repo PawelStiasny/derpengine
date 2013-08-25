@@ -1,3 +1,4 @@
+shaders vertex data/heightmap.vs fragment data/default.fs
 ambient 0.5 0.5 0.5 1.0
 diffuse 1.0 1.0 1.0 1.0
 texture data/ground.bmp

@@ -2,6 +2,7 @@
 #define TERRAIN_H
 
 #include "../core/Geometry.h"
+#include "../core/Texture.h"
 //
 /// A single patch of terrain
 class TerrainPiece : public Geometry
@@ -30,8 +31,9 @@ public:
 
 private:
 	GLfloat vertical_scaling;
-	Material m;
 	TerrainPiece t;
+	Texture hmap;
+	ResourceHandle<Material> m;
 };
 
 #endif
