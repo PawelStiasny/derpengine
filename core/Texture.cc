@@ -1,4 +1,4 @@
-#include <GL/glew.h>
+#include "../common.h"
 #include <stdio.h>
 
 #include "Texture.h"

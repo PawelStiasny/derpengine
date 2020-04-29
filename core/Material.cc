@@ -4,7 +4,7 @@
 #include "../util/ResourceManager.h"
 #include <fstream>
 #include <string>
-#include <GL/glew.h>
+#include "../common.h"
 #include <glm/gtc/type_ptr.hpp>
 
 Material * Material::active_material = NULL;

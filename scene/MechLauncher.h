@@ -1,7 +1,7 @@
 #include "../core/GraphNode.h"
 #include "GeometryNode.h"
 #include "Tile.h"
-#include <GL/glu.h>
+#include "../common.h"
 
 class MechLauncher : public GraphNode
 {

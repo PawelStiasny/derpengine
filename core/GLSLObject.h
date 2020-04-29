@@ -3,7 +3,7 @@
 
 #include "../util/resource.h"
 //#include "../util/FileWatcher.h"
-#include <GL/glew.h>
+#include "../common.h"
 
 /// Represents a GLSL Shader than can be linked into a GLSLProgram
 class GLSLObject : public SharedResource

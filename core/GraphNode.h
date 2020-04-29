@@ -1,7 +1,7 @@
 #ifndef GRAHPHNODE_H
 #define GRAHPHNODE_H
 
-#include <GL/glew.h>
+#include "../common.h"
 #include <glm/glm.hpp>
 #include <list>
 

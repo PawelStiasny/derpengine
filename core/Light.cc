@@ -1,6 +1,6 @@
 #define GLM_SWIZZLE
 #include <glm/glm.hpp>
-#include <GL/glew.h>
+#include "../common.h"
 
 #include "Light.h"
 #include "RenderingContext.h"

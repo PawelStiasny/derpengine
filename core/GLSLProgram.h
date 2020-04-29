@@ -4,7 +4,7 @@
 #include "../util/resource.h"
 #include "GLSLObject.h"
 
-#include <GL/glew.h>
+#include "../common.h"
 #include <glm/glm.hpp>
 #include <list>
 #include <map>

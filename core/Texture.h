@@ -3,7 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include "../util/resource.h"
-#include <GL/glew.h>
+#include "../common.h"
 
 class Texture : public SharedResource
 {

@@ -3,7 +3,7 @@
 #include "../core/Material.h"
 #include "../scene/FlippedTile.h"
 
-#include <GL/glew.h>
+#include "../common.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 enum SIDES {

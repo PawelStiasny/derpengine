@@ -1,4 +1,4 @@
-#include <GL/glew.h>
+#include "../common.h"
 
 #include "FlippedTile.h"
 #include "../core/GLSLProgram.h"

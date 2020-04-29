@@ -1,5 +1,5 @@
 #include "../core/ConstructedGeometry.h"
-#include <GL/glu.h>
+#include "../common.h"
 
 class MechBody : public ConstructedGeometry
 {
