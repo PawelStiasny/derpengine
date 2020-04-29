@@ -1,4 +1,4 @@
-#version 130
+#version 140
 
 uniform sampler2D tex_sampler;
 uniform sampler2DShadow shadow_sampler;

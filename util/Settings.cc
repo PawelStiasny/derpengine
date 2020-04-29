@@ -9,7 +9,7 @@
 Settings::Settings(const char *argv[])
 {
 	opengl_version_major = 3;
-	opengl_version_minor = 0;
+	opengl_version_minor = 1;
 
 #ifdef WIN32
 	enable_msaa = true;

@@ -1,6 +1,6 @@
 /* Shader ised in light space rendering to the shadowmap */
 
-#version 130
+#version 140
 
 uniform mat3x3 NormalMx;
 uniform sampler2D tex_sampler, shadow_sampler;
