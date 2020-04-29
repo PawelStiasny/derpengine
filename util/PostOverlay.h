@@ -1,5 +1,5 @@
 #ifndef POSTOVERLAY_H
-#define POSTVERLAY_H
+#define POSTOVERLAY_H
 
 #include "../core/GLSLProgram.h"
 #include "../core/FramebufferTexture.h"
