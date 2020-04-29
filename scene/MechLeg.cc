@@ -14,7 +14,7 @@ MechLeg::MechLeg(GLfloat length, GLfloat radius)
 	constructCylinder(radius, length, 20, 4, 2, 4);
 
 	// Joint cylinders
-	construction_mx = glm::rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+	construction_mx = glm::rotate(glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	construction_mx = glm::translate(construction_mx, glm::vec3(0.0f, 0.0f, -sideways_cyl_length/2.0f));
 	constructCylinder(sideways_cyl_radius, sideways_cyl_length, 20, 4, 4, 1);
 	constructCap(sideways_cyl_radius, 20, false);

@@ -1,5 +1,5 @@
 
-#define GLM_SWIZZLE
+#define GLM_FORCE_SWIZZLE
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
@@ -16,7 +16,7 @@ CameraTracking::CameraTracking(GraphNode* subject, Camera* cam)
 void CameraTracking::update(float timestep)
 {
 	glm::vec3 cam_pos = 
-		(glm::rotate(rotation, glm::vec3(0.0f, 1.0f, 0.0f)) * 
+		(glm::rotate(glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f)) * 
 		 glm::vec4(0.0f, y, 3.0f, 1.0f)).xyz();
 	cam->setPosition(cam_pos);
 	cam->setTarget(subject);

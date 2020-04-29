@@ -132,11 +132,11 @@ void GraphNode::updateTransformMatrix()
 	}
 	if (rot.isSet()) {
 		if(rot.v[0] != 0.0f)
-			m_transform = glm::rotate(m_transform, rot.v[0], glm::vec3(1.0f, 0.0f, 0.0f));
+			m_transform = glm::rotate(m_transform, glm::radians(rot.v[0]), glm::vec3(1.0f, 0.0f, 0.0f));
 		if(rot.v[1] != 0.0f)
-			m_transform = glm::rotate(m_transform, rot.v[1], glm::vec3(0.0f, 1.0f, 0.0f));
+			m_transform = glm::rotate(m_transform, glm::radians(rot.v[1]), glm::vec3(0.0f, 1.0f, 0.0f));
 		if(rot.v[2] != 0.0f)
-			m_transform = glm::rotate(m_transform, rot.v[2], glm::vec3(0.0f, 0.0f, 1.0f));
+			m_transform = glm::rotate(m_transform, glm::radians(rot.v[2]), glm::vec3(0.0f, 0.0f, 1.0f));
 	}
 	if (!scale.isOnes()) {
 		m_transform = glm::scale(m_transform, scale.toGLM());

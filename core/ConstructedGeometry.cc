@@ -1,4 +1,4 @@
-#define GLM_SWIZZLE
+#define GLM_FORCE_SWIZZLE
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
@@ -42,14 +42,14 @@ void ConstructedGeometry::constructSphere(
 	for (j = 0; j <= slices; j++) {
 		// Rotate around Y-axis by j units
 		glm::mat4 rot2 = glm::rotate(
-				(float)j * (360.0f / (float)slices),
+				glm::radians((float)j * (360.0f / (float)slices)),
 				glm::vec3(0.0f,1.0f,0.0f));
 
 		for (i = 0; i <= stacks; i++) {
 			// Rotate around X-axis by i units
 			glm::mat4 rot = glm::rotate(
 					rot2,
-					(float)i * (180.0f / (float)stacks), 
+					glm::radians((float)i * (180.0f / (float)stacks)), 
 					glm::vec3(1.0f,0.0f,0.0f));
 
 			glm::vec4 rvec = rot * glm::vec4(0.0f, radius, 0.0f, 1.0f);
@@ -98,7 +98,7 @@ void ConstructedGeometry::constructCylinder(
 
 	for (j = 0; j <= slices; j++) {
 		glm::mat4 rot = glm::rotate(
-				-(float)j * (360.0f / (float)slices),
+				glm::radians(-(float)j * (360.0f / (float)slices)),
 				glm::vec3(0.0f,0.0f,1.0f));
 
 		glm::vec3 normal = (construction_mx * rot * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f)).xyz();
@@ -159,7 +159,7 @@ void ConstructedGeometry::constructCap(
 
 	for (j = 0; j <= slices; j++) {
 		glm::mat4 rot = glm::rotate(
-				-(float)j * (360.0f / (float)slices),
+				glm::radians(-(float)j * (360.0f / (float)slices)),
 				glm::vec3(0.0f,0.0f,1.0f));
 
 		glm::vec4 rvec = rot * glm::vec4(0.0f, radius, 0.0f, 1.0f);

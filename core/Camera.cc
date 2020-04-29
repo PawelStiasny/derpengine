@@ -1,4 +1,4 @@
-#define GLM_SWIZZLE
+#define GLM_FORCE_SWIZZLE
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
@@ -48,7 +48,7 @@ void OrthogonalCamera::setFrustrum(float height)
 
 const glm::mat4 PerspectiveCamera::getProjectionMatrix(float aspect_ratio)
 {
-	return glm::perspective(fov, aspect_ratio, clip_near, clip_far);
+	return glm::perspective(glm::radians(fov), aspect_ratio, clip_near, clip_far);
 }
 
 const glm::mat4 OrthogonalCamera::getProjectionMatrix(float aspect_ratio)

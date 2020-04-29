@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
 #include "../common.h"
-#define GLM_SWIZZLE
+#define GLM_FORCE_SWIZZLE
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
