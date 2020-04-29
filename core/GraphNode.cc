@@ -128,9 +128,7 @@ void GraphNode::updateTransformMatrix()
 {
 	m_transform = glm::mat4(1.0f);
 	if (pos.isSet()) {
-		m_transform = glm::translate(
-				m_transform,
-				pos.v[0], pos.v[1], pos.v[2]);
+		m_transform = glm::translate(m_transform, pos.toGLM());
 	}
 	if (rot.isSet()) {
 		if(rot.v[0] != 0.0f)
@@ -141,9 +139,7 @@ void GraphNode::updateTransformMatrix()
 			m_transform = glm::rotate(m_transform, rot.v[2], glm::vec3(0.0f, 0.0f, 1.0f));
 	}
 	if (!scale.isOnes()) {
-		m_transform = glm::scale(
-				m_transform,
-				scale.v[0], scale.v[1], scale.v[2]);
+		m_transform = glm::scale(m_transform, scale.toGLM());
 	}
 }
 

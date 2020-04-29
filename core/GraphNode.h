@@ -51,6 +51,9 @@ private:
 		bool isOnes() {
 			return (v[0] == 1.0f) && (v[1] == 1.0f) && (v[2] == 1.0f);
 		};
+        glm::vec3 toGLM() {
+            return glm::vec3(v[0], v[1], v[2]);
+        }
 	} pos, rot, scale;
 	glm::mat4 m_transform;
 
