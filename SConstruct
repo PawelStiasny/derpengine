@@ -13,7 +13,11 @@ if sys.platform == 'win32':
 	env.Append( LIBS = ['SDL', 'OpenGL32', 'GLU32', 'GLEW32'] )
 else:
 	env = Environment()
-	env.Append( LIBS = ['SDL2', 'GL', 'GLU', 'GLEW'] )
+	if sys.platform == 'darwin':
+		env.Append( FRAMEWORKS = ['OpenGL'] )
+		env.Append( LIBS = ['SDL2', 'GLEW'] )
+	else:
+		env.Append( LIBS = ['SDL2', 'GL', 'GLU', 'GLEW'] )
 	env.Append( CPPFLAGS = ['--std=c++11'] )
 	if ARGUMENTS.get('debug', 0):
 		env.Append( CPPFLAGS = ['-O0', '-march=native', '-g'] )
